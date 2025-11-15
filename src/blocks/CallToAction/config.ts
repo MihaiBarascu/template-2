@@ -14,6 +14,21 @@ export const CallToAction: Block = {
   interfaceName: 'CallToActionBlock',
   fields: [
     {
+      name: 'style',
+      type: 'select',
+      defaultValue: 'default',
+      options: [
+        {
+          label: 'Default',
+          value: 'default',
+        },
+        {
+          label: 'Gymso Feature (Dark Background)',
+          value: 'gymso-feature',
+        },
+      ],
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({
@@ -27,6 +42,24 @@ export const CallToAction: Block = {
         },
       }),
       label: false,
+    },
+    {
+      name: 'workingHours',
+      type: 'richText',
+      admin: {
+        condition: (_, { style } = {}) => style === 'gymso-feature',
+      },
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+          ]
+        },
+      }),
+      label: 'Working Hours Content',
     },
     linkGroup({
       appearances: ['default', 'outline'],

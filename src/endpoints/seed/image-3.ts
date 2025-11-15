@@ -1,7 +1,7 @@
 import type { Media } from '@/payload-types'
 
 export const image3: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
-  alt: 'Straight metallic shapes with an orange and blue gradient',
+  alt: 'Gymso Fitness - Yoga class meditation and stretching',
   caption: {
     root: {
       type: 'root',
