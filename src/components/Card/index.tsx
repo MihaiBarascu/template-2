@@ -8,7 +8,7 @@ import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'postType' | 'serviceDetails'>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -21,14 +21,55 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title } = doc || {}
+  const { slug, categories, meta, title, postType, serviceDetails } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
+  const isService = postType === 'service'
 
+  // Service card (Gymso style)
+  if (isService) {
+    return (
+      <article
+        className={cn(
+          'gymso-class-thumb bg-gymso-white overflow-hidden hover:cursor-pointer',
+          className,
+        )}
+        ref={card.ref}
+      >
+        <div className="relative w-full">
+          {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+        </div>
+        <div className="class-info p-6">
+          {titleToUse && (
+            <h3 className="mb-1 text-2xl font-semibold">
+              <Link href={href} ref={link.ref} className="text-gymso-dark hover:text-gymso-primary">
+                {titleToUse}
+              </Link>
+            </h3>
+          )}
+          {serviceDetails?.trainer && (
+            <span className="text-gymso-gray">
+              <strong className="text-gymso-dark">Trained by</strong> - {serviceDetails.trainer}
+            </span>
+          )}
+          {serviceDetails?.price && (
+            <span className="class-price block mt-3 text-3xl font-bold text-gymso-primary">
+              {serviceDetails.price}
+            </span>
+          )}
+          {description && (
+            <p className="mt-3 text-gymso-text">{sanitizedDescription}</p>
+          )}
+        </div>
+      </article>
+    )
+  }
+
+  // Regular blog post card
   return (
     <article
       className={cn(

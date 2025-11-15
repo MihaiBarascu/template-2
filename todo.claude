@@ -1,0 +1,18 @@
+
+
+-rezolv cu reozlutia iamginilor si de ce cand intru pe o pagina apar servicile ca sic um ar fi postari simple
+
+T /api/payload-preferences/collection-pages 200 in 641ms
+ ✓ Compiled /next/preview in 2.4s (4480 modules)
+[21:05:43] ERROR: Failed to create URL object from URL: , falling back to http://localhost
+ GET /next/preview?slug=home&collection=pages&path=%2Fhome&previewSecret=YOUR_SECRET_HERE 307 in 2927ms
+ POST /api/media 200 in 2953ms
+ POST /api/media 200 in 2951ms
+ ○ Compiling /[slug] ...
+ ✓ Compiled /[slug] in 1778ms (4481 modules)
+ GET /api/media/file/image-hero1-300x200.jpg 200 in 2777ms
+[21:05:48] WARN: No email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.
+ GET /home 200 in 7379ms
+ GET /api/users/me 200 in 341ms
+[21:05:52] WARN: No email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.
+ GET /home 200 in 1113ms

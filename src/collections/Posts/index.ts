@@ -72,6 +72,53 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
     },
     {
+      name: 'postType',
+      type: 'select',
+      defaultValue: 'blog',
+      options: [
+        {
+          label: 'Blog Post',
+          value: 'blog',
+        },
+        {
+          label: 'Service',
+          value: 'service',
+        },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'serviceDetails',
+      type: 'group',
+      admin: {
+        condition: (data) => data?.postType === 'service',
+      },
+      fields: [
+        {
+          name: 'price',
+          type: 'text',
+          label: 'Price',
+        },
+        {
+          name: 'duration',
+          type: 'text',
+          label: 'Duration',
+        },
+        {
+          name: 'schedule',
+          type: 'text',
+          label: 'Schedule',
+        },
+        {
+          name: 'trainer',
+          type: 'text',
+          label: 'Trainer',
+        },
+      ],
+    },
+    {
       type: 'tabs',
       tabs: [
         {
