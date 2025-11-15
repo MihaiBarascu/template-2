@@ -2,32 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Gymso Fitness Custom Font - Will be uncommented after copying fonts */
-/*
+/* Gymso Fitness Custom Font */
 @font-face {
   font-family: 'Plain';
-  src: url('../fonts/Plain-Regular.woff2') format('woff2'),
-       url('../fonts/Plain-Regular.woff') format('woff');
+  src: url('./fonts/Plain-Regular.woff2') format('woff2'),
+       url('./fonts/Plain-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Plain';
-  src: url('../fonts/Plain-Light.woff2') format('woff2'),
-       url('../fonts/Plain-Light.woff') format('woff');
+  src: url('./fonts/Plain-Light.woff2') format('woff2'),
+       url('./fonts/Plain-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Plain';
-  src: url('../fonts/Plain-Bold.woff2') format('woff2'),
-       url('../fonts/Plain-Bold.woff') format('woff');
+  src: url('./fonts/Plain-Bold.woff2') format('woff2'),
+       url('./fonts/Plain-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
-*/
 
 @layer base {
   :root {
@@ -119,12 +117,12 @@
   /* Gymso Global Styles */
   body {
     @apply bg-gymso-white text-gymso-text min-h-[100vh] flex flex-col;
-    font-family: sans-serif; /* Will be changed to 'Plain' after copying fonts */
+    font-family: 'Plain', sans-serif;
   }
 
   /* Gymso Typography */
   h1, h2, h3, h4, h5, h6 {
-    font-family: sans-serif; /* Will be changed to 'Plain' after copying fonts */
+    font-family: 'Plain', sans-serif;
     font-weight: 100;
     line-height: normal;
     font-size: unset;
