@@ -1688,6 +1688,13 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1737,6 +1744,13 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;

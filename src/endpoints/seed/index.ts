@@ -248,8 +248,29 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
-              label: 'Services',
+              label: 'Home',
+              url: '/',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'About Us',
+              url: '/#about',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Classes',
               url: '/services',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Schedules',
+              url: '/#schedule',
             },
           },
           {
@@ -261,6 +282,20 @@ export const seed = async ({
                 value: contactPage.id,
               },
             },
+          },
+        ],
+        socialLinks: [
+          {
+            platform: 'facebook',
+            url: 'https://facebook.com/gymso',
+          },
+          {
+            platform: 'twitter',
+            url: 'https://twitter.com/gymso',
+          },
+          {
+            platform: 'instagram',
+            url: 'https://instagram.com/gymso',
           },
         ],
       },

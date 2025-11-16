@@ -17,7 +17,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
 
   return (
     <div
-      className="relative -mt-[10.4rem] flex items-center justify-center text-white min-h-screen"
+      className="relative -mt-20 flex items-center justify-center text-white min-h-screen"
       data-theme="dark"
     >
       {/* Gymso Background Overlay */}

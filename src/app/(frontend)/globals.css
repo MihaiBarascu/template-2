@@ -5,24 +5,27 @@
 /* Gymso Fitness Custom Font */
 @font-face {
   font-family: 'Plain';
-  src: url('./fonts/Plain-Regular.woff2') format('woff2'),
-       url('./fonts/Plain-Regular.woff') format('woff');
+  src:
+    url('./fonts/Plain-Regular.woff2') format('woff2'),
+    url('./fonts/Plain-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Plain';
-  src: url('./fonts/Plain-Light.woff2') format('woff2'),
-       url('./fonts/Plain-Light.woff') format('woff');
+  src:
+    url('./fonts/Plain-Light.woff2') format('woff2'),
+    url('./fonts/Plain-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Plain';
-  src: url('./fonts/Plain-Bold.woff2') format('woff2'),
-       url('./fonts/Plain-Bold.woff') format('woff');
+  src:
+    url('./fonts/Plain-Bold.woff2') format('woff2'),
+    url('./fonts/Plain-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -121,7 +124,12 @@
   }
 
   /* Gymso Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Plain', sans-serif;
     font-weight: 100;
     line-height: normal;
@@ -171,13 +179,16 @@
     transition: all 0.3s ease;
   }
 
-  a:hover, a:active, a:focus {
+  a:hover,
+  a:active,
+  a:focus {
     @apply text-gymso-primary;
     outline: none;
     text-decoration: none;
   }
 
-  b, strong {
+  b,
+  strong {
     @apply font-gymso-bold;
     letter-spacing: 0;
   }
@@ -188,7 +199,7 @@
   }
 
   .gymso-bg-overlay {
-    @apply absolute inset-0 w-full h-full bg-gymso-dark;
+    @apply absolute inset-0 w-full h-full bg-gymso-dark -z-10;
     opacity: 0.85;
   }
 }
@@ -225,6 +236,16 @@
   .gymso-btn.gymso-btn-primary:hover {
     @apply bg-gymso-white text-gymso-primary;
     border-color: transparent;
+  }
+
+  /* Gymso Navigation Links */
+  .gymso-nav-link {
+    @apply text-white font-medium uppercase tracking-wide px-5;
+    font-size: 14px;
+  }
+
+  .gymso-nav-link:hover {
+    @apply text-gymso-primary;
   }
 }
 

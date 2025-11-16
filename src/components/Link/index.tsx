@@ -1,12 +1,13 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
 
 type CMSLinkType = {
-  appearance?: 'inline' | ButtonProps['variant']
+  appearance?: 'inline' | 'gymso-nav' | ButtonProps['variant']
   children?: React.ReactNode
   className?: string
   label?: string | null
@@ -49,6 +50,23 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   if (appearance === 'inline') {
     return (
       <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
+        {label && label}
+        {children && children}
+      </Link>
+    )
+  }
+
+  /* Gymso navigation style */
+  if (appearance === 'gymso-nav') {
+    return (
+      <Link
+        className={cn(
+          "gymso-nav-link transition-colors duration-300",
+          className
+        )}
+        href={href || url || ''}
+        {...newTabProps}
+      >
         {label && label}
         {children && children}
       </Link>
