@@ -3,6 +3,7 @@ import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from '
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
+import { clasePage } from './clase-page'
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
@@ -238,6 +239,13 @@ export const seed = async ({
     }),
   ])
 
+  // Create clase page after we have the category
+  const clasePageDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    data: clasePage(classesCategory),
+  })
+
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
@@ -254,9 +262,12 @@ export const seed = async ({
           },
           {
             link: {
-              type: 'custom',
+              type: 'reference',
               label: 'Clase',
-              url: '/services',
+              reference: {
+                relationTo: 'pages',
+                value: clasePageDoc.id,
+              },
             },
           },
         ],
