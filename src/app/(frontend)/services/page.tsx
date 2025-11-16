@@ -3,7 +3,6 @@ import type { Metadata } from 'next/types'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import PageClient from './page.client'
 
 export const dynamic = 'force-static'
@@ -37,7 +36,7 @@ export default async function ServicesPage() {
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
-          <h1 className="gymso-h1">Clasele Noastre</h1>
+          <h1 className="transilvania-h1">Clasele Noastre</h1>
         </div>
       </div>
 

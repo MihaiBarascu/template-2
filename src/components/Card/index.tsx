@@ -8,7 +8,10 @@ import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'postType' | 'serviceDetails'>
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'postType' | 'serviceDetails'
+>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -30,12 +33,12 @@ export const Card: React.FC<{
   const isService = postType === 'service'
   const href = `/${relationTo}/${slug}`
 
-  // Service card (Gymso style)
+  // Service card (transilvania style)
   if (isService) {
     return (
       <article
         className={cn(
-          'gymso-class-thumb bg-gymso-white overflow-hidden hover:cursor-pointer',
+          'transilvania-class-thumb bg-transilvania-white overflow-hidden hover:cursor-pointer',
           className,
         )}
         ref={card.ref}
@@ -46,24 +49,27 @@ export const Card: React.FC<{
         <div className="class-info p-6">
           {titleToUse && (
             <h3 className="mb-1 text-2xl font-semibold">
-              <Link href={href} ref={link.ref} className="text-gymso-dark hover:text-gymso-primary">
+              <Link
+                href={href}
+                ref={link.ref}
+                className="text-transilvania-dark hover:text-transilvania-primary"
+              >
                 {titleToUse}
               </Link>
             </h3>
           )}
           {serviceDetails?.trainer && (
-            <span className="text-gymso-gray">
-              <strong className="text-gymso-dark">Trained by</strong> - {serviceDetails.trainer}
+            <span className="text-transilvania-gray">
+              <strong className="text-transilvania-dark">Trained by</strong> -{' '}
+              {serviceDetails.trainer}
             </span>
           )}
           {serviceDetails?.price && (
-            <span className="class-price block mt-3 text-3xl font-bold text-gymso-primary">
+            <span className="class-price block mt-3 text-3xl font-bold text-transilvania-primary">
               {serviceDetails.price}
             </span>
           )}
-          {description && (
-            <p className="mt-3 text-gymso-text">{sanitizedDescription}</p>
-          )}
+          {description && <p className="mt-3 text-transilvania-text">{sanitizedDescription}</p>}
         </div>
       </article>
     )

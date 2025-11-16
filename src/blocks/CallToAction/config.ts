@@ -24,7 +24,7 @@ export const CallToAction: Block = {
         },
         {
           label: 'Transilvania Gym Feature (Fundal Întunecat)',
-          value: 'gymso-feature',
+          value: 'transilvania-feature',
         },
       ],
     },
@@ -47,7 +47,7 @@ export const CallToAction: Block = {
       name: 'workingHours',
       type: 'richText',
       admin: {
-        condition: (_, { style } = {}) => style === 'gymso-feature',
+        condition: (_, { style } = {}) => style === 'transilvania-feature',
       },
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {

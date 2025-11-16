@@ -20,14 +20,14 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
       className="relative -mt-20 flex items-center justify-center text-white min-h-screen"
       data-theme="dark"
     >
-      {/* Gymso Background Overlay */}
-      <div className="gymso-bg-overlay"></div>
+      {/* transilvania Background Overlay */}
+      <div className="transilvania-bg-overlay"></div>
 
       <div className="container mb-8 z-10 relative flex items-center justify-center">
         <div className="max-w-[36.5rem] md:text-center">
           {richText && (
             <RichText
-              className="mb-6 [&_h6]:text-gymso-h6 [&_h6]:text-gymso-gray [&_h6]:font-gymso-normal [&_h6]:mb-4 [&_h1]:text-gymso-white [&_h1]:mb-8"
+              className="mb-6 [&_h6]:text-transilvania-h6 [&_h6]:text-transilvania-gray [&_h6]:font-transilvania-normal [&_h6]:mb-4 [&_h1]:text-transilvania-white [&_h1]:mb-8"
               data={richText}
               enableGutter={false}
             />
@@ -39,7 +39,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
                   <li key={i}>
                     <CMSLink
                       {...link}
-                      className={`gymso-btn ${i === 0 ? 'gymso-btn-primary' : 'gymso-btn-bordered'}`}
+                      className={`transilvania-btn ${i === 0 ? 'transilvania-btn-primary' : 'transilvania-btn-bordered'}`}
                     />
                   </li>
                 )

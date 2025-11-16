@@ -1,5 +1,5 @@
-import { formatDateTime } from 'src/utilities/formatDateTime'
 import React from 'react'
+import { formatDateTime } from 'src/utilities/formatDateTime'
 
 import type { Post } from '@/payload-types'
 
@@ -61,7 +61,9 @@ export const PostHero: React.FC<{
                 {serviceDetails.price && (
                   <div className="flex flex-col gap-1">
                     <p className="text-sm">Price</p>
-                    <p className="text-2xl font-bold text-gymso-primary">{serviceDetails.price}</p>
+                    <p className="text-2xl font-bold text-transilvania-primary">
+                      {serviceDetails.price}
+                    </p>
                   </div>
                 )}
                 {serviceDetails.duration && (

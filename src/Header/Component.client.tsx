@@ -36,13 +36,13 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const socialLinks = data?.socialLinks as Array<{ platform: string; url: string }> | undefined
 
   return (
-    <header className="relative z-20 bg-gymso-dark">
+    <header className="relative z-20 bg-transilvania-dark">
       <div className="container mx-auto max-w-6.5xl">
         <nav className="flex items-center justify-between h-20 px-4">
           {/* Logo */}
           <Link
             href="/"
-            className="text-3xl font-bold text-white hover:text-gymso-primary transition-colors"
+            className="text-3xl font-bold text-white hover:text-transilvania-primary transition-colors"
           >
             Transilvania Gym
           </Link>
@@ -60,7 +60,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-gymso-primary transition-colors"
+                    className="text-white hover:text-transilvania-primary transition-colors"
                     aria-label={social.platform}
                   >
                     <svg
@@ -80,7 +80,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden text-white hover:text-gymso-primary transition-colors"
+            className="lg:hidden text-white hover:text-transilvania-primary transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -104,7 +104,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-gymso-primary transition-colors"
+                  className="text-white hover:text-transilvania-primary transition-colors"
                   aria-label={social.platform}
                 >
                   <svg

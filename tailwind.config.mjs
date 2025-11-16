@@ -55,13 +55,13 @@ const config = {
       },
       colors: {
         // Transilvania Gym specific colors
-        'gymso-primary': '#f13a11',
-        'gymso-white': '#ffffff',
-        'gymso-dark': '#171819',
-        'gymso-about-bg': '#f9f9f9',
-        'gymso-gray': '#909090',
-        'gymso-link': '#404040',
-        'gymso-text': '#666262',
+        'transilvania-primary': '#f13a11',
+        'transilvania-white': '#ffffff',
+        'transilvania-dark': '#171819',
+        'transilvania-about-bg': '#f9f9f9',
+        'transilvania-gray': '#909090',
+        'transilvania-link': '#404040',
+        'transilvania-text': '#666262',
 
         // Keep existing ShadCN colors for components
         accent: {
@@ -104,19 +104,19 @@ const config = {
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-geist-sans)'],
-        gymso: ['Plain', 'sans-serif'], // Gymso custom font
+        transilvania: ['Plain', 'sans-serif'], // transilvania custom font
       },
       fontSize: {
-        // Gymso font sizes
-        'gymso-h1': '48px',
-        'gymso-h2': '36px',
-        'gymso-h3': '28px',
-        'gymso-h4': '24px',
-        'gymso-h5': '22px',
-        'gymso-h6': '22px',
-        'gymso-p': '18px',
-        'gymso-base': '16px',
-        'gymso-menu': '14px',
+        // transilvania font sizes
+        'transilvania-h1': '48px',
+        'transilvania-h2': '36px',
+        'transilvania-h3': '28px',
+        'transilvania-h4': '24px',
+        'transilvania-h5': '22px',
+        'transilvania-h6': '22px',
+        'transilvania-p': '18px',
+        'transilvania-base': '16px',
+        'transilvania-menu': '14px',
         // Keep existing sizes
         sm: '0.8rem',
         base: '1rem',
@@ -127,20 +127,20 @@ const config = {
         '5xl': '3.052rem',
       },
       fontWeight: {
-        'gymso-thin': '100',
-        'gymso-light': '300',
-        'gymso-normal': '400',
-        'gymso-bold': '700',
+        'transilvania-thin': '100',
+        'transilvania-light': '300',
+        'transilvania-normal': '400',
+        'transilvania-bold': '700',
       },
       spacing: {
-        // Gymso specific spacing
-        'gymso-section': '7rem',
-        'gymso-section-mobile': '5rem',
+        // transilvania specific spacing
+        'transilvania-section': '7rem',
+        'transilvania-section-mobile': '5rem',
       },
       borderRadius: {
-        // Gymso border radius
-        'gymso-large': '100%',
-        'gymso-small': '2px',
+        // transilvania border radius
+        'transilvania-large': '100%',
+        'transilvania-small': '2px',
         // Keep existing
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

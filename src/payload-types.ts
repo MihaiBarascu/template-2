@@ -448,7 +448,7 @@ export interface User {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  style?: ('default' | 'gymso-feature') | null;
+  style?: ('default' | 'transilvania-feature') | null;
   richText?: {
     root: {
       type: string;

@@ -1,5 +1,5 @@
-import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Media } from '@/payload-types'
+import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
   heroImage: Media
@@ -517,7 +517,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       {
         blockName: 'Caracteristici Transilvania Gym',
         blockType: 'cta',
-        style: 'gymso-feature',
+        style: 'transilvania-feature',
         links: [
           {
             link: {
@@ -724,7 +724,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     ],
     meta: {
-      description: 'Transformă-ți corpul la Transilvania Gym - Un nou mod de a construi un stil de viață sănătos!',
+      description:
+        'Transformă-ți corpul la Transilvania Gym - Un nou mod de a construi un stil de viață sănătos!',
       image: heroImage.id,
       title: 'Transilvania Gym',
     },
