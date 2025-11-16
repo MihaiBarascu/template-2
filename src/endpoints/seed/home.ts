@@ -3,12 +3,10 @@ import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
   heroImage: Media
-  metaImage: Media
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
-  metaImage,
 }) => {
   return {
     slug: 'home',
@@ -47,14 +45,14 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Un nou mod de a construi un stil de viață sănătos!',
+                  text: 'un mod de a construi un stil de viață sănătos!',
                   version: 1,
                 },
               ],
               direction: 'ltr',
               format: '',
               indent: 0,
-              tag: 'h6',
+              tag: 'h4',
               version: 1,
             },
             {
@@ -66,7 +64,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Transformă-ți corpul la Transilvania Gym',
+                  text: 'Transformă-ți corpul și mintea',
                   version: 1,
                 },
               ],
@@ -295,7 +293,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     ],
     meta: {
-      description: 'Transformă-ți corpul la Transilvania Gym - Un nou mod de a construi un stil de viață sănătos!',
+      description:
+        'Transformă-ți corpul la Transilvania Gym - Un nou mod de a construi un stil de viață sănătos!',
       image: heroImage.id,
       title: 'Transilvania Gym',
     },

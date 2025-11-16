@@ -1,5 +1,11 @@
 # Gymso Fitness → Payload Website Template
 
+## 📦 Package Manager
+**IMPORTANT:** Use `pnpm` for all package installations and commands. Do NOT use npm or yarn.
+
+## 🚫 Development Server
+**IMPORTANT:** Do NOT run `pnpm dev`, `pnpm build`, or any server commands. The user will handle running the development server themselves.
+
 ## 🎯 Project Overview
 
 We are converting the HTML template **Gymso Fitness** into a fully functional **Payload Website Template**, ensuring that **all component styling matches the original template as closely as possible**. We will **not add unnecessary blocks**; only essential ones for Gymso.
@@ -164,12 +170,16 @@ We will also integrate **ShadCN/UI** components wherever possible (buttons, moda
    - CTA content: membership info + working hours
    - Meta descriptions and titles
 
-### Phase 4: Essential Blocks Only (In Progress)
+### Phase 4: CMS Pages Approach (New Strategy)
 
-8. **Create ONLY necessary new blocks** (not duplicates):
-   - **Classes Block**: For fitness classes with images and pricing
-   - **Schedule Block**: For weekly schedule table
-   - All other sections use adapted existing blocks
+8. **Create separate CMS pages instead of hardcoding sections**:
+   - **Classes Page**: Create a dedicated page in CMS for fitness classes with Archive block showing services/classes
+   - **Schedule Page**: Separate page with schedule information
+   - **About Page**: Use existing page functionality with content blocks
+   - **Contact Page**: Dedicated contact page with form block
+   - This approach allows content editors to manage sections independently
+   - Can optionally display these as Archive blocks on homepage if needed
+   - Avoids hardcoding design - everything is managed through CMS
 
 ### Key Principles Learned:
 
@@ -247,6 +257,7 @@ Convert any HTML template into a fully functional Payload Website Template while
 7. **Animations & Interactivity**
    - Convert any template animations (AOS, jQuery) to Tailwind/Framer Motion.
    - Smooth scroll, modals, or interactive features should be implemented with React + Payload fields.
+   - Install packages with pnpm: `pnpm add framer-motion`
 
 8. **Testing & Optimization**
    - Test mobile, tablet, desktop responsiveness.

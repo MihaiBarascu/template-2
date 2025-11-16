@@ -226,11 +226,11 @@ export const seed = async ({
   payload.logger.info(`— Seeding pages...`)
 
   // First create the home page data
-  const [_, contactPage] = await Promise.all([
+  const [_] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      data: home({ heroImage: imageHomeDoc }),
     }),
     payload.create({
       collection: 'pages',

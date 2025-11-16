@@ -205,7 +205,63 @@
 }
 
 @layer components {
-  /* transilvania Button Styles */
+  /* Gymso Button Styles - Exact Match */
+  .custom-btn {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 2px !important;
+    padding: 24px 20px !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none !important;
+  }
+
+  .custom-btn:hover {
+    color: #f13a11 !important;
+    background: transparent !important;
+    text-decoration: none;
+  }
+
+  .custom-btn:focus {
+    box-shadow: none;
+    outline: none;
+  }
+
+  /* Bordered button variant - with visible orange border */
+  .custom-btn.bordered {
+    border: 1px solid #f13a11 !important;
+    color: #f13a11 !important;
+    background: transparent !important;
+  }
+
+  .custom-btn.bordered:hover,
+  .custom-btn.bordered:focus {
+    background: #ffffff !important;
+    color: #f13a11 !important;
+    border-color: transparent !important;
+  }
+
+  /* Primary/BG color button variant */
+  .custom-btn.bg-color {
+    background: #f13a11;
+    color: #ffffff;
+    border: 1px solid #f13a11;
+  }
+
+  .custom-btn.bg-color:hover,
+  .custom-btn.bg-color:focus {
+    background: #ffffff;
+    color: #f13a11;
+    border-color: transparent;
+  }
+
+  /* Transilvania Button Styles - Keep for other components */
   .transilvania-btn {
     @apply bg-transparent border border-transilvania-primary text-transilvania-white px-6 py-3 text-transilvania-menu font-transilvania-normal uppercase tracking-wide transition-all duration-300 rounded-transilvania-small;
     letter-spacing: 0.5px;
