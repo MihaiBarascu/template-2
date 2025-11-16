@@ -44,7 +44,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             href="/"
             className="text-3xl font-bold text-white hover:text-gymso-primary transition-colors"
           >
-            Gymso Fitness
+            Transilvania Gym
           </Link>
 
           {/* Desktop Navigation */}

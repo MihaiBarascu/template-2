@@ -37,7 +37,7 @@ export default async function ServicesPage() {
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
-          <h1 className="gymso-h1">Our Classes</h1>
+          <h1 className="gymso-h1">Clasele Noastre</h1>
         </div>
       </div>
 
@@ -48,7 +48,7 @@ export default async function ServicesPage() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Services - Gymso Fitness',
-    description: 'Explore our fitness classes and training services',
+    title: 'Servicii - Transilvania Gym',
+    description: 'Explorează clasele noastre de fitness și serviciile de antrenament',
   }
 }

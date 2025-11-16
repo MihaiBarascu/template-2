@@ -13,13 +13,13 @@ export const serviceCardio: (args: ServiceArgs) => RequiredDataFromCollectionSlu
   author,
 }) => {
   return {
-    slug: 'cardio-training',
+    slug: 'antrenament-cardio',
     _status: 'published',
     postType: 'service',
     serviceDetails: {
-      price: '$45/month',
+      price: '180 RON/lună',
       duration: '50 min',
-      schedule: 'Mon-Fri 8:00AM',
+      schedule: 'Luni-Vineri 8:00',
       trainer: 'Olivia',
     },
     authors: [author],
@@ -36,7 +36,7 @@ export const serviceCardio: (args: ServiceArgs) => RequiredDataFromCollectionSlu
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Boost your cardiovascular health and endurance with our dynamic cardio training program.',
+                text: 'Îmbunătățește-ți sănătatea cardiovasculară și rezistența cu programul nostru dinamic de antrenament cardio.',
                 version: 1,
               },
             ],

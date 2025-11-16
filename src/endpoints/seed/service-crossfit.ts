@@ -13,14 +13,14 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
   author,
 }) => {
   return {
-    slug: 'areobic-crossfit',
+    slug: 'aerobic-crossfit',
     _status: 'published',
     postType: 'service',
     serviceDetails: {
-      price: '$66/month',
+      price: '250 RON/lună',
       duration: '75 min',
-      schedule: 'Mon-Fri 6:00AM',
-      trainer: 'Mary',
+      schedule: 'Luni-Vineri 6:00',
+      trainer: 'Maria',
     },
     authors: [author],
     content: {
@@ -36,7 +36,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'High-intensity training that builds strength, endurance, and burns calories fast.',
+                text: 'Antrenament de intensitate ridicată care dezvoltă forța, rezistența și arde calorii rapid.',
                 version: 1,
               },
             ],
@@ -55,7 +55,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Our Aerobic & CrossFit program combines cardiovascular conditioning with functional strength movements to deliver maximum results. Led by our experienced trainer Mary, these intensive 75-minute sessions will challenge your limits while building real-world fitness that translates to everyday activities.',
+                text: 'Programul nostru Aerobic & CrossFit combină condiționarea cardiovasculară cu mișcări funcționale de forță pentru a oferi rezultate maxime. Condus de antrenorul nostru experimentat Maria, aceste sesiuni intensive de 75 de minute îți vor provoca limitele în timp ce dezvoltă o condiție fizică reală care se traduce în activitățile de zi cu zi.',
                 version: 1,
               },
             ],
@@ -74,7 +74,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Functional Fitness Training',
+                text: 'Antrenament de Fitness Funcțional',
                 version: 1,
               },
             ],
@@ -93,7 +93,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'CrossFit methodology focuses on constantly varied, high-intensity functional movements. Our workouts incorporate elements from weightlifting, gymnastics, and cardio to build comprehensive fitness. Each workout is scalable to individual fitness levels, ensuring everyone can participate safely while being challenged appropriately.',
+                text: 'Metodologia CrossFit se concentrează pe mișcări funcționale de intensitate ridicată, constant variate. Antrenamentele noastre incorporează elemente din haltere, gimnastică și cardio pentru a construi o condiție fizică completă. Fiecare antrenament este scalabil la nivelurile individuale de fitness, asigurând că toată lumea poate participa în siguranță în timp ce este provocată corespunzător.',
                 version: 1,
               },
             ],
@@ -122,7 +122,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Training Structure',
+                text: 'Structura Antrenamentului',
                 version: 1,
               },
             ],
@@ -141,7 +141,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Each session begins with a dynamic warm-up to prepare your body for intense exercise. The main workout varies daily but typically includes strength training, metabolic conditioning, and skill development. We finish with targeted stretching and mobility work to aid recovery. Our early morning schedule is perfect for starting your day with energy and focus.',
+                text: 'Fiecare sesiune începe cu o încălzire dinamică pentru a pregăti corpul pentru exerciții intense. Antrenamentul principal variază zilnic, dar include de obicei antrenament de forță, condiționare metabolică și dezvoltarea abilităților. Terminăm cu stretching țintit și lucru de mobilitate pentru a ajuta recuperarea. Programul nostru de dimineață devreme este perfect pentru a-ți începe ziua cu energie și concentrare.',
                 version: 1,
               },
             ],
@@ -154,7 +154,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
           {
             type: 'block',
             fields: {
-              blockName: 'High Intensity Results',
+              blockName: 'Rezultate de Intensitate Ridicată',
               blockType: 'banner',
               content: {
                 root: {
@@ -169,7 +169,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                           format: 1,
                           mode: 'normal',
                           style: '',
-                          text: 'Ready to push your limits?',
+                          text: 'Ești gata să-ți depășești limitele?',
                           version: 1,
                         },
                         {
@@ -178,7 +178,7 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
                           format: 0,
                           mode: 'normal',
                           style: '',
-                          text: ' Join our CrossFit community and discover what your body is truly capable of. Every workout is an opportunity to get stronger, faster, and more confident.',
+                          text: ' Alătură-te comunității noastre CrossFit și descoperă de ce este cu adevărat capabil corpul tău. Fiecare antrenament este o oportunitate de a deveni mai puternic, mai rapid și mai încrezător.',
                           version: 1,
                         },
                       ],
@@ -210,11 +210,11 @@ export const serviceCrossfit: (args: ServiceArgs) => RequiredDataFromCollectionS
     heroImage: heroImage.id,
     meta: {
       description:
-        'High-intensity aerobic and CrossFit training that builds strength, endurance, and burns calories fast. Expert coaching and scalable workouts for all levels.',
+        'Antrenament aerobic și CrossFit de intensitate ridicată care dezvoltă forța, rezistența și arde calorii rapid. Coaching expert și antrenamente scalabile pentru toate nivelurile.',
       image: heroImage.id,
-      title: 'Aerobic & CrossFit - High-Intensity Functional Fitness',
+      title: 'Aerobic & CrossFit - Fitness Funcțional de Intensitate Ridicată',
     },
     relatedPosts: [], // this is populated by the seed script
-    title: 'Areobic & Crossfit',
+    title: 'Aerobic & CrossFit',
   }
 }

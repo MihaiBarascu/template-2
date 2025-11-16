@@ -54,7 +54,7 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       colors: {
-        // Gymso specific colors
+        // Transilvania Gym specific colors
         'gymso-primary': '#f13a11',
         'gymso-white': '#ffffff',
         'gymso-dark': '#171819',

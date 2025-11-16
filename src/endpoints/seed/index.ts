@@ -248,54 +248,30 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
-              label: 'Home',
+              label: 'Acasă',
               url: '/',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'About Us',
-              url: '/#about',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Classes',
+              label: 'Clase',
               url: '/services',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Schedules',
-              url: '/#schedule',
-            },
-          },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
-              },
             },
           },
         ],
         socialLinks: [
           {
             platform: 'facebook',
-            url: 'https://facebook.com/gymso',
+            url: 'https://facebook.com/transilvaniagym',
           },
           {
             platform: 'twitter',
-            url: 'https://twitter.com/gymso',
+            url: 'https://twitter.com/transilvaniagym',
           },
           {
             platform: 'instagram',
-            url: 'https://instagram.com/gymso',
+            url: 'https://instagram.com/transilvaniagym',
           },
         ],
       },

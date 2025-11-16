@@ -13,14 +13,14 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
   author,
 }) => {
   return {
-    slug: 'yoga-training',
+    slug: 'antrenament-yoga',
     _status: 'published',
     postType: 'service',
     serviceDetails: {
-      price: '$50/month',
+      price: '200 RON/lună',
       duration: '60 min',
-      schedule: 'Mon-Fri 7:30AM',
-      trainer: 'Bella',
+      schedule: 'Luni-Vineri 7:30',
+      trainer: 'Ana Maria',
     },
     authors: [author],
     content: {
@@ -36,7 +36,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Transform your body and mind with our comprehensive yoga training program.',
+                text: 'Transformă-ți corpul și mintea cu programul nostru complet de antrenament yoga.',
                 version: 1,
               },
             ],
@@ -55,7 +55,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Our yoga training program combines traditional Hatha and Vinyasa styles to create a balanced practice that builds strength, flexibility, and inner peace. Whether you\'re a beginner looking to start your yoga journey or an experienced practitioner seeking to deepen your practice, our expert instructor Bella will guide you through each session with care and attention.',
+                text: 'Programul nostru de antrenament yoga combină stilurile tradiționale Hatha și Vinyasa pentru a crea o practică echilibrată care dezvoltă forța, flexibilitatea și pacea interioară. Fie că ești un începător care dorește să înceapă călătoria în yoga sau un practicant experimentat care caută să-și aprofundeze practica, instructorul nostru expert Ana Maria te va ghida prin fiecare sesiune cu grijă și atenție.',
                 version: 1,
               },
             ],
@@ -74,7 +74,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Benefits of Regular Yoga Practice',
+                text: 'Beneficiile practicării regulate a yoga',
                 version: 1,
               },
             ],
@@ -93,7 +93,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Yoga offers numerous physical and mental health benefits. Regular practice can improve flexibility, build muscle strength, and perfect your posture. It also helps reduce stress, increase focus, and promote better sleep patterns. Our structured 60-minute sessions are designed to maximize these benefits while ensuring a safe and enjoyable experience.',
+                text: 'Yoga oferă numeroase beneficii pentru sănătatea fizică și mentală. Practica regulată poate îmbunătăți flexibilitatea, poate dezvolta forța musculară și poate perfecționa postura. De asemenea, ajută la reducerea stresului, creșterea concentrării și promovarea unor tipare mai bune de somn. Sesiunile noastre structurate de 60 de minute sunt concepute pentru a maximiza aceste beneficii, asigurând în același timp o experiență sigură și plăcută.',
                 version: 1,
               },
             ],
@@ -122,7 +122,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'What to Expect',
+                text: 'La ce să te aștepți',
                 version: 1,
               },
             ],
@@ -141,7 +141,7 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Each yoga session begins with breathing exercises and gentle warm-up poses, followed by a flowing sequence that builds heat and strength in the body. Sessions conclude with relaxing poses and meditation to help you leave feeling centered and renewed. All necessary equipment is provided, and modifications are offered for different skill levels.',
+                text: 'Fiecare sesiune de yoga începe cu exerciții de respirație și poziții ușoare de încălzire, urmate de o secvență fluidă care creează căldură și forță în corp. Sesiunile se încheie cu poziții relaxante și meditație pentru a te ajuta să pleci simțindu-te centrat și reînnoit. Toate echipamentele necesare sunt furnizate, iar modificări sunt oferite pentru diferite niveluri de experiență.',
                 version: 1,
               },
             ],
@@ -161,11 +161,11 @@ export const serviceYoga: (args: ServiceArgs) => RequiredDataFromCollectionSlug<
     heroImage: heroImage.id,
     meta: {
       description:
-        'Transform your body and mind with our comprehensive yoga training program. Expert instruction, flexible scheduling, and benefits for all skill levels.',
+        'Transformă-ți corpul și mintea cu programul nostru complet de antrenament yoga. Instruire expertă, program flexibil și beneficii pentru toate nivelurile de experiență.',
       image: heroImage.id,
-      title: 'Yoga Training - Mindful Movement for Body & Soul',
+      title: 'Antrenament Yoga - Mișcare Conștientă pentru Corp și Suflet',
     },
     relatedPosts: [], // this is populated by the seed script
-    title: 'Yoga Training',
+    title: 'Antrenament Yoga',
   }
 }

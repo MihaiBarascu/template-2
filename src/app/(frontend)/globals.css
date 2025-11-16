@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Gymso Fitness Custom Font */
+/* Transilvania Gym Custom Font */
 @font-face {
   font-family: 'Plain';
   src:
@@ -32,7 +32,7 @@
 
 @layer base {
   :root {
-    /* Gymso Fitness Colors */
+    /* Transilvania Gym Colors */
     --gymso-primary: #f13a11;
     --gymso-white: #ffffff;
     --gymso-dark: #171819;
@@ -117,13 +117,13 @@
     @apply border-border;
   }
 
-  /* Gymso Global Styles */
+  /* Transilvania Gym Global Styles */
   body {
     @apply bg-gymso-white text-gymso-text min-h-[100vh] flex flex-col;
     font-family: 'Plain', sans-serif;
   }
 
-  /* Gymso Typography */
+  /* Transilvania Gym Typography */
   h1,
   h2,
   h3,
@@ -193,7 +193,7 @@
     letter-spacing: 0;
   }
 
-  /* Gymso Utility Classes */
+  /* Transilvania Gym Utility Classes */
   .gymso-section {
     @apply py-gymso-section;
   }

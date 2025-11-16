@@ -23,7 +23,7 @@ export const CallToAction: Block = {
           value: 'default',
         },
         {
-          label: 'Gymso Feature (Dark Background)',
+          label: 'Transilvania Gym Feature (Fundal Întunecat)',
           value: 'gymso-feature',
         },
       ],
