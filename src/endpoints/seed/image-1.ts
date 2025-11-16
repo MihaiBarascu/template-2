@@ -1,7 +1,7 @@
 import type { Media } from '@/payload-types'
 
 export const image1: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
-  alt: 'Curving abstract shapes with an orange and blue gradient',
+  alt: 'Yoga class in session with participants stretching',
   caption: {
     root: {
       type: 'root',
@@ -15,39 +15,7 @@ export const image1: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Photo by ',
-              version: 1,
-            },
-            {
-              type: 'link',
-              children: [
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Andrew Kliatskyi',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              fields: {
-                linkType: 'custom',
-                newTab: true,
-                url: 'https://unsplash.com/@kirp',
-              },
-              format: '',
-              indent: 0,
-              version: 2,
-            },
-            {
-              type: 'text',
-              detail: 0,
-              format: 0,
-              mode: 'normal',
-              style: '',
-              text: ' on Unsplash.',
+              text: 'Transform your body and mind with our yoga training sessions',
               version: 1,
             },
           ],

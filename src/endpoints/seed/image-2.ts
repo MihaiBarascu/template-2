@@ -1,7 +1,7 @@
 import type { Media } from '@/payload-types'
 
 export const image2: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
-  alt: 'Gymso Fitness - Cardio class training session',
+  alt: 'CrossFit training session with high intensity workout',
   caption: {
     root: {
       type: 'root',
@@ -15,39 +15,7 @@ export const image2: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Photo by ',
-              version: 1,
-            },
-            {
-              type: 'link',
-              children: [
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Andrew Kliatskyi',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              fields: {
-                linkType: 'custom',
-                newTab: true,
-                url: 'https://unsplash.com/@kirp',
-              },
-              format: '',
-              indent: 0,
-              version: 2,
-            },
-            {
-              type: 'text',
-              detail: 0,
-              format: 0,
-              mode: 'normal',
-              style: '',
-              text: ' on Unsplash.',
+              text: 'Push your limits with our Aerobic & CrossFit training',
               version: 1,
             },
           ],
