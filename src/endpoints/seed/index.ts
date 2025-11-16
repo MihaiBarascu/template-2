@@ -1,4 +1,4 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -6,10 +6,9 @@ import { home } from './home'
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
-import { post1 } from './post-1'
-import { post2 } from './post-2'
-import { post3 } from './post-3'
-
+import { serviceCardio } from './service-cardio'
+import { serviceCrossfit } from './service-crossfit'
+import { serviceYoga } from './service-yoga'
 const collections: CollectionSlug[] = [
   'categories',
   'media',
@@ -22,7 +21,7 @@ const collections: CollectionSlug[] = [
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
-const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+const categories = ['Classes', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -98,97 +97,120 @@ export const seed = async ({
     ),
   ])
 
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
-    payload.create({
-      collection: 'users',
-      data: {
-        name: 'Demo Author',
-        email: 'demo-author@example.com',
-        password: 'password',
-      },
-    }),
-    payload.create({
-      collection: 'media',
-      data: image1,
-      file: image1Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image2Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image3Buffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHero1,
-      file: hero1Buffer,
-    }),
-    categories.map((category) =>
+  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc, categoriesCreated] =
+    await Promise.all([
       payload.create({
-        collection: 'categories',
+        collection: 'users',
         data: {
-          title: category,
-          slug: category,
+          name: 'Demo Author',
+          email: 'demo-author@example.com',
+          password: 'password',
         },
       }),
-    ),
-  ])
+      payload.create({
+        collection: 'media',
+        data: image1,
+        file: image1Buffer,
+      }),
+      payload.create({
+        collection: 'media',
+        data: image2,
+        file: image2Buffer,
+      }),
+      payload.create({
+        collection: 'media',
+        data: image2,
+        file: image3Buffer,
+      }),
+      payload.create({
+        collection: 'media',
+        data: imageHero1,
+        file: hero1Buffer,
+      }),
+      Promise.all(
+        categories.map((category) =>
+          payload.create({
+            collection: 'categories',
+            data: {
+              title: category,
+              slug: category.toLowerCase(),
+            },
+          }),
+        ),
+      ),
+    ])
 
-  payload.logger.info(`— Seeding posts...`)
+  // Find the Classes category
+  const classesCategory = categoriesCreated.find((cat) => cat.title === 'Classes')
+
+  payload.logger.info(`— Seeding service posts...`)
 
   // Do not create posts with `Promise.all` because we want the posts to be created in order
   // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
-  const post1Doc = await payload.create({
+  const yogaData = serviceYoga({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor })
+  yogaData.categories = classesCategory ? [classesCategory.id] : []
+
+  const yogaDoc = await payload.create({
     collection: 'posts',
     depth: 0,
     context: {
       disableRevalidate: true,
     },
-    data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
+    data: yogaData,
   })
 
-  const post2Doc = await payload.create({
+  const crossfitData = serviceCrossfit({
+    heroImage: image2Doc,
+    blockImage: image3Doc,
+    author: demoAuthor,
+  })
+  crossfitData.categories = classesCategory ? [classesCategory.id] : []
+
+  const crossfitDoc = await payload.create({
     collection: 'posts',
     depth: 0,
     context: {
       disableRevalidate: true,
     },
-    data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
+    data: crossfitData,
   })
 
-  const post3Doc = await payload.create({
+  const cardioData = serviceCardio({
+    heroImage: image3Doc,
+    blockImage: image1Doc,
+    author: demoAuthor,
+  })
+  cardioData.categories = classesCategory ? [classesCategory.id] : []
+
+  const cardioDoc = await payload.create({
     collection: 'posts',
     depth: 0,
     context: {
       disableRevalidate: true,
     },
-    data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
+    data: cardioData,
   })
 
-  // update each post with related posts
+  // update each service post with related posts
   await payload.update({
-    id: post1Doc.id,
+    id: yogaDoc.id,
     collection: 'posts',
     data: {
-      relatedPosts: [post2Doc.id, post3Doc.id],
+      relatedPosts: [crossfitDoc.id, cardioDoc.id],
     },
   })
   await payload.update({
-    id: post2Doc.id,
+    id: crossfitDoc.id,
     collection: 'posts',
     data: {
-      relatedPosts: [post1Doc.id, post3Doc.id],
+      relatedPosts: [yogaDoc.id, cardioDoc.id],
     },
   })
   await payload.update({
-    id: post3Doc.id,
+    id: cardioDoc.id,
     collection: 'posts',
     data: {
-      relatedPosts: [post1Doc.id, post2Doc.id],
+      relatedPosts: [yogaDoc.id, crossfitDoc.id],
     },
   })
 
@@ -202,6 +224,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
+  // First create the home page data
   const [_, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
@@ -225,8 +248,8 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
-              label: 'Posts',
-              url: '/posts',
+              label: 'Services',
+              url: '/services',
             },
           },
           {
