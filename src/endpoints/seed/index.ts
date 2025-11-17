@@ -10,6 +10,8 @@ import { imageHero1 } from './image-hero-1'
 import { serviceCardio } from './service-cardio'
 import { serviceCrossfit } from './service-crossfit'
 import { serviceYoga } from './service-yoga'
+import { footerData } from './footer-data'
+// import { anpcLogo, solLogo } from './compliance-logos' // Temporar dezactivat până când imaginile sunt pe GitHub
 const collections: CollectionSlug[] = [
   'categories',
   'media',
@@ -44,20 +46,31 @@ export const seed = async ({
   payload.logger.info(`— Clearing collections and globals...`)
 
   // clear the database
-  await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: {
-          navItems: [],
-        },
-        depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
-      }),
-    ),
-  )
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'header',
+      data: {
+        navItems: [],
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      data: {
+        companyInfo: {},
+        columns: [],
+        socialMedia: {},
+        bottomBar: {},
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+  ])
 
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
@@ -96,6 +109,9 @@ export const seed = async ({
     fetchFileByURL(
       'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-hero1.webp',
     ),
+    // Temporar dezactivat până când imaginile sunt pe GitHub:
+    // fetchFileByURL('https://anpc.ro/galerie/file/categ_legislatie/1660/logo%20ANPC.png'),
+    // fetchFileByURL('https://ec.europa.eu/consumers/odr/resources/public2/images/odr_logo_ro.png'),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc, categoriesCreated] =
@@ -128,6 +144,17 @@ export const seed = async ({
         data: imageHero1,
         file: hero1Buffer,
       }),
+      // Temporar dezactivat până când imaginile sunt pe GitHub:
+      // payload.create({
+      //   collection: 'media',
+      //   data: anpcLogo,
+      //   file: anpcBuffer,
+      // }),
+      // payload.create({
+      //   collection: 'media',
+      //   data: solLogo,
+      //   file: solBuffer,
+      // }),
       Promise.all(
         categories.map((category) =>
           payload.create({
@@ -248,6 +275,28 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals...`)
 
+  // Temporar dezactivat până când imaginile sunt pe GitHub:
+  // const footerWithLogos = {
+  //   ...footerData,
+  //   bottomBar: {
+  //     ...footerData.bottomBar,
+  //     complianceLogos: [
+  //       {
+  //         logo: anpcDoc.id,
+  //         link: 'https://anpc.ro/',
+  //         altText: 'ANPC - Autoritatea Națională pentru Protecția Consumatorilor',
+  //         width: 120,
+  //       },
+  //       {
+  //         logo: solDoc.id,
+  //         link: 'https://ec.europa.eu/consumers/odr',
+  //         altText: 'SOL - Soluționarea Online a Litigiilor',
+  //         width: 150,
+  //       },
+  //     ],
+  //   },
+  // }
+
   await Promise.all([
     payload.updateGlobal({
       slug: 'header',
@@ -289,33 +338,7 @@ export const seed = async ({
     }),
     payload.updateGlobal({
       slug: 'footer',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
-        ],
-      },
+      data: footerData,
     }),
   ])
 

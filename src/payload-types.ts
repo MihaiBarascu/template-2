@@ -1704,26 +1704,132 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  companyInfo?: {
+    logoType?: ('text' | 'image' | 'both') | null;
+    logoText?: string | null;
+    logoImage?: (string | null) | Media;
+    description?: string | null;
+    showSocialHere?: boolean | null;
+  };
+  columns?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        title: string;
+        contentType?: ('links' | 'text' | 'contact' | 'schedule' | 'custom') | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        textItems?:
+          | {
+              icon?:
+                | (
+                    | 'none'
+                    | 'phone'
+                    | 'email'
+                    | 'location'
+                    | 'clock'
+                    | 'check'
+                    | 'arrow'
+                    | 'star'
+                    | 'heart'
+                    | 'user'
+                    | 'calendar'
+                  )
+                | null;
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        contactItems?:
+          | {
+              type: 'phone' | 'email' | 'address' | 'whatsapp';
+              value: string;
+              label?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        scheduleItems?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        customContent?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
         id?: string | null;
       }[]
     | null;
+  socialMedia?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    tiktok?: string | null;
+    youtube?: string | null;
+    whatsapp?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+  };
+  bottomBar?: {
+    copyright?: string | null;
+    legalLinks?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    complianceLogos?:
+      | {
+          logo: string | Media;
+          link?: string | null;
+          altText: string;
+          width?: number | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1762,19 +1868,97 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  companyInfo?:
     | T
     | {
-        link?:
+        logoType?: T;
+        logoText?: T;
+        logoImage?: T;
+        description?: T;
+        showSocialHere?: T;
+      };
+  columns?:
+    | T
+    | {
+        title?: T;
+        contentType?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        textItems?:
+          | T
+          | {
+              icon?: T;
+              text?: T;
+              id?: T;
+            };
+        contactItems?:
           | T
           | {
               type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
+              value?: T;
               label?: T;
+              id?: T;
             };
+        scheduleItems?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+        customContent?: T;
         id?: T;
+      };
+  socialMedia?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        tiktok?: T;
+        youtube?: T;
+        whatsapp?: T;
+        linkedin?: T;
+        twitter?: T;
+      };
+  bottomBar?:
+    | T
+    | {
+        copyright?: T;
+        legalLinks?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        complianceLogos?:
+          | T
+          | {
+              logo?: T;
+              link?: T;
+              altText?: T;
+              width?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
