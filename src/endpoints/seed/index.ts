@@ -11,18 +11,20 @@ import { serviceCardio } from './service-cardio'
 import { serviceCrossfit } from './service-crossfit'
 import { serviceYoga } from './service-yoga'
 import { footerData } from './footer-data'
+import { getTeamMembersData } from './teamMembersData'
 // import { anpcLogo, solLogo } from './compliance-logos' // Temporar dezactivat până când imaginile sunt pe GitHub
 const collections: CollectionSlug[] = [
   'categories',
   'media',
   'pages',
   'posts',
+  'team-members',
   'forms',
   'form-submissions',
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const _globals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Classes', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -242,6 +244,24 @@ export const seed = async ({
     },
   })
 
+  payload.logger.info(`— Seeding team members...`)
+
+  // Create team members using existing images
+  const teamMembersData = getTeamMembersData(image1Doc, image2Doc, image3Doc)
+
+  await Promise.all(
+    teamMembersData.map((memberData) =>
+      payload.create({
+        collection: 'team-members',
+        depth: 0,
+        data: {
+          ...memberData,
+          featuredImage: memberData.featuredImage.toString(),
+        },
+      })
+    )
+  )
+
   payload.logger.info(`— Seeding contact form...`)
 
   const contactForm = await payload.create({
@@ -317,6 +337,13 @@ export const seed = async ({
                 relationTo: 'pages',
                 value: clasePageDoc.id,
               },
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Echipa',
+              url: '/team-members',
             },
           },
         ],

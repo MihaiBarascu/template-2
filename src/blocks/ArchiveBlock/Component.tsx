@@ -1,4 +1,4 @@
-import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
+import type { Post, TeamMember, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -12,43 +12,65 @@ export const ArchiveBlock: React.FC<
     id?: string
   }
 > = async (props) => {
-  const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const {
+    id,
+    categories,
+    introContent,
+    limit: limitFromProps,
+    populateBy,
+    selectedDocs,
+    relationTo = 'posts'
+  } = props
 
   const limit = limitFromProps || 3
 
-  let posts: Post[] = []
+  let items: (Post | TeamMember)[] = []
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    const flattenedCategories = categories?.map((category) => {
-      if (typeof category === 'object') return category.id
-      else return category
-    })
+    if (relationTo === 'posts') {
+      const flattenedCategories = categories?.map((category) => {
+        if (typeof category === 'object') return category.id
+        else return category
+      })
 
-    const fetchedPosts = await payload.find({
-      collection: 'posts',
-      depth: 1,
-      limit,
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
+      const fetchedPosts = await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit,
+        ...(flattenedCategories && flattenedCategories.length > 0
+          ? {
+              where: {
+                categories: {
+                  in: flattenedCategories,
+                },
               },
-            },
-          }
-        : {}),
-    })
+            }
+          : {}),
+      })
 
-    posts = fetchedPosts.docs
+      items = fetchedPosts.docs
+    } else if (relationTo === 'team-members') {
+      const fetchedMembers = await payload.find({
+        collection: 'team-members',
+        depth: 1,
+        limit,
+        where: {
+          status: { equals: 'published' },
+        },
+        sort: '-createdAt',
+      })
+
+      items = fetchedMembers.docs
+    }
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
-        if (typeof post.value === 'object') return post.value
-      }) as Post[]
+      const filteredSelectedItems = selectedDocs.map((item) => {
+        if (typeof item.value === 'object') return item.value
+      }) as (Post | TeamMember)[]
 
-      posts = filteredSelectedPosts
+      items = filteredSelectedItems
     }
   }
 
@@ -59,7 +81,7 @@ export const ArchiveBlock: React.FC<
           <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
         </div>
       )}
-      <CollectionArchive posts={posts} />
+      <CollectionArchive items={items} collectionType={relationTo || 'posts'} />
     </div>
   )
 }
