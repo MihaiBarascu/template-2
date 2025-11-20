@@ -1,21 +1,20 @@
 import type { Metadata } from 'next'
 
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
 import RichText from '@/components/RichText'
+import configPromise from '@payload-config'
+import { Award, ChevronRight, Facebook, Instagram, Mail, Phone, Target } from 'lucide-react'
 import Image from 'next/image'
-import { Facebook, Instagram, Mail, Phone } from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import { cache } from 'react'
 
+import type { TeamMember } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
   try {
-    const payload = await getPayloadHMR({ config: configPromise })
+    const payload = await getPayload({ config: configPromise })
 
     if (!payload) {
       console.warn('Payload not initialized for team-members')
@@ -24,9 +23,7 @@ export async function generateStaticParams() {
 
     const teamMembers = await payload.find({
       collection: 'team-members',
-      draft: false,
       limit: 1000,
-      overrideAccess: false,
       pagination: false,
       select: {
         slug: true,
@@ -54,6 +51,22 @@ type Args = {
   }>
 }
 
+// Helper function to get other team members
+const getOtherTeamMembers = cache(async (currentId: string) => {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'team-members',
+    where: {
+      id: { not_equals: currentId },
+    },
+    limit: 3,
+    depth: 2,
+  })
+
+  return result.docs as TeamMember[]
+})
+
 export default async function TeamMemberPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
@@ -61,171 +74,294 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
   const teamMember = await queryTeamMemberBySlug({ slug: decodedSlug })
 
   if (!teamMember) {
-    return (
-      <div className="container py-16">
-        <h1 className="text-2xl font-bold mb-4">Team Member Not Found</h1>
-        <p>Looking for: {decodedSlug}</p>
-        <p className="mt-4">
-          <a href="/team-members" className="text-blue-600 underline">
-            ← Back to all team members
-          </a>
-        </p>
-      </div>
-    )
+    notFound()
   }
 
-  const { isEnabled: draft } = await draftMode()
+  // Get other team members for the "Meet the Team" section
+  const otherMembers = await getOtherTeamMembers(teamMember.id)
+
+  // Get the image URL safely
+  const imageUrl =
+    teamMember.featuredImage && typeof teamMember.featuredImage === 'object'
+      ? teamMember.featuredImage.url
+      : null
 
   return (
-    <article className="pb-16">
-      {/* Hero Section with Image */}
-      <div className="relative h-[400px] md:h-[500px] bg-gradient-to-b from-transilvania-dark to-black">
-        {teamMember.featuredImage && typeof teamMember.featuredImage === 'object' && (
-          <div className="absolute inset-0">
-            <Image
-              src={teamMember.featuredImage.url || ''}
-              alt={teamMember.featuredImage.alt || teamMember.title}
-              fill
-              className="object-cover opacity-30"
-              priority
-            />
-          </div>
-        )}
+    <div className="min-h-screen bg-gray-50">
+      <article className="container mx-auto py-8 px-4">
+        {/* Breadcrumb */}
+        <nav className="mb-8">
+          <ol className="flex items-center space-x-2 text-sm text-gray-500">
+            <li>
+              <Link href="/" className="hover:text-transilvania-primary transition-colors">
+                Acasă
+              </Link>
+            </li>
+            <li>
+              <ChevronRight className="w-4 h-4" />
+            </li>
+            <li>
+              <Link
+                href="/team-members"
+                className="hover:text-transilvania-primary transition-colors"
+              >
+                Echipa
+              </Link>
+            </li>
+            <li>
+              <ChevronRight className="w-4 h-4" />
+            </li>
+            <li className="text-transilvania-dark font-medium">{teamMember.title}</li>
+          </ol>
+        </nav>
 
-        <div className="relative container h-full flex items-end pb-12">
-          <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3">
-              {teamMember.title}
-            </h1>
-            {teamMember.role && (
-              <p className="text-xl md:text-2xl text-transilvania-primary font-medium">
-                {teamMember.role}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Left Column - Image & Quick Info */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-8">
+              {imageUrl ? (
+                <div className="relative h-96 lg:h-[450px]">
+                  <Image
+                    src={imageUrl}
+                    alt={teamMember.title || 'Team member'}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              ) : (
+                <div className="h-96 lg:h-[450px] bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
+                  <div className="text-6xl font-bold text-transilvania-primary/30">
+                    {teamMember.title?.charAt(0).toUpperCase()}
+                  </div>
+                </div>
+              )}
 
-      <div className="container mt-12">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Main Content */}
+              <div className="p-6 space-y-4">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-transilvania-dark">{teamMember.title}</h2>
+                  {teamMember.role && (
+                    <p className="text-lg text-transilvania-primary font-medium mt-1">
+                      {teamMember.role}
+                    </p>
+                  )}
+                </div>
+
+                {/* Experience Badge */}
+                {teamMember.experience && (
+                  <div className="flex items-center justify-center gap-3 py-4 border-y border-gray-100">
+                    <Award className="w-8 h-8 text-transilvania-primary" />
+                    <div>
+                      <p className="text-2xl font-bold text-transilvania-dark">
+                        {teamMember.experience}+
+                      </p>
+                      <p className="text-sm text-gray-600">Ani experiență</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Contact Info */}
+                {teamMember.contact && (
+                  <div className="space-y-3">
+                    {teamMember.contact.email && (
+                      <a
+                        href={`mailto:${teamMember.contact.email}`}
+                        className="flex items-center gap-3 text-gray-600 hover:text-transilvania-primary transition-colors"
+                      >
+                        <Mail className="w-5 h-5 flex-shrink-0" />
+                        <span className="text-sm break-all">{teamMember.contact.email}</span>
+                      </a>
+                    )}
+                    {teamMember.contact.phone && (
+                      <a
+                        href={`tel:${teamMember.contact.phone}`}
+                        className="flex items-center gap-3 text-gray-600 hover:text-transilvania-primary transition-colors"
+                      >
+                        <Phone className="w-5 h-5 flex-shrink-0" />
+                        <span className="text-sm">{teamMember.contact.phone}</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {/* Social Media */}
+                {teamMember.socialMedia && (
+                  <div className="pt-4">
+                    <div className="flex justify-center gap-3">
+                      {teamMember.socialMedia.facebook && (
+                        <a
+                          href={teamMember.socialMedia.facebook}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-transilvania-primary/10 hover:bg-transilvania-primary hover:text-white transition-all"
+                          aria-label="Facebook"
+                        >
+                          <Facebook className="w-5 h-5" />
+                        </a>
+                      )}
+                      {teamMember.socialMedia.instagram && (
+                        <a
+                          href={teamMember.socialMedia.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-transilvania-primary/10 hover:bg-transilvania-primary hover:text-white transition-all"
+                          aria-label="Instagram"
+                        >
+                          <Instagram className="w-5 h-5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Bio & Details */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Bio */}
-            {teamMember.excerpt && (
-              <div className="prose prose-lg max-w-none">
-                <p className="text-lg text-transilvania-text leading-relaxed">
-                  {teamMember.excerpt}
-                </p>
-              </div>
-            )}
+            {/* Main Bio Section */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              {teamMember.excerpt && (
+                <div className="mb-6">
+                  <p className="text-lg text-gray-700 leading-relaxed font-light">
+                    {teamMember.excerpt}
+                  </p>
+                </div>
+              )}
 
-            {/* Rich Text Content */}
-            {teamMember.content && (
-              <div className="prose prose-lg max-w-none">
-                <RichText data={teamMember.content} />
-              </div>
-            )}
+              {/* Rich Text Content */}
+              {teamMember.content && (
+                <div className="prose prose-lg max-w-none prose-headings:text-transilvania-dark prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-transilvania-dark prose-a:text-transilvania-primary hover:prose-a:text-transilvania-primary/80">
+                  <RichText data={teamMember.content} />
+                </div>
+              )}
+            </div>
 
-            {/* Specializations */}
+            {/* Specializations Card */}
             {teamMember.specializations && teamMember.specializations.length > 0 && (
-              <div>
-                <h2 className="text-2xl font-bold text-transilvania-dark mb-4">
-                  Specializări
-                </h2>
-                <div className="flex flex-wrap gap-3">
+              <div className="bg-white rounded-xl shadow-lg p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Target className="w-6 h-6 text-transilvania-primary" />
+                  <h2 className="text-2xl font-bold text-transilvania-dark">Specializări</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {teamMember.specializations.map((spec, index) => (
-                    <span
+                    <div
                       key={index}
-                      className="px-4 py-2 bg-transilvania-primary/10 text-transilvania-primary
-                               rounded-full font-medium"
+                      className="px-4 py-3 bg-gradient-to-r from-transilvania-primary/10 to-transparent text-transilvania-dark rounded-lg font-medium border border-transilvania-primary/20 hover:border-transilvania-primary/40 transition-colors"
                     >
                       {spec.name}
-                    </span>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="bg-gray-50 rounded-xl p-6 sticky top-8">
-              {/* Experience */}
-              {teamMember.experience && (
-                <div className="text-center mb-6 pb-6 border-b">
-                  <p className="text-3xl font-bold text-transilvania-primary">
-                    {teamMember.experience}+
-                  </p>
-                  <p className="text-sm text-transilvania-text">Ani experiență</p>
-                </div>
-              )}
-
-              {/* Contact */}
-              {teamMember.contact && (
-                <div className="space-y-3 mb-6">
-                  <h3 className="font-semibold text-transilvania-dark mb-3">Contact</h3>
-                  {teamMember.contact.email && (
-                    <a
-                      href={`mailto:${teamMember.contact.email}`}
-                      className="flex items-center gap-3 text-transilvania-text
-                               hover:text-transilvania-primary transition-colors"
-                    >
-                      <Mail className="w-5 h-5" />
-                      <span className="text-sm">{teamMember.contact.email}</span>
-                    </a>
-                  )}
-                  {teamMember.contact.phone && (
-                    <a
-                      href={`tel:${teamMember.contact.phone}`}
-                      className="flex items-center gap-3 text-transilvania-text
-                               hover:text-transilvania-primary transition-colors"
-                    >
-                      <Phone className="w-5 h-5" />
-                      <span className="text-sm">{teamMember.contact.phone}</span>
-                    </a>
-                  )}
-                </div>
-              )}
-
-              {/* Social Media */}
-              {teamMember.socialMedia && (
-                <div className="pt-6 border-t">
-                  <h3 className="font-semibold text-transilvania-dark mb-3">Social Media</h3>
-                  <div className="flex gap-3">
-                    {teamMember.socialMedia.facebook && (
-                      <a
-                        href={teamMember.socialMedia.facebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 flex items-center justify-center rounded-full
-                                 bg-white shadow hover:shadow-md transition-shadow"
-                        aria-label="Facebook"
-                      >
-                        <Facebook className="w-5 h-5 text-transilvania-text" />
-                      </a>
-                    )}
-                    {teamMember.socialMedia.instagram && (
-                      <a
-                        href={teamMember.socialMedia.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 flex items-center justify-center rounded-full
-                                 bg-white shadow hover:shadow-md transition-shadow"
-                        aria-label="Instagram"
-                      >
-                        <Instagram className="w-5 h-5 text-transilvania-text" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
+            {/* CTA Section */}
+            <div className="bg-gradient-to-r from-transilvania-primary to-transilvania-primary/90 rounded-xl shadow-lg p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">
+                Vrei să lucrezi cu {teamMember.title?.split(' ')[0]}?
+              </h3>
+              <p className="mb-6 text-white/90">
+                Contactează-ne pentru a programa o sesiune de antrenament sau pentru mai multe
+                informații despre serviciile noastre.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-transilvania-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  Contactează-ne
+                </Link>
+                <Link
+                  href="/classes"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-transparent text-white font-bold rounded-lg border-2 border-white hover:bg-white/10 transition-colors"
+                >
+                  Vezi clasele disponibile
+                </Link>
+              </div>
             </div>
-          </aside>
+          </div>
         </div>
-      </div>
 
-      {draft && <LivePreviewListener />}
-    </article>
+        {/* Other Team Members Section */}
+        {otherMembers.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-transilvania-dark mb-8">Restul echipei</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {otherMembers.map((member) => {
+                const memberImageUrl =
+                  member.featuredImage && typeof member.featuredImage === 'object'
+                    ? member.featuredImage.url
+                    : null
+
+                return (
+                  <div
+                    key={member.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow group"
+                  >
+                    <Link href={`/team-members/${member.slug}`}>
+                      <div className="relative h-64">
+                        {memberImageUrl ? (
+                          <Image
+                            src={memberImageUrl}
+                            alt={member.title || 'Team member'}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="h-full bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
+                            <div className="text-4xl font-bold text-transilvania-primary/30">
+                              {member.title?.charAt(0).toUpperCase()}
+                            </div>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                        <div className="absolute bottom-0 left-0 p-6 text-white">
+                          <h3 className="font-bold text-xl mb-1">{member.title}</h3>
+                          {member.role && <p className="text-sm text-white/90">{member.role}</p>}
+                        </div>
+                      </div>
+                      {member.specializations && member.specializations.length > 0 && (
+                        <div className="p-4">
+                          <div className="flex flex-wrap gap-2">
+                            {member.specializations.slice(0, 2).map((spec, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs px-2 py-1 bg-transilvania-primary/10 text-transilvania-primary rounded-full"
+                              >
+                                {spec.name}
+                              </span>
+                            ))}
+                            {member.specializations.length > 2 && (
+                              <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
+                                +{member.specializations.length - 2}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </Link>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* View All Team Button */}
+            <div className="text-center mt-8">
+              <Link
+                href="/team-members"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-transilvania-primary text-white font-bold rounded-lg hover:bg-transilvania-primary/90 transition-colors"
+              >
+                Vezi toată echipa
+                <ChevronRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        )}
+      </article>
+    </div>
   )
 }
 
@@ -237,15 +373,11 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryTeamMemberBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
     collection: 'team-members',
-    draft,
     limit: 1,
-    overrideAccess: draft,
     pagination: false,
     where: {
       slug: {

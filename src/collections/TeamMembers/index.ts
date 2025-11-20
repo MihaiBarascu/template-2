@@ -1,8 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { anyone } from '../../access/anyone'
 
 export const TeamMembers: CollectionConfig<'team-members'> = {
   slug: 'team-members',
@@ -14,18 +13,17 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
     title: true,
     slug: true,
     role: true,
-    status: true,
     featuredImage: true,
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'role', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'role', 'updatedAt'],
     group: 'Conținut',
   },
   access: {
     create: authenticated,
     delete: authenticated,
-    read: authenticatedOrPublished,
+    read: anyone,
     update: authenticated,
   },
   fields: [
@@ -114,38 +112,6 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
         },
       ],
     },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
-        position: 'sidebar',
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData.status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
-      },
-    },
-    {
-      name: 'status',
-      type: 'select',
-      defaultValue: 'published',
-      options: [
-        { label: 'Publicat', value: 'published' },
-        { label: 'Draft', value: 'draft' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
   ],
   hooks: {
     afterChange: [
@@ -157,7 +123,6 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
         return doc
       },
     ],
-    beforeChange: [populatePublishedAt],
   },
   versions: {
     drafts: {

@@ -654,8 +654,6 @@ export interface TeamMember {
     facebook?: string | null;
     instagram?: string | null;
   };
-  publishedAt?: string | null;
-  status?: ('published' | 'draft') | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1481,8 +1479,6 @@ export interface TeamMembersSelect<T extends boolean = true> {
         facebook?: T;
         instagram?: T;
       };
-  publishedAt?: T;
-  status?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

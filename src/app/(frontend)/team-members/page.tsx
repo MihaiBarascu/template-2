@@ -28,9 +28,6 @@ export default async function TeamMembersPage({
     depth: 1,
     limit: 12,
     page: currentPage,
-    where: {
-      status: { equals: 'published' },
-    },
     sort: '-createdAt',
   })
 
