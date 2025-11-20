@@ -3,7 +3,7 @@ import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from '
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
-import { clasePage } from './clase-page'
+// import { clasePage } from './clase-page' // No longer needed with dedicated Classes collection
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
@@ -249,7 +249,7 @@ export const seed = async ({
   // Create team members using existing images
   const teamMembersData = getTeamMembersData(image1Doc, image2Doc, image3Doc)
 
-  await Promise.all(
+  const teamMembers = await Promise.all(
     teamMembersData.map((memberData) =>
       payload.create({
         collection: 'team-members',
@@ -261,6 +261,434 @@ export const seed = async ({
       })
     )
   )
+
+  payload.logger.info(`— Seeding classes...`)
+
+  // Create classes
+  await Promise.all([
+    payload.create({
+      collection: 'classes',
+      depth: 0,
+      data: {
+        title: 'Yoga pentru Începători',
+        slug: 'yoga-incepatori',
+        featuredImage: image1Doc.id,
+        description: 'Clasă de yoga perfectă pentru cei care vor să înceapă o practică de yoga relaxantă și revigorantă.',
+        category: 'mind-body',
+        difficulty: 'beginner',
+        duration: 60,
+        trainer: teamMembers[1].id, // Maria Ionescu
+        capacity: 20,
+        active: true,
+        schedule: [
+          { day: 'monday', time: '18:00' },
+          { day: 'wednesday', time: '18:00' },
+          { day: 'friday', time: '18:00' },
+        ],
+        price: {
+          dropIn: 50,
+          monthly: 350,
+          package: {
+            sessions: 10,
+            price: 400,
+          },
+        },
+        benefits: [
+          { benefit: 'Îmbunătățește flexibilitatea' },
+          { benefit: 'Reduce stresul și anxietatea' },
+          { benefit: 'Întărește musculatura' },
+          { benefit: 'Îmbunătățește postura' },
+        ],
+        requirements: 'Saltea de yoga, prosop, sticlă de apă',
+        content: {
+          root: {
+            type: 'root',
+            version: 1,
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            children: [
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Descoperă beneficiile yoga într-o atmosferă relaxantă și prietenoasă. Clasa noastră pentru începători este perfectă pentru cei care doresc să exploreze yoga pentru prima dată sau să-și consolideze bazele.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Ce vei învăța',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'În această clasă vei învăța pozițiile de bază ale yoga (asanas), tehnici de respirație (pranayama) și principiile fundamentale ale practicii yoga. Fiecare sesiune include încălzire, secvență de poziții și relaxare finală.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Pentru cine este potrivită',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Această clasă este perfectă pentru începători absoluți sau pentru cei care vor să-și consolideze bazele. Nu este necesară experiență anterioară. Toate vârstele și nivelurile de fitness sunt binevenite.',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    }),
+    payload.create({
+      collection: 'classes',
+      depth: 0,
+      data: {
+        title: 'CrossFit Intensiv',
+        slug: 'crossfit-intensiv',
+        featuredImage: image2Doc.id,
+        description: 'Antrenament de înaltă intensitate pentru cei care vor rezultate rapide și vizibile.',
+        category: 'strength',
+        difficulty: 'advanced',
+        duration: 45,
+        trainer: teamMembers[0].id, // Mihai Radu
+        capacity: 15,
+        active: true,
+        schedule: [
+          { day: 'tuesday', time: '07:00' },
+          { day: 'thursday', time: '07:00' },
+          { day: 'saturday', time: '09:00' },
+        ],
+        price: {
+          dropIn: 70,
+          monthly: 450,
+        },
+        benefits: [
+          { benefit: 'Crește forța și rezistența' },
+          { benefit: 'Arde calorii eficient' },
+          { benefit: 'Dezvoltă masa musculară' },
+          { benefit: 'Îmbunătățește condiția fizică generală' },
+        ],
+        requirements: 'Încălțăminte sport, prosop mare, sticlă de apă, mănuși (opțional)',
+        content: {
+          root: {
+            type: 'root',
+            version: 1,
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            children: [
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'CrossFit este o metodă de antrenament care combină exerciții din gimnastică, haltere olimpice și exerciții cardiovasculare într-un program variat și intens.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Structura antrenamentului',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Fiecare sesiune începe cu o încălzire dinamică, urmată de exerciții de tehnică și mobilitate. Partea principală constă în WOD (Workout of the Day) - un antrenament intens și variat. Încheierea include stretching și recuperare.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Rezultate așteptate',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'După 4-6 săptămâni de antrenament constant vei observa îmbunătățiri semnificative în forță, rezistență cardiovasculară, flexibilitate și compoziție corporală. CrossFit dezvoltă toate cele 10 componente ale fitness-ului.',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    }),
+    payload.create({
+      collection: 'classes',
+      depth: 0,
+      data: {
+        title: 'Pilates Core',
+        slug: 'pilates-core',
+        featuredImage: image3Doc.id,
+        description: 'Consolidează-ți centrul corpului și îmbunătățește-ți postura cu exerciții Pilates.',
+        category: 'flexibility',
+        difficulty: 'intermediate',
+        duration: 50,
+        trainer: teamMembers[2].id, // Alexandru Popescu
+        capacity: 12,
+        active: true,
+        schedule: [
+          { day: 'monday', time: '10:00' },
+          { day: 'wednesday', time: '10:00' },
+          { day: 'friday', time: '10:00' },
+        ],
+        price: {
+          dropIn: 60,
+          monthly: 400,
+          package: {
+            sessions: 8,
+            price: 380,
+          },
+        },
+        benefits: [
+          { benefit: 'Întărește mușchii abdominali' },
+          { benefit: 'Îmbunătățește echilibrul' },
+          { benefit: 'Reduce durerile de spate' },
+          { benefit: 'Tonifică întregul corp' },
+        ],
+        requirements: 'Saltea de yoga, îmbrăcăminte confortabilă',
+        content: {
+          root: {
+            type: 'root',
+            version: 1,
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            children: [
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Pilates este o metodă de exerciții care se concentrează pe întărirea mușchilor centrali ai corpului, îmbunătățirea posturii și creșterea flexibilității.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Principiile Pilates',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Metoda Pilates se bazează pe 6 principii fundamentale: concentrare, control, centru, fluiditate, precizie și respirație. Fiecare exercițiu este executat cu atenție la detalii și coordonare perfectă cu respirația.',
+                  },
+                ],
+              },
+              {
+                type: 'heading',
+                version: 1,
+                tag: 'h3',
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Beneficii pe termen lung',
+                  },
+                ],
+              },
+              {
+                type: 'paragraph',
+                version: 1,
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                children: [
+                  {
+                    type: 'text',
+                    version: 1,
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Practicarea regulată a Pilates îmbunătățește postura, reduce durerile de spate, crește flexibilitatea și mobilitatea articulară. Este excelent pentru recuperare după accidentări și pentru prevenirea leziunilor.',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    }),
+  ])
 
   payload.logger.info(`— Seeding contact form...`)
 
@@ -286,12 +714,12 @@ export const seed = async ({
     }),
   ])
 
-  // Create clase page after we have the category
-  const clasePageDoc = await payload.create({
-    collection: 'pages',
-    depth: 0,
-    data: clasePage(classesCategory),
-  })
+  // Create clase page after we have the category - disabled as we now have a dedicated Classes collection
+  // const clasePageDoc = await payload.create({
+  //   collection: 'pages',
+  //   depth: 0,
+  //   data: clasePage(classesCategory),
+  // })
 
   payload.logger.info(`— Seeding globals...`)
 
@@ -331,12 +759,9 @@ export const seed = async ({
           },
           {
             link: {
-              type: 'reference',
+              type: 'custom',
               label: 'Clase',
-              reference: {
-                relationTo: 'pages',
-                value: clasePageDoc.id,
-              },
+              url: '/classes',
             },
           },
           {

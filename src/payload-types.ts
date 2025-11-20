@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     'team-members': TeamMember;
+    classes: Class;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +97,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    classes: ClassesSelect<false> | ClassesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -860,6 +862,68 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classes".
+ */
+export interface Class {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  featuredImage?: (string | null) | Media;
+  description: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  trainer?: (string | null) | TeamMember;
+  category: 'cardio' | 'strength' | 'flexibility' | 'mind-body' | 'combat' | 'dance';
+  difficulty?: ('beginner' | 'intermediate' | 'advanced' | 'all-levels') | null;
+  duration: number;
+  schedule?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  capacity?: number | null;
+  price?: {
+    dropIn?: number | null;
+    monthly?: number | null;
+    package?: {
+      sessions?: number | null;
+      price?: number | null;
+    };
+  };
+  benefits?:
+    | {
+        benefit?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  requirements?: string | null;
+  featured?: boolean | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1071,6 +1135,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'team-members';
         value: string | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'classes';
+        value: string | Class;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1479,6 +1547,54 @@ export interface TeamMembersSelect<T extends boolean = true> {
         facebook?: T;
         instagram?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classes_select".
+ */
+export interface ClassesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  featuredImage?: T;
+  description?: T;
+  content?: T;
+  trainer?: T;
+  category?: T;
+  difficulty?: T;
+  duration?: T;
+  schedule?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        id?: T;
+      };
+  capacity?: T;
+  price?:
+    | T
+    | {
+        dropIn?: T;
+        monthly?: T;
+        package?:
+          | T
+          | {
+              sessions?: T;
+              price?: T;
+            };
+      };
+  benefits?:
+    | T
+    | {
+        benefit?: T;
+        id?: T;
+      };
+  requirements?: T;
+  featured?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
