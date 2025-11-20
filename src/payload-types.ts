@@ -916,7 +916,6 @@ export interface Class {
       }[]
     | null;
   requirements?: string | null;
-  featured?: boolean | null;
   active?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1593,7 +1592,6 @@ export interface ClassesSelect<T extends boolean = true> {
         id?: T;
       };
   requirements?: T;
-  featured?: T;
   active?: T;
   updatedAt?: T;
   createdAt?: T;
