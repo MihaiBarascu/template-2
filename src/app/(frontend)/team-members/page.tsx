@@ -8,6 +8,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { TeamMember } from '@/payload-types'
 
+export const dynamic = 'force-static'
+export const revalidate = 600
+
 export const metadata: Metadata = {
   title: 'Echipa Noastră | Transilvania Fitness',
   description: 'Întâlnește echipa de profesioniști dedicați de la Transilvania Fitness',

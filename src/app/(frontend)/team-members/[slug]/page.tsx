@@ -13,36 +13,22 @@ import type { TeamMember } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 
 export async function generateStaticParams() {
-  try {
-    const payload = await getPayload({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
+  const teamMembers = await payload.find({
+    collection: 'team-members',
+    limit: 1000,
+    overrideAccess: false,
+    pagination: false,
+    select: {
+      slug: true,
+    },
+  })
 
-    if (!payload) {
-      console.warn('Payload not initialized for team-members')
-      return []
-    }
+  const params = teamMembers.docs.map(({ slug }) => {
+    return { slug }
+  })
 
-    const teamMembers = await payload.find({
-      collection: 'team-members',
-      limit: 1000,
-      pagination: false,
-      select: {
-        slug: true,
-      },
-    })
-
-    if (!teamMembers || !teamMembers.docs) {
-      return []
-    }
-
-    const params = teamMembers.docs
-      .filter((doc) => doc.slug)
-      .map(({ slug }) => ({ slug: slug || '' }))
-
-    return params
-  } catch (error) {
-    console.warn('Failed to generate static params for team-members:', error)
-    return []
-  }
+  return params
 }
 
 type Args = {
