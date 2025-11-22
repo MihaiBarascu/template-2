@@ -207,6 +207,24 @@ export interface Page {
   };
   layout: (
     | CallToActionBlock
+    | {
+        /**
+         * Textul mic de deasupra titlului principal
+         */
+        preTitle?: string | null;
+        title: string;
+        /**
+         * Selectează clasele care vor fi afișate (maxim 6)
+         */
+        classes: (string | Class)[];
+        /**
+         * Afișează badge-ul cu prețul pe imagine
+         */
+        showPrice?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'classesPreview';
+      }
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
@@ -224,6 +242,28 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'schedule';
+      }
+    | {
+        title: string;
+        /**
+         * Descriere care apare sub titlu
+         */
+        description?: string | null;
+        /**
+         * Selectează membrii echipei care vor fi afișați (maxim 6)
+         */
+        teamMembers: (string | TeamMember)[];
+        /**
+         * Afișează iconițele pentru social media pe hover
+         */
+        showSocialLinks?: boolean | null;
+        /**
+         * Alege stilul vizual pentru afișarea echipei
+         */
+        designTheme?: ('default' | 'transilvania') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'teamPreview';
       }
   )[];
   meta?: {
@@ -535,6 +575,119 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classes".
+ */
+export interface Class {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  featuredImage?: (string | null) | Media;
+  description: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  trainer?: (string | null) | TeamMember;
+  category: 'cardio' | 'strength' | 'flexibility' | 'mind-body' | 'combat' | 'dance';
+  difficulty?: ('beginner' | 'intermediate' | 'advanced' | 'all-levels') | null;
+  duration: number;
+  schedule?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  capacity?: number | null;
+  price?: {
+    dropIn?: number | null;
+    monthly?: number | null;
+    package?: {
+      sessions?: number | null;
+      price?: number | null;
+    };
+  };
+  benefits?:
+    | {
+        benefit?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  requirements?: string | null;
+  active?: boolean | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  role: string;
+  featuredImage?: (string | null) | Media;
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  experience?: number | null;
+  specializations?:
+    | {
+        name?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+  };
+  socialMedia?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    twitter?: string | null;
+  };
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
@@ -632,56 +785,6 @@ export interface ArchiveBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team-members".
- */
-export interface TeamMember {
-  id: string;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  role: string;
-  featuredImage?: (string | null) | Media;
-  excerpt?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  experience?: number | null;
-  specializations?:
-    | {
-        name?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  contact?: {
-    email?: string | null;
-    phone?: string | null;
-  };
-  socialMedia?: {
-    facebook?: string | null;
-    instagram?: string | null;
-  };
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -882,68 +985,6 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "classes".
- */
-export interface Class {
-  id: string;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  featuredImage?: (string | null) | Media;
-  description: string;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  trainer?: (string | null) | TeamMember;
-  category: 'cardio' | 'strength' | 'flexibility' | 'mind-body' | 'combat' | 'dance';
-  difficulty?: ('beginner' | 'intermediate' | 'advanced' | 'all-levels') | null;
-  duration: number;
-  schedule?:
-    | {
-        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-        time: string;
-        id?: string | null;
-      }[]
-    | null;
-  capacity?: number | null;
-  price?: {
-    dropIn?: number | null;
-    monthly?: number | null;
-    package?: {
-      sessions?: number | null;
-      price?: number | null;
-    };
-  };
-  benefits?:
-    | {
-        benefit?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  requirements?: string | null;
-  active?: boolean | null;
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1257,6 +1298,16 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         cta?: T | CallToActionBlockSelect<T>;
+        classesPreview?:
+          | T
+          | {
+              preTitle?: T;
+              title?: T;
+              classes?: T;
+              showPrice?: T;
+              id?: T;
+              blockName?: T;
+            };
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1266,6 +1317,17 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               displayMode?: T;
               customTitle?: T;
+              designTheme?: T;
+              id?: T;
+              blockName?: T;
+            };
+        teamPreview?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              teamMembers?: T;
+              showSocialLinks?: T;
               designTheme?: T;
               id?: T;
               blockName?: T;
@@ -1578,6 +1640,7 @@ export interface TeamMembersSelect<T extends boolean = true> {
     | {
         facebook?: T;
         instagram?: T;
+        twitter?: T;
       };
   publishedAt?: T;
   updatedAt?: T;

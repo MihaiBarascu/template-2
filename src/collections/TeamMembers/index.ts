@@ -127,6 +127,11 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
           type: 'text',
           label: 'Instagram URL',
         },
+        {
+          name: 'twitter',
+          type: 'text',
+          label: 'Twitter URL',
+        },
       ],
     },
     {

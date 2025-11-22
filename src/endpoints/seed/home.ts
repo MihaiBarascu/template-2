@@ -1,12 +1,16 @@
-import type { Media } from '@/payload-types'
+import type { Class, Media, TeamMember } from '@/payload-types'
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
   heroImage: Media
+  teamMembers: TeamMember[]
+  classes: Class[]
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
+  teamMembers,
+  classes,
 }) => {
   return {
     slug: 'home',
@@ -290,6 +294,22 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             version: 1,
           },
         },
+      },
+      {
+        blockType: 'teamPreview',
+        title: 'Salut, suntem Transilvania Gym',
+        description:
+          'Echipa noastră de antrenori profesioniști este dedicată să te ajute să îți atingi obiectivele de fitness. Cu experiență vastă și certificări internaționale, suntem aici pentru tine.',
+        teamMembers: teamMembers.map((member) => member.id),
+        showSocialLinks: true,
+        designTheme: 'transilvania',
+      },
+      {
+        blockType: 'classesPreview',
+        preTitle: 'Obține un Corp Perfect',
+        title: 'Clasele Noastre de Antrenament',
+        classes: classes.map((cls) => cls.id),
+        showPrice: true,
       },
       {
         blockType: 'schedule',

@@ -276,7 +276,7 @@ export const seed = async ({
   payload.logger.info(`— Seeding classes...`)
 
   // Create classes
-  await Promise.all([
+  const classes = await Promise.all([
     payload.create({
       collection: 'classes',
       depth: 0,
@@ -722,7 +722,7 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc }),
+      data: home({ heroImage: imageHomeDoc, teamMembers, classes }),
     }),
     payload.create({
       collection: 'pages',
