@@ -24,6 +24,7 @@ export const getTeamMembersData = (image1Doc: ImageDoc, image2Doc: ImageDoc, ima
       phone: '+40 722 333 444',
     },
     _status: 'published' as const,
+    publishedAt: new Date().toISOString(),
   },
   {
     title: 'Maria Ionescu',
@@ -46,6 +47,7 @@ export const getTeamMembersData = (image1Doc: ImageDoc, image2Doc: ImageDoc, ima
       phone: '+40 733 444 555',
     },
     _status: 'published' as const,
+    publishedAt: new Date().toISOString(),
   },
   {
     title: 'Mihai Radu',
@@ -67,5 +69,6 @@ export const getTeamMembersData = (image1Doc: ImageDoc, image2Doc: ImageDoc, ima
       phone: '+40 744 555 666',
     },
     _status: 'published' as const,
+    publishedAt: new Date().toISOString(),
   },
 ]

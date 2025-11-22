@@ -2,6 +2,10 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { revalidateClass, revalidateDelete } from './hooks/revalidateClass'
+import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 
 export const Classes: CollectionConfig<'classes'> = {
   slug: 'classes',
@@ -22,11 +26,25 @@ export const Classes: CollectionConfig<'classes'> = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'trainer', 'schedule', 'capacity', 'updatedAt'],
     group: 'Conținut',
+    livePreview: {
+      url: ({ data, req }) =>
+        generatePreviewPath({
+          slug: data?.slug,
+          collection: 'classes',
+          req,
+        }),
+    },
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: data?.slug as string,
+        collection: 'classes',
+        req,
+      }),
   },
   access: {
     create: authenticated,
     delete: authenticated,
-    read: anyone,
+    read: authenticatedOrPublished,
     update: authenticated,
   },
   fields: [
@@ -74,6 +92,7 @@ export const Classes: CollectionConfig<'classes'> = {
         { label: 'Combat', value: 'combat' },
         { label: 'Dance', value: 'dance' },
       ],
+      defaultValue: 'cardio',
       required: true,
     },
     {
@@ -203,17 +222,18 @@ export const Classes: CollectionConfig<'classes'> = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
-    afterChange: [
-      ({ doc, context }) => {
-        if (context.disableRevalidate) {
-          return doc
-        }
-        // Revalidate logic can be added here if needed
-        return doc
-      },
-    ],
+    afterChange: [revalidateClass],
+    beforeChange: [populatePublishedAt],
+    afterDelete: [revalidateDelete],
   },
   versions: {
     drafts: {

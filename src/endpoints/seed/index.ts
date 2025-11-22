@@ -281,6 +281,8 @@ export const seed = async ({
         trainer: teamMembers[1].id, // Maria Ionescu
         capacity: 20,
         active: true,
+        _status: 'published' as const,
+        publishedAt: new Date().toISOString(),
         schedule: [
           { day: 'monday', time: '18:00' },
           { day: 'wednesday', time: '18:00' },
@@ -423,6 +425,8 @@ export const seed = async ({
         trainer: teamMembers[0].id, // Mihai Radu
         capacity: 15,
         active: true,
+        _status: 'published' as const,
+        publishedAt: new Date().toISOString(),
         schedule: [
           { day: 'tuesday', time: '07:00' },
           { day: 'thursday', time: '07:00' },
@@ -561,6 +565,8 @@ export const seed = async ({
         trainer: teamMembers[2].id, // Alexandru Popescu
         capacity: 12,
         active: true,
+        _status: 'published' as const,
+        publishedAt: new Date().toISOString(),
         schedule: [
           { day: 'monday', time: '10:00' },
           { day: 'wednesday', time: '10:00' },

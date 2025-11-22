@@ -656,6 +656,7 @@ export interface TeamMember {
     facebook?: string | null;
     instagram?: string | null;
   };
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -917,6 +918,7 @@ export interface Class {
     | null;
   requirements?: string | null;
   active?: boolean | null;
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1546,6 +1548,7 @@ export interface TeamMembersSelect<T extends boolean = true> {
         facebook?: T;
         instagram?: T;
       };
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1593,6 +1596,7 @@ export interface ClassesSelect<T extends boolean = true> {
       };
   requirements?: T;
   active?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

@@ -2,6 +2,10 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { revalidateTeamMember, revalidateDelete } from './hooks/revalidateTeamMember'
+import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 
 export const TeamMembers: CollectionConfig<'team-members'> = {
   slug: 'team-members',
@@ -19,11 +23,25 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'role', 'updatedAt'],
     group: 'Conținut',
+    livePreview: {
+      url: ({ data, req }) =>
+        generatePreviewPath({
+          slug: data?.slug,
+          collection: 'team-members',
+          req,
+        }),
+    },
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: data?.slug as string,
+        collection: 'team-members',
+        req,
+      }),
   },
   access: {
     create: authenticated,
     delete: authenticated,
-    read: anyone,
+    read: authenticatedOrPublished,
     update: authenticated,
   },
   fields: [
@@ -112,17 +130,18 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
         },
       ],
     },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
-    afterChange: [
-      ({ doc, context }) => {
-        if (context.disableRevalidate) {
-          return doc
-        }
-        // Revalidate logic can be added here if needed
-        return doc
-      },
-    ],
+    afterChange: [revalidateTeamMember],
+    beforeChange: [populatePublishedAt],
+    afterDelete: [revalidateDelete],
   },
   versions: {
     drafts: {
