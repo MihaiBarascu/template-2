@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload, Where } from 'payload'
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -27,7 +27,7 @@ export default async function ClassesPage({
 
   const payload = await getPayload({ config: configPromise })
 
-  const where: Record<string, any> = { active: { equals: true } }
+  const where: Where = { active: { equals: true } }
   if (category) {
     where.category = { equals: category }
   }

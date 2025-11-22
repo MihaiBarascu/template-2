@@ -115,10 +115,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    schedule: Schedule;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    schedule: ScheduleSelect<false> | ScheduleSelect<true>;
   };
   locale: null;
   user: User & {
@@ -203,7 +205,23 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | {
+        displayMode?: ('full' | 'compact') | null;
+        /**
+         * Lasă gol pentru a folosi titlul din setări
+         */
+        customTitle?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'schedule';
+      }
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -1239,6 +1257,14 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        schedule?:
+          | T
+          | {
+              displayMode?: T;
+              customTitle?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -2049,6 +2075,44 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedule".
+ */
+export interface Schedule {
+  id: string;
+  title: string;
+  description?: string | null;
+  settings: {
+    startHour: string;
+    endHour: string;
+    timeSlotDuration: number;
+    showEmptySlots?: boolean | null;
+  };
+  entries?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        entryType: 'linked' | 'custom';
+        class?: (string | null) | Class;
+        /**
+         * Lasă gol pentru a folosi antrenorul default al clasei
+         */
+        overrideTrainer?: (string | null) | TeamMember;
+        customTitle?: string | null;
+        customTrainer?: string | null;
+        customDuration?: number | null;
+        /**
+         * Culoare HEX pentru această clasă
+         */
+        customColor?: string | null;
+        customDescription?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2173,6 +2237,40 @@ export interface FooterSelect<T extends boolean = true> {
               width?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedule_select".
+ */
+export interface ScheduleSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  settings?:
+    | T
+    | {
+        startHour?: T;
+        endHour?: T;
+        timeSlotDuration?: T;
+        showEmptySlots?: T;
+      };
+  entries?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        entryType?: T;
+        class?: T;
+        overrideTrainer?: T;
+        customTitle?: T;
+        customTrainer?: T;
+        customDuration?: T;
+        customColor?: T;
+        customDescription?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 import { authenticated } from '../../access/authenticated'
-import { anyone } from '../../access/anyone'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateTeamMember, revalidateDelete } from './hooks/revalidateTeamMember'

@@ -291,6 +291,11 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           },
         },
       },
+      {
+        blockType: 'schedule',
+        displayMode: 'full',
+        customTitle: 'Programul Nostru Săptămânal',
+      },
     ],
     meta: {
       description:

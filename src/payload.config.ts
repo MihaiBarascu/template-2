@@ -15,6 +15,7 @@ import { TeamMembers } from './collections/TeamMembers'
 import { Classes } from './collections/Classes'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { Schedule } from './globals/Schedule/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -66,7 +67,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, Schedule],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

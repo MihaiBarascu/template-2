@@ -25,7 +25,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const _globals: GlobalSlug[] = ['header', 'footer']
+const _globals: GlobalSlug[] = ['header', 'footer', 'schedule']
 
 const categories = ['Classes', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -67,6 +67,16 @@ export const seed = async ({
         columns: [],
         socialMedia: {},
         bottomBar: {},
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'schedule',
+      data: {
+        entries: [],
       },
       depth: 0,
       context: {
@@ -728,31 +738,207 @@ export const seed = async ({
   //   data: clasePage(classesCategory),
   // })
 
+  payload.logger.info(`— Seeding schedule...`)
+
+  // Create schedule data with linked and custom entries
+  const scheduleData = {
+    title: 'Orar Săptămânal',
+    description: 'Program valabil începând cu 1 Decembrie 2024',
+    settings: {
+      startHour: '07:00',
+      endHour: '21:00',
+      timeSlotDuration: 60,
+      showEmptySlots: true,
+    },
+    entries: [
+      // Luni
+      {
+        day: 'monday' as const,
+        time: '07:00',
+        entryType: 'custom' as const,
+        customTitle: 'Morning Cardio',
+        customTrainer: 'Dan Popescu',
+        customDuration: 60,
+        customColor: '#f13a11',
+      },
+      {
+        day: 'monday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'Yoga pentru Începători',
+        customTrainer: teamMembers[1].title, // Maria Ionescu
+        customDuration: 60,
+        customColor: '#7209B7',
+      },
+      {
+        day: 'monday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'Spinning',
+        customTrainer: 'Andreea Pop',
+        customDuration: 45,
+        customColor: '#FFD93D',
+      },
+      {
+        day: 'monday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'TRX',
+        customTrainer: 'Sala 2',
+        customDuration: 60,
+        customColor: '#4ECDC4',
+      },
+      {
+        day: 'monday' as const,
+        time: '19:00',
+        entryType: 'custom' as const,
+        customTitle: 'Kango Jumps',
+        customTrainer: 'Marius David',
+        customDuration: 45,
+        customColor: '#FF6B35',
+      },
+      // Marți
+      {
+        day: 'tuesday' as const,
+        time: '07:00',
+        entryType: 'custom' as const,
+        customTitle: 'CrossFit Intensiv',
+        customTrainer: teamMembers[2].title, // Mihai Radu
+        customDuration: 45,
+        customColor: '#E63946',
+      },
+      {
+        day: 'tuesday' as const,
+        time: '09:00',
+        entryType: 'custom' as const,
+        customTitle: 'TRX Training',
+        customTrainer: 'Ana Marinescu',
+        customDuration: 60,
+        customColor: '#4ECDC4',
+      },
+      {
+        day: 'tuesday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'Spinning',
+        customTrainer: 'Vlad Ionescu',
+        customDuration: 45,
+        customColor: '#FFD93D',
+      },
+      // Miercuri
+      {
+        day: 'wednesday' as const,
+        time: '10:00',
+        entryType: 'custom' as const,
+        customTitle: 'Pilates Core',
+        customTrainer: teamMembers[0].title, // Alexandru Popescu
+        customDuration: 50,
+        customColor: '#A8DADC',
+      },
+      {
+        day: 'wednesday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'Yoga pentru Începători',
+        customTrainer: teamMembers[1].title,
+        customDuration: 60,
+        customColor: '#7209B7',
+      },
+      {
+        day: 'wednesday' as const,
+        time: '19:30',
+        entryType: 'custom' as const,
+        customTitle: 'Boxing Fitness',
+        customTrainer: 'Radu Constantin',
+        customDuration: 60,
+        customColor: '#E63946',
+      },
+      // Joi
+      {
+        day: 'thursday' as const,
+        time: '07:00',
+        entryType: 'custom' as const,
+        customTitle: 'CrossFit Intensiv',
+        customTrainer: teamMembers[2].title,
+        customDuration: 45,
+        customColor: '#E63946',
+      },
+      {
+        day: 'thursday' as const,
+        time: '17:00',
+        entryType: 'custom' as const,
+        customTitle: 'Aerobic Step',
+        customTrainer: 'Elena Dumitrescu',
+        customDuration: 50,
+        customColor: '#A8DADC',
+      },
+      // Vineri
+      {
+        day: 'friday' as const,
+        time: '10:00',
+        entryType: 'custom' as const,
+        customTitle: 'Pilates Core',
+        customTrainer: teamMembers[0].title,
+        customDuration: 50,
+        customColor: '#A8DADC',
+      },
+      {
+        day: 'friday' as const,
+        time: '18:00',
+        entryType: 'custom' as const,
+        customTitle: 'Yoga pentru Începători',
+        customTrainer: teamMembers[1].title,
+        customDuration: 60,
+        customColor: '#7209B7',
+      },
+      // Sâmbătă
+      {
+        day: 'saturday' as const,
+        time: '09:00',
+        entryType: 'custom' as const,
+        customTitle: 'CrossFit Intensiv',
+        customTrainer: teamMembers[2].title,
+        customDuration: 45,
+        customColor: '#E63946',
+      },
+      {
+        day: 'saturday' as const,
+        time: '11:00',
+        entryType: 'custom' as const,
+        customTitle: 'Zumba Party',
+        customTrainer: 'Cristina Popa',
+        customDuration: 90,
+        customColor: '#F72585',
+      },
+      // Duminică
+      {
+        day: 'sunday' as const,
+        time: '10:00',
+        entryType: 'custom' as const,
+        customTitle: 'Yoga Relaxare',
+        customTrainer: teamMembers[1].title,
+        customDuration: 75,
+        customColor: '#7209B7',
+      },
+      {
+        day: 'sunday' as const,
+        time: '16:00',
+        entryType: 'custom' as const,
+        customTitle: 'Stretching & Recovery',
+        customTrainer: 'Team',
+        customDuration: 60,
+        customColor: '#560BAD',
+      },
+    ],
+  }
+
   payload.logger.info(`— Seeding globals...`)
 
-  // Temporar dezactivat până când imaginile sunt pe GitHub:
-  // const footerWithLogos = {
-  //   ...footerData,
-  //   bottomBar: {
-  //     ...footerData.bottomBar,
-  //     complianceLogos: [
-  //       {
-  //         logo: anpcDoc.id,
-  //         link: 'https://anpc.ro/',
-  //         altText: 'ANPC - Autoritatea Națională pentru Protecția Consumatorilor',
-  //         width: 120,
-  //       },
-  //       {
-  //         logo: solDoc.id,
-  //         link: 'https://ec.europa.eu/consumers/odr',
-  //         altText: 'SOL - Soluționarea Online a Litigiilor',
-  //         width: 150,
-  //       },
-  //     ],
-  //   },
-  // }
-
   await Promise.all([
+    payload.updateGlobal({
+      slug: 'schedule',
+      data: scheduleData,
+    }),
     payload.updateGlobal({
       slug: 'header',
       data: {
