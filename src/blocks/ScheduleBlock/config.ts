@@ -25,5 +25,18 @@ export const ScheduleBlock: Block = {
         description: 'Lasă gol pentru a folosi titlul din setări',
       },
     },
+    {
+      name: 'designTheme',
+      type: 'select',
+      label: 'Tema vizuală',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Transilvania', value: 'transilvania' },
+      ],
+      admin: {
+        description: 'Alege stilul vizual pentru afișarea orarului',
+      },
+    },
   ],
 }

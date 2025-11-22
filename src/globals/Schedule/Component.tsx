@@ -6,6 +6,7 @@ type ScheduleEntry = NonNullable<ScheduleType['entries']>[0]
 
 interface ScheduleProps {
   schedule: ScheduleType | null
+  designTheme?: 'default' | 'transilvania'
   className?: string
 }
 
@@ -33,7 +34,7 @@ const generateTimeSlots = (startHour: string, endHour: string): string[] => {
   return slots
 }
 
-export const Schedule: React.FC<ScheduleProps> = ({ schedule, className = '' }) => {
+export const Schedule: React.FC<ScheduleProps> = ({ schedule, designTheme = 'default', className = '' }) => {
   if (!schedule || !schedule.entries || schedule.entries.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
@@ -77,25 +78,43 @@ export const Schedule: React.FC<ScheduleProps> = ({ schedule, className = '' }) 
         )}
       </div>
 
-      {/* Tabel Orar - Design inspirat Gymso */}
+      {/* Tabel Orar - Design condiționat */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse min-w-[800px]">
+        <table className={`w-full border-collapse min-w-[800px] ${
+          designTheme === 'transilvania' ? 'bg-transilvania-dark' : ''
+        }`}>
           <thead>
             <tr>
-              <th className="bg-transilvania-dark text-white p-4 text-left font-bold">
-                Ora
+              <th className={`p-4 text-left font-bold ${
+                designTheme === 'transilvania'
+                  ? 'bg-transilvania-primary text-white'
+                  : 'bg-transilvania-dark text-white'
+              }`}>
+                <span className="flex items-center justify-center text-2xl">📅</span>
               </th>
               {dayOrder.map((day) => (
-                <th key={day} className="bg-transilvania-dark text-white p-4 text-center font-bold">
-                  {dayNames[day]}
+                <th key={day} className={`p-4 text-center font-bold uppercase ${
+                  designTheme === 'transilvania'
+                    ? 'bg-transilvania-primary text-white'
+                    : 'bg-transilvania-dark text-white'
+                }`}>
+                  {dayNames[day].substring(0, 3).toUpperCase()}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {timeSlots.map((time) => (
-              <tr key={time} className="border-b border-gray-200">
-                <td className="bg-gray-50 p-4 font-bold text-transilvania-dark">
+              <tr key={time} className={
+                designTheme === 'transilvania'
+                  ? ''
+                  : 'border-b border-gray-200'
+              }>
+                <td className={`p-4 font-bold ${
+                  designTheme === 'transilvania'
+                    ? 'bg-transilvania-primary text-white'
+                    : 'bg-gray-50 text-transilvania-dark'
+                }`}>
                   {time}
                 </td>
                 {dayOrder.map((day) => {
@@ -103,15 +122,23 @@ export const Schedule: React.FC<ScheduleProps> = ({ schedule, className = '' }) 
 
                   if (!entries || entries.length === 0) {
                     return (
-                      <td key={`${day}-${time}`} className="p-4 bg-white hover:bg-gray-50 transition-colors">
+                      <td key={`${day}-${time}`} className={`p-4 ${
+                        designTheme === 'transilvania'
+                          ? 'bg-transilvania-dark border border-gray-800'
+                          : 'bg-white hover:bg-gray-50 transition-colors'
+                      }`}>
                         {/* Celulă goală */}
                       </td>
                     )
                   }
 
                   return (
-                    <td key={`${day}-${time}`} className="p-0">
-                      <ScheduleEntriesCell entries={entries} />
+                    <td key={`${day}-${time}`} className={
+                      designTheme === 'transilvania'
+                        ? 'p-0 bg-transilvania-dark border border-gray-800'
+                        : 'p-0'
+                    }>
+                      <ScheduleEntriesCell entries={entries} theme={designTheme} />
                     </td>
                   )
                 })}
@@ -125,24 +152,24 @@ export const Schedule: React.FC<ScheduleProps> = ({ schedule, className = '' }) 
 }
 
 // Componentă pentru celulă cu multiple clase
-const ScheduleEntriesCell: React.FC<{ entries: ScheduleEntry[] }> = ({ entries }) => {
+const ScheduleEntriesCell: React.FC<{ entries: ScheduleEntry[]; theme?: string }> = ({ entries, theme = 'default' }) => {
   // Dacă avem o singură clasă, afișăm normal
   if (entries.length === 1) {
-    return <SingleEntryCell entry={entries[0]} />
+    return <SingleEntryCell entry={entries[0]} theme={theme} />
   }
 
   // Pentru multiple clase, le afișăm stacked sau side by side
   return (
     <div className="p-2 space-y-2">
       {entries.map((entry, index) => (
-        <SingleEntryCell key={index} entry={entry} compact />
+        <SingleEntryCell key={index} entry={entry} compact theme={theme} />
       ))}
     </div>
   )
 }
 
 // Componentă pentru o singură intrare
-const SingleEntryCell: React.FC<{ entry: ScheduleEntry; compact?: boolean }> = ({ entry, compact = false }) => {
+const SingleEntryCell: React.FC<{ entry: ScheduleEntry; compact?: boolean; theme?: string }> = ({ entry, compact = false, theme = 'default' }) => {
   const isLinked = entry.entryType === 'linked'
   const classData = isLinked && entry.class ? entry.class as Class : null
   const trainerData = isLinked && entry.overrideTrainer
@@ -159,7 +186,35 @@ const SingleEntryCell: React.FC<{ entry: ScheduleEntry; compact?: boolean }> = (
     : entry.customDuration
   const color = entry.customColor || '#f13a11' // Transilvania primary ca default
 
-  const content = (
+  // Calculăm timpul pentru tema Transilvania
+  const startTime = entry.time || '07:00'
+  const [hour, minute] = startTime.split(':').map(Number)
+  const durationMinutes = duration || 60
+  const totalMinutes = hour * 60 + minute + durationMinutes
+  const endHour = Math.floor(totalMinutes / 60)
+  const endMinute = totalMinutes % 60
+  const timeRange = `${startTime} - ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`
+
+  // Stiluri diferite pentru fiecare temă
+  const content = theme === 'transilvania' ? (
+    <div
+      className={`${
+        compact ? 'p-3 min-h-[80px]' : 'p-4 min-h-[100px]'
+      } h-full flex flex-col justify-center text-center transition-all duration-300 hover:opacity-90 cursor-pointer bg-transilvania-primary rounded`}
+    >
+      <div className={`font-bold text-white ${compact ? 'text-sm' : 'text-base mb-1'}`}>
+        {title}
+      </div>
+      {trainer && (
+        <div className="text-xs text-white/90 mb-1">
+          {trainer}
+        </div>
+      )}
+      <div className="text-xs text-white/80">
+        {timeRange}
+      </div>
+    </div>
+  ) : (
     <div
       className={`${
         compact ? 'p-3 min-h-[80px]' : 'p-4 min-h-[100px]'

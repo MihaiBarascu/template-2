@@ -217,6 +217,10 @@ export interface Page {
          * Lasă gol pentru a folosi titlul din setări
          */
         customTitle?: string | null;
+        /**
+         * Alege stilul vizual pentru afișarea orarului
+         */
+        designTheme?: ('default' | 'transilvania') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'schedule';
@@ -1262,6 +1266,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               displayMode?: T;
               customTitle?: T;
+              designTheme?: T;
               id?: T;
               blockName?: T;
             };
