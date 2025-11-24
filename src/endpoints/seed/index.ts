@@ -20,6 +20,8 @@ const collections: CollectionSlug[] = [
   'posts',
   'team-members',
   'classes',
+  'contacts',
+  'addresses',
   'forms',
   'form-submissions',
   'search',
@@ -715,6 +717,35 @@ export const seed = async ({
     data: contactFormData,
   })
 
+  payload.logger.info(`— Seeding contacts and addresses...`)
+
+  // Create Contact entry
+  const mainContact = await payload.create({
+    collection: 'contacts',
+    depth: 0,
+    data: {
+      phone: '+40 264 123 456',
+      email: 'contact@transilvaniagym.ro',
+      socialMedia: {
+        facebook: 'https://facebook.com/transilvaniagym',
+        instagram: 'https://instagram.com/transilvaniagym',
+        whatsapp: '+40264123456',
+      },
+    },
+  })
+
+  // Create Address entry
+  const mainAddress = await payload.create({
+    collection: 'addresses',
+    depth: 0,
+    data: {
+      title: 'Sediul Principal Transilvania Fitness',
+      address: 'Str. Moților nr. 54, Cluj-Napoca, România',
+      googleMapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2732.4729182042995!2d23.588416315676973!3d46.77121097913861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47490e8a9c5b81d1%3A0x3c8e3a1f8f7c8b9!2sCluj-Napoca%2C%20Romania!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s',
+      googleMapsUrl: 'https://goo.gl/maps/cluj-napoca',
+    },
+  })
+
   payload.logger.info(`— Seeding pages...`)
 
   // First create the home page data
@@ -722,12 +753,16 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, teamMembers, classes }),
+      data: home({ heroImage: imageHomeDoc, teamMembers, classes, contactForm, address: mainAddress }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: contactPageData({ contactForm: contactForm }),
+      data: contactPageData({
+        contactForm: contactForm,
+        contact: mainContact,
+        address: mainAddress,
+      }),
     }),
   ])
 
@@ -962,6 +997,13 @@ export const seed = async ({
               type: 'custom',
               label: 'Echipa',
               url: '/team-members',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Contact',
+              url: '/contact',
             },
           },
         ],

@@ -7,6 +7,7 @@ import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ClassesPreview } from '@/blocks/ClassesPreview/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { MapBlock } from '@/blocks/MapBlock/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ScheduleBlock } from '@/blocks/ScheduleBlock/Component'
 import { TeamPreview } from '@/blocks/TeamPreview/Component'
@@ -17,6 +18,7 @@ const blockComponents = {
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
+  mapBlock: MapBlock,
   mediaBlock: MediaBlock,
   schedule: ScheduleBlock,
   teamPreview: TeamPreview,

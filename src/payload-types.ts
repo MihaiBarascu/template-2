@@ -74,6 +74,8 @@ export interface Config {
     users: User;
     'team-members': TeamMember;
     classes: Class;
+    contacts: Contact;
+    addresses: Address;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -98,6 +100,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     classes: ClassesSelect<false> | ClassesSelect<true>;
+    contacts: ContactsSelect<false> | ContactsSelect<true>;
+    addresses: AddressesSelect<false> | AddressesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -229,6 +233,7 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FormBlock
+    | MapBlock
     | {
         displayMode?: ('full' | 'compact') | null;
         /**
@@ -694,6 +699,9 @@ export interface ContentBlock {
   columns?:
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+        /**
+         * Add rich text content to this column
+         */
         richText?: {
           root: {
             type: string;
@@ -709,6 +717,10 @@ export interface ContentBlock {
           };
           [k: string]: unknown;
         } | null;
+        /**
+         * Add blocks (forms, maps, media, CTA) to this column
+         */
+        blocks?: (FormBlock | MapBlock | MediaBlock | CallToActionBlock)[] | null;
         enableLink?: boolean | null;
         link?: {
           type?: ('reference' | 'custom') | null;
@@ -738,56 +750,6 @@ export interface ContentBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: string | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
- */
-export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: ('posts' | 'team-members') | null;
-  categories?: (string | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | (
-        | {
-            relationTo: 'posts';
-            value: string | Post;
-          }
-        | {
-            relationTo: 'team-members';
-            value: string | TeamMember;
-          }
-      )[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'archive';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
@@ -808,6 +770,14 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Display contact details next to the form
+   */
+  showContactInfo?: boolean | null;
+  /**
+   * Select contact information to display. Click "Add New" to create new contact.
+   */
+  contact?: (string | null) | Contact;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -985,6 +955,136 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts".
+ */
+export interface Contact {
+  id: string;
+  phone: string;
+  email?: string | null;
+  socialMedia?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    tiktok?: string | null;
+    youtube?: string | null;
+    /**
+     * Număr de telefon pentru WhatsApp (fără spații)
+     */
+    whatsapp?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapBlock".
+ */
+export interface MapBlock {
+  /**
+   * Choose an address from the Addresses collection or configure a custom map
+   */
+  mapSource: 'fromCollection' | 'custom';
+  /**
+   * Select an address from the Addresses collection. Click "Add New" to create a new address.
+   */
+  address?: (string | null) | Address;
+  customMap?: {
+    /**
+     * Optional title above the map
+     */
+    mapTitle?: string | null;
+    /**
+     * Get embed URL from Google Maps: Share → Embed a map → Copy HTML (use the src URL)
+     */
+    embedURL: string;
+    width?: ('full' | 'container' | 'narrow') | null;
+    height?: number | null;
+    borderRadius?: number | null;
+  };
+  /**
+   * Add a border above the map section
+   */
+  showBorder?: boolean | null;
+  topSpacing?: ('none' | 'small' | 'normal' | 'large') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mapBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses".
+ */
+export interface Address {
+  id: string;
+  /**
+   * Un nume identificator pentru această adresă
+   */
+  title: string;
+  address: string;
+  /**
+   * Codul iframe complet de la Google Maps (Share → Embed a map → Copy HTML)
+   */
+  googleMapsEmbed?: string | null;
+  /**
+   * Link direct către locație pe Google Maps
+   */
+  googleMapsUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock".
+ */
+export interface MediaBlock {
+  media: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock".
+ */
+export interface ArchiveBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  relationTo?: ('posts' | 'team-members') | null;
+  categories?: (string | Category)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | (
+        | {
+            relationTo: 'posts';
+            value: string | Post;
+          }
+        | {
+            relationTo: 'team-members';
+            value: string | TeamMember;
+          }
+      )[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archive';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1205,6 +1305,14 @@ export interface PayloadLockedDocument {
         value: string | Class;
       } | null)
     | ({
+        relationTo: 'contacts';
+        value: string | Contact;
+      } | null)
+    | ({
+        relationTo: 'addresses';
+        value: string | Address;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1312,6 +1420,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        mapBlock?: T | MapBlockSelect<T>;
         schedule?:
           | T
           | {
@@ -1383,6 +1492,14 @@ export interface ContentBlockSelect<T extends boolean = true> {
     | {
         size?: T;
         richText?: T;
+        blocks?:
+          | T
+          | {
+              formBlock?: T | FormBlockSelect<T>;
+              mapBlock?: T | MapBlockSelect<T>;
+              mediaBlock?: T | MediaBlockSelect<T>;
+              cta?: T | CallToActionBlockSelect<T>;
+            };
         enableLink?: T;
         link?:
           | T
@@ -1396,6 +1513,40 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormBlock_select".
+ */
+export interface FormBlockSelect<T extends boolean = true> {
+  form?: T;
+  enableIntro?: T;
+  introContent?: T;
+  showContactInfo?: T;
+  contact?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapBlock_select".
+ */
+export interface MapBlockSelect<T extends boolean = true> {
+  mapSource?: T;
+  address?: T;
+  customMap?:
+    | T
+    | {
+        mapTitle?: T;
+        embedURL?: T;
+        width?: T;
+        height?: T;
+        borderRadius?: T;
+      };
+  showBorder?: T;
+  topSpacing?: T;
   id?: T;
   blockName?: T;
 }
@@ -1419,17 +1570,6 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   categories?: T;
   limit?: T;
   selectedDocs?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock_select".
- */
-export interface FormBlockSelect<T extends boolean = true> {
-  form?: T;
-  enableIntro?: T;
-  introContent?: T;
   id?: T;
   blockName?: T;
 }
@@ -1694,6 +1834,39 @@ export interface ClassesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contacts_select".
+ */
+export interface ContactsSelect<T extends boolean = true> {
+  phone?: T;
+  email?: T;
+  socialMedia?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        tiktok?: T;
+        youtube?: T;
+        whatsapp?: T;
+        linkedin?: T;
+        twitter?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses_select".
+ */
+export interface AddressesSelect<T extends boolean = true> {
+  title?: T;
+  address?: T;
+  googleMapsEmbed?: T;
+  googleMapsUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

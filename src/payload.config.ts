@@ -13,6 +13,8 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { TeamMembers } from './collections/TeamMembers'
 import { Classes } from './collections/Classes'
+import { Contacts } from './collections/Contacts'
+import { Addresses } from './collections/Addresses'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { Schedule } from './globals/Schedule/config'
@@ -65,7 +67,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes],
+  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Contacts, Addresses],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Schedule],
   plugins: [

@@ -8,6 +8,10 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
+import { FormBlock } from '../Form/config'
+import { MapBlock } from '../MapBlock/config'
+import { MediaBlock } from '../MediaBlock/config'
+import { CallToAction } from '../CallToAction/config'
 
 const columnFields: Field[] = [
   {
@@ -47,6 +51,19 @@ const columnFields: Field[] = [
       },
     }),
     label: false,
+    admin: {
+      description: 'Add rich text content to this column',
+    },
+  },
+  {
+    name: 'blocks',
+    type: 'blocks',
+    blocks: [FormBlock, MapBlock, MediaBlock, CallToAction],
+    label: 'Content Blocks',
+    admin: {
+      description: 'Add blocks (forms, maps, media, CTA) to this column',
+      initCollapsed: true,
+    },
   },
   {
     name: 'enableLink',

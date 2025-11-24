@@ -7,6 +7,7 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { ClassesPreview } from '../../blocks/ClassesPreview/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { MapBlock } from '../../blocks/MapBlock/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { ScheduleBlock } from '../../blocks/ScheduleBlock/config'
 import { TeamPreview } from '../../blocks/TeamPreview/config'
@@ -75,7 +76,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, ClassesPreview, Content, MediaBlock, Archive, FormBlock, ScheduleBlock, TeamPreview],
+              blocks: [CallToAction, ClassesPreview, Content, MediaBlock, Archive, FormBlock, MapBlock, ScheduleBlock, TeamPreview],
               required: true,
               admin: {
                 initCollapsed: true,

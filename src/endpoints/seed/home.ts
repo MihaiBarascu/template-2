@@ -1,16 +1,20 @@
-import type { Class, Media, TeamMember } from '@/payload-types'
+import type { Address, Class, Form, Media, TeamMember } from '@/payload-types'
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
   heroImage: Media
   teamMembers: TeamMember[]
   classes: Class[]
+  contactForm: Form
+  address: Address
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
   teamMembers,
   classes,
+  contactForm,
+  address,
 }) => {
   return {
     slug: 'home',
@@ -316,6 +320,63 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         displayMode: 'full',
         customTitle: 'Programul Nostru Săptămânal',
         designTheme: 'default',
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Trimite-ne un mesaj',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    tag: 'h2',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            },
+            blocks: [
+              {
+                blockType: 'formBlock',
+                form: typeof contactForm.id === 'string' ? contactForm.id : String(contactForm.id),
+                enableIntro: false,
+              },
+            ],
+          },
+          {
+            size: 'half',
+            blocks: [
+              {
+                blockType: 'mapBlock',
+                mapSource: 'fromCollection',
+                address: typeof address.id === 'string' ? address.id : String(address.id),
+                showBorder: false,
+                topSpacing: 'none',
+              },
+            ],
+          },
+        ],
       },
     ],
     meta: {

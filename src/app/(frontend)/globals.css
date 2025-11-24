@@ -41,6 +41,27 @@
     --transilvania-link: #404040;
     --transilvania-text: #666262;
 
+    /* Transilvania Gym Typography Variables */
+    --transilvania-font-family: 'Plain', sans-serif;
+    --transilvania-font-weight-bold: bold;
+    --transilvania-font-weight-normal: normal;
+    --transilvania-font-weight-light: 300;
+    --transilvania-font-weight-thin: 100;
+
+    --transilvania-h1-size: 48px;
+    --transilvania-h2-size: 36px;
+    --transilvania-h3-size: 28px;
+    --transilvania-h4-size: 24px;
+    --transilvania-h5-size: 22px;
+    --transilvania-h6-size: 22px;
+    --transilvania-p-size: 18px;
+    --transilvania-base-size: 16px;
+    --transilvania-menu-size: 14px;
+
+    /* Transilvania Gym Border Radius */
+    --transilvania-radius-large: 100%;
+    --transilvania-radius-small: 2px;
+
     /* Keep existing ShadCN variables for components */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -303,6 +324,193 @@
   .transilvania-nav-link:hover {
     @apply text-transilvania-primary;
   }
+
+  /* ============================================
+     Transilvania Feature Section (Dark Background)
+     ============================================ */
+  .transilvania-feature {
+    @apply bg-transilvania-dark py-20;
+  }
+
+  /* ============================================
+     Transilvania Modal Styles
+     ============================================ */
+  .transilvania-modal-content {
+    @apply p-8 md:p-12;
+  }
+
+  .transilvania-modal-header,
+  .transilvania-modal-body,
+  .transilvania-modal-footer {
+    @apply border-0 p-0;
+  }
+
+  /* ============================================
+     Transilvania Class Card
+     ============================================ */
+  .transilvania-class-card {
+    @apply bg-white rounded-b-transilvania-small relative;
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+    padding: 1rem 2rem;
+  }
+
+  .transilvania-class-card img {
+    @apply rounded-t-transilvania-small;
+  }
+
+  .transilvania-class-card strong {
+    @apply text-transilvania-gray;
+  }
+
+  .transilvania-class-price {
+    @apply bg-transilvania-primary text-white font-bold absolute top-8 right-8 flex items-center justify-center;
+    border-radius: var(--transilvania-radius-large);
+    width: 3.5rem;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    text-align: center;
+  }
+
+  /* ============================================
+     Transilvania Schedule Table
+     ============================================ */
+  .transilvania-schedule {
+    @apply bg-transilvania-dark;
+  }
+
+  .transilvania-schedule-table {
+    @apply table-auto border-0 text-center w-full;
+  }
+
+  .transilvania-schedule-table strong {
+    @apply text-white block text-center;
+  }
+
+  .transilvania-schedule-table span {
+    @apply text-transilvania-gray block text-center;
+  }
+
+  .transilvania-schedule-table span,
+  .transilvania-schedule-table small {
+    @apply text-transilvania-menu uppercase;
+  }
+
+  .transilvania-schedule-table thead th {
+    @apply bg-transilvania-primary text-white uppercase;
+    border: 1px solid #212122;
+  }
+
+  .transilvania-schedule-table tbody tr td:first-child {
+    @apply bg-transilvania-primary text-white;
+    border: 1px solid #212122;
+  }
+
+  .transilvania-schedule-table td,
+  .transilvania-schedule-table th {
+    padding: 1rem;
+    border: 1px solid #212122;
+  }
+
+  .transilvania-schedule-table td {
+    padding-bottom: 22px;
+  }
+
+  /* ============================================
+     Transilvania About Section
+     ============================================ */
+  .transilvania-about {
+    @apply bg-transilvania-about-bg;
+  }
+
+  .transilvania-working-hours {
+    @apply border-l-2 border-current pl-14;
+  }
+
+  .transilvania-working-hours strong {
+    @apply text-white;
+    opacity: 0.85;
+  }
+
+  /* ============================================
+     Transilvania Team Card
+     ============================================ */
+  .transilvania-team-card {
+    @apply relative;
+  }
+
+  .transilvania-team-info {
+    @apply bg-white rounded-b-transilvania-small p-5 relative;
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+  }
+
+  .transilvania-team-info span {
+    @apply font-transilvania-light;
+    opacity: 0.85;
+  }
+
+  .transilvania-team-info .transilvania-social-icon {
+    @apply absolute top-2.5 right-5;
+  }
+
+  .transilvania-team-info .transilvania-social-icon li {
+    @apply block;
+  }
+
+  /* ============================================
+     Transilvania Contact Section
+     ============================================ */
+  .transilvania-contact h2 + p {
+    max-width: 90%;
+  }
+
+  .transilvania-google-map {
+    @apply border-t border-gray-200 mt-10 pt-10;
+  }
+
+  .transilvania-google-map iframe {
+    @apply w-full;
+  }
+
+  /* ============================================
+     Transilvania Social Icons
+     ============================================ */
+  .transilvania-social-icon {
+    @apply relative p-0 m-0 mt-1;
+  }
+
+  .transilvania-social-icon li {
+    @apply inline-block list-none;
+  }
+
+  .transilvania-social-icon li a {
+    @apply text-transilvania-text inline-block no-underline font-transilvania-bold text-center;
+    font-size: var(--transilvania-p-size);
+    margin: 5px 10px;
+  }
+
+  .transilvania-social-icon li a:hover {
+    @apply text-transilvania-primary;
+  }
+
+  /* ============================================
+     Transilvania Footer
+     ============================================ */
+  .transilvania-footer {
+    @apply border-t border-gray-200 py-12;
+  }
+
+  .transilvania-footer a {
+    @apply text-transilvania-text font-transilvania-light;
+  }
+
+  .transilvania-footer p {
+    @apply text-transilvania-base;
+  }
+
+  .transilvania-footer .fa,
+  .transilvania-contact .fa {
+    @apply text-transilvania-primary;
+  }
 }
 
 html {
@@ -312,4 +520,153 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+/* ============================================
+   Gymso Form Styling - Contact Forms
+   ============================================ */
+
+/* Remove container border and padding - clean minimal design */
+.gymso-form-style {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.gymso-form-style input[type='text'],
+.gymso-form-style input[type='email'],
+.gymso-form-style input[type='tel'],
+.gymso-form-style input[type='number'],
+.gymso-form-style textarea {
+  background: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 2px !important;
+  padding: 18px 20px !important;
+  font-family:
+    'Plain',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif !important;
+  font-size: 16px !important;
+  color: #333333 !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: none !important;
+  line-height: 1.5 !important;
+}
+
+.gymso-form-style textarea {
+  min-height: 140px !important;
+  resize: vertical !important;
+}
+
+.gymso-form-style input:focus,
+.gymso-form-style textarea:focus {
+  border-color: #999999 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: #ffffff !important;
+}
+
+.gymso-form-style input::placeholder,
+.gymso-form-style textarea::placeholder {
+  color: #999999 !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+  font-size: 15px !important;
+}
+
+.gymso-form-style button[type='submit'],
+.gymso-form-style button[form] {
+  background: var(--transilvania-dark) !important;
+  border: none !important;
+  border-radius: 2px !important;
+  color: #ffffff !important;
+  font-family:
+    'Plain',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 22px 40px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.gymso-form-style button[type='submit']:hover,
+.gymso-form-style button[form]:hover {
+  background: var(--transilvania-primary) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 58, 17, 0.3) !important;
+}
+
+/* .gymso-form-style label {
+  display: none !important;
+} */
+
+/* Remove Payload default spacing */
+.gymso-form-style .mb-4,
+.gymso-form-style .mb-6,
+.gymso-form-style > div > div > div {
+  margin-bottom: 0 !important;
+}
+
+.gymso-form-style form > div {
+  margin-bottom: 0 !important;
+}
+
+.gymso-form-style form > div > div {
+  margin-bottom: 20px !important;
+}
+
+.gymso-form-style form > div > div:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+/* ============================================
+   Transilvania Responsive Utilities
+   ============================================ */
+@media screen and (max-width: 992px) {
+  .transilvania-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .transilvania-nav-link {
+    padding: 6px;
+  }
+
+  .transilvania-schedule-table {
+    display: block;
+  }
+
+  .transilvania-modal-content {
+    padding: 2rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  h1 {
+    font-size: 38px !important;
+  }
+
+  .transilvania-working-hours {
+    border-left: 0;
+    padding-left: 0;
+    padding-top: 1.5rem;
+  }
+
+  .transilvania-contact h2 span {
+    display: block;
+  }
 }
