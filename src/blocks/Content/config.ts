@@ -8,10 +8,11 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
+import { CallToAction } from '../CallToAction/config'
 import { FormBlock } from '../Form/config'
 import { MapBlock } from '../MapBlock/config'
 import { MediaBlock } from '../MediaBlock/config'
-import { CallToAction } from '../CallToAction/config'
+import { PreviewCards } from '../PreviewCards/config'
 
 const columnFields: Field[] = [
   {
@@ -58,7 +59,7 @@ const columnFields: Field[] = [
   {
     name: 'blocks',
     type: 'blocks',
-    blocks: [FormBlock, MapBlock, MediaBlock, CallToAction],
+    blocks: [CallToAction, FormBlock, MapBlock, MediaBlock, PreviewCards],
     label: 'Content Blocks',
     admin: {
       description: 'Add blocks (forms, maps, media, CTA) to this column',
@@ -84,6 +85,20 @@ export const Content: Block = {
   slug: 'content',
   interfaceName: 'ContentBlock',
   fields: [
+    {
+      name: 'backgroundColor',
+      type: 'select',
+      label: 'Fundal',
+      defaultValue: 'white',
+      options: [
+        { label: 'Alb', value: 'white' },
+        { label: 'Gri deschis (about)', value: 'light' },
+        { label: 'Închis (dark)', value: 'dark' },
+      ],
+      admin: {
+        description: 'Culoarea de fundal a secțiunii',
+      },
+    },
     {
       name: 'columns',
       type: 'array',

@@ -196,6 +196,14 @@ export interface Page {
               | ({
                   relationTo: 'posts';
                   value: string | Post;
+                } | null)
+              | ({
+                  relationTo: 'team-members';
+                  value: string | TeamMember;
+                } | null)
+              | ({
+                  relationTo: 'classes';
+                  value: string | Class;
                 } | null);
             url?: string | null;
             label: string;
@@ -211,29 +219,53 @@ export interface Page {
   };
   layout: (
     | CallToActionBlock
-    | {
-        /**
-         * Textul mic de deasupra titlului principal
-         */
-        preTitle?: string | null;
-        title: string;
-        /**
-         * Selectează clasele care vor fi afișate (maxim 6)
-         */
-        classes: (string | Class)[];
-        /**
-         * Afișează badge-ul cu prețul pe imagine
-         */
-        showPrice?: boolean | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'classesPreview';
-      }
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
     | FormBlock
     | MapBlock
+    | {
+        /**
+         * Gymso = stil original template | Small/Large = stiluri alternative
+         */
+        style?: ('gymso-team' | 'gymso-class' | 'small' | 'large') | null;
+        cards?:
+          | {
+              image: string | Media;
+              title: string;
+              /**
+               * Ex: "Antrenor Principal" sau "Antrenat de • Maria"
+               */
+              subtitle?: string | null;
+              /**
+               * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
+               */
+              badge?: string | null;
+              link?: {
+                type?: ('reference' | 'custom') | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'team-members';
+                      value: string | TeamMember;
+                    } | null)
+                  | ({
+                      relationTo: 'classes';
+                      value: string | Class;
+                    } | null);
+                url?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'previewCards';
+      }
     | {
         displayMode?: ('full' | 'compact') | null;
         /**
@@ -247,28 +279,6 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'schedule';
-      }
-    | {
-        title: string;
-        /**
-         * Descriere care apare sub titlu
-         */
-        description?: string | null;
-        /**
-         * Selectează membrii echipei care vor fi afișați (maxim 6)
-         */
-        teamMembers: (string | TeamMember)[];
-        /**
-         * Afișează iconițele pentru social media pe hover
-         */
-        showSocialLinks?: boolean | null;
-        /**
-         * Alege stilul vizual pentru afișarea echipei
-         */
-        designTheme?: ('default' | 'transilvania') | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'teamPreview';
       }
   )[];
   meta?: {
@@ -517,11 +527,20 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
+ * via the `definition` "team-members".
  */
-export interface CallToActionBlock {
-  style?: ('default' | 'transilvania-feature') | null;
-  richText?: {
+export interface TeamMember {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  role: string;
+  featuredImage?: (string | null) | Media;
+  excerpt?: string | null;
+  content?: {
     root: {
       type: string;
       children: {
@@ -536,48 +555,26 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
-  workingHours?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
+  experience?: number | null;
+  specializations?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        name?: string | null;
         id?: string | null;
       }[]
     | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+  };
+  socialMedia?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    twitter?: string | null;
+  };
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -643,20 +640,11 @@ export interface Class {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team-members".
+ * via the `definition` "CallToActionBlock".
  */
-export interface TeamMember {
-  id: string;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  role: string;
-  featuredImage?: (string | null) | Media;
-  excerpt?: string | null;
-  content?: {
+export interface CallToActionBlock {
+  style?: ('default' | 'transilvania-feature') | null;
+  richText?: {
     root: {
       type: string;
       children: {
@@ -671,32 +659,66 @@ export interface TeamMember {
     };
     [k: string]: unknown;
   } | null;
-  experience?: number | null;
-  specializations?:
+  workingHours?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
     | {
-        name?: string | null;
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null)
+            | ({
+                relationTo: 'team-members';
+                value: string | TeamMember;
+              } | null)
+            | ({
+                relationTo: 'classes';
+                value: string | Class;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
         id?: string | null;
       }[]
     | null;
-  contact?: {
-    email?: string | null;
-    phone?: string | null;
-  };
-  socialMedia?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    twitter?: string | null;
-  };
-  publishedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
+  /**
+   * Culoarea de fundal a secțiunii
+   */
+  backgroundColor?: ('white' | 'light' | 'dark') | null;
   columns?:
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
@@ -721,7 +743,56 @@ export interface ContentBlock {
         /**
          * Add blocks (forms, maps, media, CTA) to this column
          */
-        blocks?: (FormBlock | MapBlock | MediaBlock | CallToActionBlock)[] | null;
+        blocks?:
+          | (
+              | CallToActionBlock
+              | FormBlock
+              | MapBlock
+              | MediaBlock
+              | {
+                  /**
+                   * Gymso = stil original template | Small/Large = stiluri alternative
+                   */
+                  style?: ('gymso-team' | 'gymso-class' | 'small' | 'large') | null;
+                  cards?:
+                    | {
+                        image: string | Media;
+                        title: string;
+                        /**
+                         * Ex: "Antrenor Principal" sau "Antrenat de • Maria"
+                         */
+                        subtitle?: string | null;
+                        /**
+                         * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
+                         */
+                        badge?: string | null;
+                        link?: {
+                          type?: ('reference' | 'custom') | null;
+                          reference?:
+                            | ({
+                                relationTo: 'pages';
+                                value: string | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'team-members';
+                                value: string | TeamMember;
+                              } | null)
+                            | ({
+                                relationTo: 'classes';
+                                value: string | Class;
+                              } | null);
+                          url?: string | null;
+                          newTab?: boolean | null;
+                        };
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'previewCards';
+                }
+            )[]
+          | null;
         enableLink?: boolean | null;
         link?: {
           type?: ('reference' | 'custom') | null;
@@ -734,6 +805,14 @@ export interface ContentBlock {
             | ({
                 relationTo: 'posts';
                 value: string | Post;
+              } | null)
+            | ({
+                relationTo: 'team-members';
+                value: string | TeamMember;
+              } | null)
+            | ({
+                relationTo: 'classes';
+                value: string | Class;
               } | null);
           url?: string | null;
           label: string;
@@ -1407,37 +1486,40 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         cta?: T | CallToActionBlockSelect<T>;
-        classesPreview?:
-          | T
-          | {
-              preTitle?: T;
-              title?: T;
-              classes?: T;
-              showPrice?: T;
-              id?: T;
-              blockName?: T;
-            };
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         mapBlock?: T | MapBlockSelect<T>;
+        previewCards?:
+          | T
+          | {
+              style?: T;
+              cards?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    subtitle?: T;
+                    badge?: T;
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          reference?: T;
+                          url?: T;
+                          newTab?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         schedule?:
           | T
           | {
               displayMode?: T;
               customTitle?: T;
-              designTheme?: T;
-              id?: T;
-              blockName?: T;
-            };
-        teamPreview?:
-          | T
-          | {
-              title?: T;
-              description?: T;
-              teamMembers?: T;
-              showSocialLinks?: T;
               designTheme?: T;
               id?: T;
               blockName?: T;
@@ -1488,6 +1570,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
+  backgroundColor?: T;
   columns?:
     | T
     | {
@@ -1496,10 +1579,34 @@ export interface ContentBlockSelect<T extends boolean = true> {
         blocks?:
           | T
           | {
+              cta?: T | CallToActionBlockSelect<T>;
               formBlock?: T | FormBlockSelect<T>;
               mapBlock?: T | MapBlockSelect<T>;
               mediaBlock?: T | MediaBlockSelect<T>;
-              cta?: T | CallToActionBlockSelect<T>;
+              previewCards?:
+                | T
+                | {
+                    style?: T;
+                    cards?:
+                      | T
+                      | {
+                          image?: T;
+                          title?: T;
+                          subtitle?: T;
+                          badge?: T;
+                          link?:
+                            | T
+                            | {
+                                type?: T;
+                                reference?: T;
+                                url?: T;
+                                newTab?: T;
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         enableLink?: T;
         link?:
@@ -2164,6 +2271,14 @@ export interface Header {
             | ({
                 relationTo: 'posts';
                 value: string | Post;
+              } | null)
+            | ({
+                relationTo: 'team-members';
+                value: string | TeamMember;
+              } | null)
+            | ({
+                relationTo: 'classes';
+                value: string | Class;
               } | null);
           url?: string | null;
           label: string;
@@ -2211,6 +2326,14 @@ export interface Footer {
                   | ({
                       relationTo: 'posts';
                       value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'team-members';
+                      value: string | TeamMember;
+                    } | null)
+                  | ({
+                      relationTo: 'classes';
+                      value: string | Class;
                     } | null);
                 url?: string | null;
                 label: string;
@@ -2296,6 +2419,14 @@ export interface Footer {
               | ({
                   relationTo: 'posts';
                   value: string | Post;
+                } | null)
+              | ({
+                  relationTo: 'team-members';
+                  value: string | TeamMember;
+                } | null)
+              | ({
+                  relationTo: 'classes';
+                  value: string | Class;
                 } | null);
             url?: string | null;
             label: string;

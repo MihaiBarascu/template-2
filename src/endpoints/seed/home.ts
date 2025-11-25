@@ -300,20 +300,177 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         },
       },
       {
-        blockType: 'teamPreview',
-        title: 'Salut, suntem Transilvania Gym',
-        description:
-          'Echipa noastră de antrenori profesioniști este dedicată să te ajute să îți atingi obiectivele de fitness. Cu experiență vastă și certificări internaționale, suntem aici pentru tine.',
-        teamMembers: teamMembers.map((member) => member.id),
-        showSocialLinks: true,
-        designTheme: 'transilvania',
+        blockType: 'content',
+        backgroundColor: 'light',
+        columns: [
+          {
+            size: 'oneThird',
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Salut, suntem ',
+                        version: 1,
+                      },
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 128,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Transilvania',
+                        version: 1,
+                      },
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: ' Gym',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    tag: 'h2',
+                    version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Echipa noastră de antrenori profesioniști este dedicată să te ajute să îți atingi obiectivele de fitness. Cu experiență vastă și certificări internaționale, suntem aici pentru tine.',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    textFormat: 0,
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            },
+          },
+          {
+            size: 'twoThirds',
+            blocks: [
+              {
+                blockType: 'previewCards',
+                style: 'gymso-team',
+                cards: teamMembers.slice(0, 2).map((member) => ({
+                  image: member.featuredImage as string,
+                  title: member.title,
+                  subtitle: member.role || 'Antrenor Fitness',
+                  link: {
+                    type: 'reference' as const,
+                    reference: {
+                      relationTo: 'team-members' as const,
+                      value: member.id,
+                    },
+                  },
+                })),
+              },
+            ],
+          },
+        ],
       },
       {
-        blockType: 'classesPreview',
-        preTitle: 'Obține un Corp Perfect',
-        title: 'Clasele Noastre de Antrenament',
-        classes: classes.map((cls) => cls.id),
-        showPrice: true,
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'OBȚINE UN CORP PERFECT',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: 'center',
+                    indent: 0,
+                    textFormat: 0,
+                    version: 1,
+                  },
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Clasele Noastre de Antrenament',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: 'center',
+                    indent: 0,
+                    tag: 'h2',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            },
+            blocks: [
+              {
+                blockType: 'previewCards',
+                style: 'gymso-class',
+                cards: classes.slice(0, 3).map((cls) => ({
+                  image: cls.featuredImage as string,
+                  title: cls.title,
+                  subtitle: typeof cls.trainer === 'object' ? cls.trainer?.title : 'Antrenor',
+                  badge: cls.price?.dropIn ? `${cls.price.dropIn} RON` : undefined,
+                  link: {
+                    type: 'reference' as const,
+                    reference: {
+                      relationTo: 'classes' as const,
+                      value: cls.id,
+                    },
+                  },
+                })),
+              },
+            ],
+          },
+        ],
       },
       {
         blockType: 'schedule',

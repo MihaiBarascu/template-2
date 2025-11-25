@@ -219,6 +219,14 @@
     @apply py-transilvania-section;
   }
 
+  /* Text highlight effect - cyan/teal background */
+  .text-highlight,
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #7dd3c4 60%);
+    padding: 0 4px;
+    margin: 0 -4px;
+  }
+
   .transilvania-bg-overlay {
     @apply absolute inset-0 w-full h-full bg-transilvania-dark -z-10;
     opacity: 0.85;
@@ -510,6 +518,42 @@
   .transilvania-footer .fa,
   .transilvania-contact .fa {
     @apply text-transilvania-primary;
+  }
+
+  /* ============================================
+     Gymso Preview Cards - Team Style (Original)
+     ============================================ */
+  .gymso-card-team {
+    @apply bg-white overflow-hidden;
+    border-radius: 2px;
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+  }
+
+  .gymso-card-info {
+    @apply p-5;
+  }
+
+  /* ============================================
+     Gymso Preview Cards - Class Style (Original)
+     ============================================ */
+  .gymso-card-class {
+    @apply bg-white overflow-hidden;
+    border-radius: 2px;
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+  }
+
+  .gymso-card-info-class {
+    padding: 1rem 2rem;
+  }
+
+  .gymso-class-price {
+    @apply bg-transilvania-primary text-white font-bold flex items-center justify-center;
+    border-radius: 100%;
+    width: 3.5rem;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    text-align: center;
+    font-size: 14px;
   }
 }
 

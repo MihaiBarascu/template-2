@@ -4,24 +4,22 @@ import type { Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ClassesPreview } from '@/blocks/ClassesPreview/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MapBlock } from '@/blocks/MapBlock/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PreviewCards } from '@/blocks/PreviewCards/Component'
 import { ScheduleBlock } from '@/blocks/ScheduleBlock/Component'
-import { TeamPreview } from '@/blocks/TeamPreview/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
-  classesPreview: ClassesPreview,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mapBlock: MapBlock,
   mediaBlock: MediaBlock,
+  previewCards: PreviewCards,
   schedule: ScheduleBlock,
-  teamPreview: TeamPreview,
 }
 
 export const RenderBlocks: React.FC<{

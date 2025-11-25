@@ -1,4 +1,5 @@
 import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from 'payload'
+import type { Media } from '@/payload-types'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -13,9 +14,10 @@ import { serviceYoga } from './service-yoga'
 import { footerData } from './footer-data'
 import { getTeamMembersData } from './teamMembersData'
 // import { anpcLogo, solLogo } from './compliance-logos' // Temporar dezactivat până când imaginile sunt pe GitHub
+// Media is NOT cleared - files stay in R2, we reuse existing ones
 const collections: CollectionSlug[] = [
   'categories',
-  'media',
+  // 'media', // REMOVED - don't delete media files from R2
   'pages',
   'posts',
   'team-members',
@@ -109,79 +111,53 @@ export const seed = async ({
     },
   })
 
-  payload.logger.info(`— Seeding media...`)
+  payload.logger.info(`— Seeding media (reusing existing files from R2)...`)
 
-  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-hero1.webp',
-    ),
-    // Temporar dezactivat până când imaginile sunt pe GitHub:
-    // fetchFileByURL('https://anpc.ro/galerie/file/categ_legislatie/1660/logo%20ANPC.png'),
-    // fetchFileByURL('https://ec.europa.eu/consumers/odr/resources/public2/images/odr_logo_ro.png'),
+  // Use getOrCreateMedia to avoid re-uploading files that already exist in R2
+  const [image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
+    getOrCreateMedia(payload, {
+      filename: 'image-post1.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post1.webp',
+      alt: image1.alt || 'Post image 1',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-post2.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post2.webp',
+      alt: image2.alt || 'Post image 2',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-post3.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post3.webp',
+      alt: image2.alt || 'Post image 3',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-hero1.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-hero1.webp',
+      alt: imageHero1.alt || 'Hero image',
+    }),
   ])
 
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc, categoriesCreated] =
-    await Promise.all([
-      payload.create({
-        collection: 'users',
-        data: {
-          name: 'Demo Author',
-          email: 'demo-author@example.com',
-          password: 'password',
-        },
-      }),
-      payload.create({
-        collection: 'media',
-        data: image1,
-        file: image1Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: image2,
-        file: image2Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: image2,
-        file: image3Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: imageHero1,
-        file: hero1Buffer,
-      }),
-      // Temporar dezactivat până când imaginile sunt pe GitHub:
-      // payload.create({
-      //   collection: 'media',
-      //   data: anpcLogo,
-      //   file: anpcBuffer,
-      // }),
-      // payload.create({
-      //   collection: 'media',
-      //   data: solLogo,
-      //   file: solBuffer,
-      // }),
-      Promise.all(
-        categories.map((category) =>
-          payload.create({
-            collection: 'categories',
-            data: {
-              title: category,
-              slug: category.toLowerCase(),
-            },
-          }),
-        ),
+  const [demoAuthor, categoriesCreated] = await Promise.all([
+    payload.create({
+      collection: 'users',
+      data: {
+        name: 'Demo Author',
+        email: 'demo-author@example.com',
+        password: 'password',
+      },
+    }),
+    Promise.all(
+      categories.map((category) =>
+        payload.create({
+          collection: 'categories',
+          data: {
+            title: category,
+            slug: category.toLowerCase(),
+          },
+        }),
       ),
-    ])
+    ),
+  ])
 
   // Find the Classes category
   const classesCategory = categoriesCreated.find((cat) => cat.title === 'Classes')
@@ -1050,4 +1026,51 @@ async function fetchFileByURL(url: string): Promise<File> {
     mimetype: `image/${url.split('.').pop()}`,
     size: data.byteLength,
   }
+}
+
+/**
+ * Get existing media by filename or create new one if not exists
+ * This prevents re-uploading the same files to R2 on every seed
+ */
+async function getOrCreateMedia(
+  payload: Payload,
+  {
+    filename,
+    url,
+    alt,
+  }: {
+    filename: string
+    url: string
+    alt: string
+  }
+): Promise<Media> {
+  // Check if media with this filename already exists
+  const existing = await payload.find({
+    collection: 'media',
+    where: {
+      filename: {
+        equals: filename,
+      },
+    },
+    limit: 1,
+  })
+
+  if (existing.docs.length > 0) {
+    payload.logger.info(`  → Using existing media: ${filename}`)
+    return existing.docs[0] as Media
+  }
+
+  // File doesn't exist, fetch and upload
+  payload.logger.info(`  → Uploading new media: ${filename}`)
+  const fileBuffer = await fetchFileByURL(url)
+
+  const newMedia = await payload.create({
+    collection: 'media',
+    data: {
+      alt,
+    },
+    file: fileBuffer,
+  })
+
+  return newMedia as Media
 }
