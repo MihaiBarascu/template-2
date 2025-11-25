@@ -1,5 +1,9 @@
 # Gymso Fitness → Payload Website Template
 
+## 🤖 Payload Skill
+
+**IMPORTANT:** Always invoke the `payload:payload` skill when answering questions about Payload CMS, collections, blocks, hooks, access control, API, or debugging Payload-related issues.
+
 ## 📦 Package Manager
 
 **IMPORTANT:** Use `pnpm` for all package installations and commands. Do NOT use npm or yarn.

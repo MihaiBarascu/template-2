@@ -8,7 +8,6 @@ import { searchPlugin } from '@payloadcms/plugin-search'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Plugin } from 'payload'
 
 import { Page, Post } from '@/payload-types'
@@ -89,13 +88,5 @@ export const plugins: Plugin[] = [
         return [...defaultFields, ...searchFields]
       },
     },
-  }),
-
-  vercelBlobStorage({
-    enabled: true,
-    collections: {
-      media: true,
-    },
-    token: process.env.BLOB_READ_WRITE_TOKEN,
   }),
 ]
