@@ -11,15 +11,13 @@ export const PreviewCards: Block = {
       name: 'style',
       type: 'select',
       label: 'Stil Carduri',
-      defaultValue: 'gymso-team',
+      defaultValue: 'team',
       options: [
-        { label: 'Gymso Team (card alb cu shadow)', value: 'gymso-team' },
-        { label: 'Gymso Class (card alb cu preț badge)', value: 'gymso-class' },
-        { label: 'Small (stil simplu)', value: 'small' },
-        { label: 'Large (overlay pe imagine)', value: 'large' },
+        { label: 'Team (echipă cu social icons)', value: 'team' },
+        { label: 'Class (clase cu preț badge)', value: 'class' },
       ],
       admin: {
-        description: 'Gymso = stil original template | Small/Large = stiluri alternative',
+        description: 'Team = pentru membri echipă | Class = pentru clase fitness',
       },
     },
     {
@@ -47,7 +45,15 @@ export const PreviewCards: Block = {
           type: 'text',
           label: 'Subtitlu',
           admin: {
-            description: 'Ex: "Antrenor Principal" sau "Antrenat de • Maria"',
+            description: 'Ex: "Antrenor Principal" sau "Bella" (numele antrenorului)',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Descriere',
+          admin: {
+            description: 'Descriere scurtă a clasei/serviciului',
           },
         },
         {

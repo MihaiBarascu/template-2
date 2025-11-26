@@ -76,6 +76,7 @@ export interface Config {
     classes: Class;
     contacts: Contact;
     addresses: Address;
+    schedules: Schedule;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -102,6 +103,7 @@ export interface Config {
     classes: ClassesSelect<false> | ClassesSelect<true>;
     contacts: ContactsSelect<false> | ContactsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
+    schedules: SchedulesSelect<false> | SchedulesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -119,12 +121,10 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
-    schedule: Schedule;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    schedule: ScheduleSelect<false> | ScheduleSelect<true>;
   };
   locale: null;
   user: User & {
@@ -226,17 +226,21 @@ export interface Page {
     | MapBlock
     | {
         /**
-         * Gymso = stil original template | Small/Large = stiluri alternative
+         * Team = pentru membri echipă | Class = pentru clase fitness
          */
-        style?: ('gymso-team' | 'gymso-class' | 'small' | 'large') | null;
+        style?: ('team' | 'class') | null;
         cards?:
           | {
               image: string | Media;
               title: string;
               /**
-               * Ex: "Antrenor Principal" sau "Antrenat de • Maria"
+               * Ex: "Antrenor Principal" sau "Bella" (numele antrenorului)
                */
               subtitle?: string | null;
+              /**
+               * Descriere scurtă a clasei/serviciului
+               */
+              description?: string | null;
               /**
                * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
                */
@@ -267,15 +271,14 @@ export interface Page {
         blockType: 'previewCards';
       }
     | {
-        displayMode?: ('full' | 'compact') | null;
         /**
-         * Lasă gol pentru a folosi titlul din setări
+         * Alege orarul care va fi afișat
+         */
+        schedule: string | Schedule;
+        /**
+         * Lasă gol pentru a folosi titlul din orar
          */
         customTitle?: string | null;
-        /**
-         * Alege stilul vizual pentru afișarea orarului
-         */
-        designTheme?: ('default' | 'transilvania') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'schedule';
@@ -723,7 +726,16 @@ export interface ContentBlock {
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
         /**
-         * Add rich text content to this column
+         * Setări de formatare text pentru această coloană
+         */
+        textStyle?: {
+          lineHeight?: ('none' | 'tight' | 'snug' | 'normal' | 'relaxed' | 'loose') | null;
+          fontSize?: ('xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl') | null;
+          letterSpacing?: ('tighter' | 'tight' | 'normal' | 'wide' | 'wider') | null;
+          paragraphSpacing?: ('none' | 'sm' | 'normal' | 'lg' | 'xl') | null;
+        };
+        /**
+         * Add rich text content to this column (use centered h6 + h2 for section headers)
          */
         richText?: {
           root: {
@@ -741,7 +753,7 @@ export interface ContentBlock {
           [k: string]: unknown;
         } | null;
         /**
-         * Add blocks (forms, maps, media, CTA) to this column
+         * Add blocks (forms, maps, media, CTA, preview cards) to this column
          */
         blocks?:
           | (
@@ -751,17 +763,21 @@ export interface ContentBlock {
               | MediaBlock
               | {
                   /**
-                   * Gymso = stil original template | Small/Large = stiluri alternative
+                   * Team = pentru membri echipă | Class = pentru clase fitness
                    */
-                  style?: ('gymso-team' | 'gymso-class' | 'small' | 'large') | null;
+                  style?: ('team' | 'class') | null;
                   cards?:
                     | {
                         image: string | Media;
                         title: string;
                         /**
-                         * Ex: "Antrenor Principal" sau "Antrenat de • Maria"
+                         * Ex: "Antrenor Principal" sau "Bella" (numele antrenorului)
                          */
                         subtitle?: string | null;
+                        /**
+                         * Descriere scurtă a clasei/serviciului
+                         */
+                        description?: string | null;
                         /**
                          * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
                          */
@@ -1168,6 +1184,38 @@ export interface ArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules".
+ */
+export interface Schedule {
+  id: string;
+  title: string;
+  description?: string | null;
+  simpleHours?:
+    | {
+        days: string;
+        hours: string;
+        id?: string | null;
+      }[]
+    | null;
+  settings?: {
+    startHour?: string | null;
+    endHour?: string | null;
+  };
+  entries?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        endTime?: string | null;
+        className: string;
+        trainer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1393,6 +1441,10 @@ export interface PayloadLockedDocument {
         value: string | Address;
       } | null)
     | ({
+        relationTo: 'schedules';
+        value: string | Schedule;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1501,6 +1553,7 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     title?: T;
                     subtitle?: T;
+                    description?: T;
                     badge?: T;
                     link?:
                       | T
@@ -1518,9 +1571,8 @@ export interface PagesSelect<T extends boolean = true> {
         schedule?:
           | T
           | {
-              displayMode?: T;
+              schedule?: T;
               customTitle?: T;
-              designTheme?: T;
               id?: T;
               blockName?: T;
             };
@@ -1575,6 +1627,14 @@ export interface ContentBlockSelect<T extends boolean = true> {
     | T
     | {
         size?: T;
+        textStyle?:
+          | T
+          | {
+              lineHeight?: T;
+              fontSize?: T;
+              letterSpacing?: T;
+              paragraphSpacing?: T;
+            };
         richText?: T;
         blocks?:
           | T
@@ -1593,6 +1653,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
                           image?: T;
                           title?: T;
                           subtitle?: T;
+                          description?: T;
                           badge?: T;
                           link?:
                             | T
@@ -1974,6 +2035,39 @@ export interface AddressesSelect<T extends boolean = true> {
   address?: T;
   googleMapsEmbed?: T;
   googleMapsUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules_select".
+ */
+export interface SchedulesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  simpleHours?:
+    | T
+    | {
+        days?: T;
+        hours?: T;
+        id?: T;
+      };
+  settings?:
+    | T
+    | {
+        startHour?: T;
+        endHour?: T;
+      };
+  entries?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        endTime?: T;
+        className?: T;
+        trainer?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2449,44 +2543,6 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "schedule".
- */
-export interface Schedule {
-  id: string;
-  title: string;
-  description?: string | null;
-  settings: {
-    startHour: string;
-    endHour: string;
-    timeSlotDuration: number;
-    showEmptySlots?: boolean | null;
-  };
-  entries?:
-    | {
-        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-        time: string;
-        entryType: 'linked' | 'custom';
-        class?: (string | null) | Class;
-        /**
-         * Lasă gol pentru a folosi antrenorul default al clasei
-         */
-        overrideTrainer?: (string | null) | TeamMember;
-        customTitle?: string | null;
-        customTrainer?: string | null;
-        customDuration?: number | null;
-        /**
-         * Culoare HEX pentru această clasă
-         */
-        customColor?: string | null;
-        customDescription?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2611,40 +2667,6 @@ export interface FooterSelect<T extends boolean = true> {
               width?: T;
               id?: T;
             };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "schedule_select".
- */
-export interface ScheduleSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  settings?:
-    | T
-    | {
-        startHour?: T;
-        endHour?: T;
-        timeSlotDuration?: T;
-        showEmptySlots?: T;
-      };
-  entries?:
-    | T
-    | {
-        day?: T;
-        time?: T;
-        entryType?: T;
-        class?: T;
-        overrideTrainer?: T;
-        customTitle?: T;
-        customTrainer?: T;
-        customDuration?: T;
-        customColor?: T;
-        customDescription?: T;
-        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

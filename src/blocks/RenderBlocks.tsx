@@ -24,8 +24,9 @@ const blockComponents = {
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
+  nested?: boolean
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, nested = false } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -39,8 +40,18 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
+              // Nested blocks don't need wrapper margins
+              if (nested) {
+                return (
+                  <div key={index}>
+                    {/* @ts-expect-error - Block components may have different prop types */}
+                    <Block {...block} />
+                  </div>
+                )
+              }
+
               return (
-                <div className="my-16" key={index}>
+                <div key={index}>
                   {/* @ts-expect-error - Block components may have different prop types */}
                   <Block {...block} />
                 </div>

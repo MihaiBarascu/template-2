@@ -1,4 +1,4 @@
-import type { Address, Class, Form, Media, TeamMember } from '@/payload-types'
+import type { Address, Class, Form, Media, Schedule, TeamMember } from '@/payload-types'
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
@@ -7,6 +7,7 @@ type HomeArgs = {
   classes: Class[]
   contactForm: Form
   address: Address
+  schedule: Schedule
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
@@ -15,6 +16,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
   classes,
   contactForm,
   address,
+  schedule,
 }) => {
   return {
     slug: 'home',
@@ -305,6 +307,12 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         columns: [
           {
             size: 'oneThird',
+            textStyle: {
+              lineHeight: 'relaxed',
+              fontSize: 'lg',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
             richText: {
               root: {
                 type: 'root',
@@ -375,10 +383,16 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           },
           {
             size: 'twoThirds',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'base',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
             blocks: [
               {
                 blockType: 'previewCards',
-                style: 'gymso-team',
+                style: 'team',
                 cards: teamMembers.slice(0, 2).map((member) => ({
                   image: member.featuredImage as string,
                   title: member.title,
@@ -401,12 +415,18 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         columns: [
           {
             size: 'full',
+            textStyle: {
+              lineHeight: 'tight',
+              fontSize: 'base',
+              letterSpacing: 'wide',
+              paragraphSpacing: 'none',
+            },
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
-                    type: 'paragraph',
+                    type: 'heading',
                     children: [
                       {
                         type: 'text',
@@ -414,14 +434,14 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: 'OBȚINE UN CORP PERFECT',
+                        text: 'Obține un Corp Perfect',
                         version: 1,
                       },
                     ],
                     direction: 'ltr',
                     format: 'center',
                     indent: 0,
-                    textFormat: 0,
+                    tag: 'h6',
                     version: 1,
                   },
                   {
@@ -453,11 +473,12 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             blocks: [
               {
                 blockType: 'previewCards',
-                style: 'gymso-class',
+                style: 'class',
                 cards: classes.slice(0, 3).map((cls) => ({
                   image: cls.featuredImage as string,
                   title: cls.title,
                   subtitle: typeof cls.trainer === 'object' ? cls.trainer?.title : 'Antrenor',
+                  description: cls.description || 'Descoperă beneficiile acestei clase și transformă-ți corpul.',
                   badge: cls.price?.dropIn ? `${cls.price.dropIn} RON` : undefined,
                   link: {
                     type: 'reference' as const,
@@ -474,15 +495,20 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
       {
         blockType: 'schedule',
-        displayMode: 'full',
+        schedule: typeof schedule.id === 'string' ? schedule.id : String(schedule.id),
         customTitle: 'Programul Nostru Săptămânal',
-        designTheme: 'default',
       },
       {
         blockType: 'content',
         columns: [
           {
             size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'lg',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'lg',
+            },
             richText: {
               root: {
                 type: 'root',
@@ -523,6 +549,12 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           },
           {
             size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'base',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
             blocks: [
               {
                 blockType: 'mapBlock',
