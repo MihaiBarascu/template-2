@@ -4,30 +4,29 @@ import type { Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ClassesPreview } from '@/blocks/ClassesPreview/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MapBlock } from '@/blocks/MapBlock/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PreviewCards } from '@/blocks/PreviewCards/Component'
 import { ScheduleBlock } from '@/blocks/ScheduleBlock/Component'
-import { TeamPreview } from '@/blocks/TeamPreview/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
-  classesPreview: ClassesPreview,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mapBlock: MapBlock,
   mediaBlock: MediaBlock,
+  previewCards: PreviewCards,
   schedule: ScheduleBlock,
-  teamPreview: TeamPreview,
 }
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
+  nested?: boolean
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, nested = false } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -41,8 +40,18 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
+              // Nested blocks don't need wrapper margins
+              if (nested) {
+                return (
+                  <div key={index}>
+                    {/* @ts-expect-error - Block components may have different prop types */}
+                    <Block {...block} />
+                  </div>
+                )
+              }
+
               return (
-                <div className="my-16" key={index}>
+                <div key={index}>
                   {/* @ts-expect-error - Block components may have different prop types */}
                   <Block {...block} />
                 </div>

@@ -15,9 +15,9 @@ import { TeamMembers } from './collections/TeamMembers'
 import { Classes } from './collections/Classes'
 import { Contacts } from './collections/Contacts'
 import { Addresses } from './collections/Addresses'
+import { Schedules } from './collections/Schedules'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
-import { Schedule } from './globals/Schedule/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -67,9 +67,9 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Contacts, Addresses],
+  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Contacts, Addresses, Schedules],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, Schedule],
+  globals: [Header, Footer],
   plugins: [
     ...plugins,
     // Cloudflare R2 Storage (S3-compatible)

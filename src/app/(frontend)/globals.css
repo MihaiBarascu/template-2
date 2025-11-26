@@ -219,6 +219,14 @@
     @apply py-transilvania-section;
   }
 
+  /* Text highlight effect - cyan/teal background */
+  .text-highlight,
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #7dd3c4 60%);
+    padding: 0 4px;
+    margin: 0 -4px;
+  }
+
   .transilvania-bg-overlay {
     @apply absolute inset-0 w-full h-full bg-transilvania-dark -z-10;
     opacity: 0.85;
@@ -372,46 +380,61 @@
   }
 
   /* ============================================
-     Transilvania Schedule Table
+     Schedule Section (Gymso Original Style)
      ============================================ */
-  .transilvania-schedule {
-    @apply bg-transilvania-dark;
+  .schedule {
+    background: var(--transilvania-dark);
   }
 
-  .transilvania-schedule-table {
-    @apply table-auto border-0 text-center w-full;
+  .schedule-table {
+    display: table;
+    border: 0;
+    text-align: center;
+    border-collapse: collapse;
   }
 
-  .transilvania-schedule-table strong {
-    @apply text-white block text-center;
+  .schedule-table strong {
+    display: block;
+    text-align: center;
+    color: var(--transilvania-white);
   }
 
-  .transilvania-schedule-table span {
-    @apply text-transilvania-gray block text-center;
+  .schedule-table span {
+    display: block;
+    text-align: center;
+    color: var(--transilvania-gray);
+    font-size: 14px;
+    text-transform: uppercase;
   }
 
-  .transilvania-schedule-table span,
-  .transilvania-schedule-table small {
-    @apply text-transilvania-menu uppercase;
+  .schedule-table small {
+    font-size: 14px;
+    text-transform: uppercase;
+    position: relative;
+    top: 10px;
+    color: var(--transilvania-white);
   }
 
-  .transilvania-schedule-table thead th {
-    @apply bg-transilvania-primary text-white uppercase;
+  .schedule-time-header,
+  .schedule-day-header {
+    background: var(--transilvania-primary);
     border: 1px solid #212122;
-  }
-
-  .transilvania-schedule-table tbody tr td:first-child {
-    @apply bg-transilvania-primary text-white;
-    border: 1px solid #212122;
-  }
-
-  .transilvania-schedule-table td,
-  .transilvania-schedule-table th {
+    color: var(--transilvania-white);
+    text-transform: uppercase;
+    font-weight: 700;
     padding: 1rem;
-    border: 1px solid #212122;
   }
 
-  .transilvania-schedule-table td {
+  .schedule-time-cell {
+    background: var(--transilvania-primary);
+    border: 1px solid #212122;
+    color: var(--transilvania-white);
+    padding: 1rem;
+  }
+
+  .schedule-cell {
+    border: 1px solid #212122;
+    padding: 1rem;
     padding-bottom: 22px;
   }
 
@@ -510,6 +533,169 @@
   .transilvania-footer .fa,
   .transilvania-contact .fa {
     @apply text-transilvania-primary;
+  }
+
+  /* ============================================
+     Preview Cards - Team Style (Gymso Original)
+     ============================================ */
+  .team-thumb {
+    position: relative;
+  }
+
+  .team-info {
+    background: var(--transilvania-white);
+    border-radius: 0 0 2px 2px;
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+    padding: 20px;
+    position: relative;
+  }
+
+  .team-info h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--transilvania-dark);
+    margin: 0;
+    letter-spacing: -1px;
+  }
+
+  .team-info span {
+    font-weight: 300;
+    opacity: 0.85;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ============================================
+     Preview Cards - Class Style (Gymso Original)
+     ============================================ */
+  .class-thumb {
+    position: relative;
+  }
+
+  .class-info {
+    background: var(--transilvania-white);
+    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+    border-radius: 0 0 2px 2px;
+    padding: 1rem 2rem;
+    position: relative;
+  }
+
+  .class-info h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--transilvania-dark);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -1px;
+  }
+
+  .class-trainer {
+    font-size: 14px;
+    color: var(--transilvania-gray);
+    display: block;
+  }
+
+  .class-trainer strong {
+    color: var(--transilvania-gray);
+    font-weight: 500;
+  }
+
+  .class-price {
+    background: var(--transilvania-primary);
+    border-radius: 50%;
+    color: var(--transilvania-white);
+    font-weight: 700;
+    display: block;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .class-description {
+    font-size: 15px;
+    color: #6c757d;
+    line-height: 1.6;
+    margin: 0.75rem 0 0 0;
+  }
+
+  /* ============================================
+     RichText Section Headers (centered headings)
+     ============================================ */
+  /* Style for centered h6 subtitle in RichText */
+  [class*="RichText"] h6[style*="text-align: center"],
+  [class*="RichText"] h6[style*="text-align:center"],
+  .rich-text-section-header h6 {
+    color: #6c757d;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 0 0;
+    line-height: 1.4;
+  }
+
+  /* Style for centered h2 title in RichText */
+  [class*="RichText"] h2[style*="text-align: center"],
+  [class*="RichText"] h2[style*="text-align:center"],
+  .rich-text-section-header h2 {
+    font-family: var(--font-plain), sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--color-transilvania-dark);
+    letter-spacing: -2px;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+  }
+
+  /* Remove gap between h6 followed by h2 in section headers */
+  [class*="RichText"] h6 + h2,
+  [class*="RichText"] h6[style*="text-align: center"] + h2,
+  [class*="RichText"] h6[style*="text-align:center"] + h2,
+  .payload-richtext h6 + h2 {
+    margin-top: 0 !important;
+  }
+
+  /* Remove all margins from headings in Content block RichText */
+  .payload-richtext h6 {
+    margin-bottom: 0 !important;
+  }
+
+  .payload-richtext h2 {
+    margin-top: 0.25rem !important;
+  }
+
+  /* ============================================
+     RichText Alignment Support (override prose)
+     ============================================ */
+  /* Ensure text-align styles from Lexical are respected */
+  .prose [style*="text-align: center"],
+  .prose [style*="text-align:center"],
+  .payload-richtext [style*="text-align: center"],
+  .payload-richtext [style*="text-align:center"] {
+    text-align: center !important;
+  }
+
+  .prose [style*="text-align: right"],
+  .prose [style*="text-align:right"],
+  .payload-richtext [style*="text-align: right"],
+  .payload-richtext [style*="text-align:right"] {
+    text-align: right !important;
+  }
+
+  .prose [style*="text-align: justify"],
+  .prose [style*="text-align:justify"],
+  .payload-richtext [style*="text-align: justify"],
+  .payload-richtext [style*="text-align:justify"] {
+    text-align: justify !important;
+  }
+
+  .prose [style*="text-align: left"],
+  .prose [style*="text-align:left"],
+  .payload-richtext [style*="text-align: left"],
+  .payload-richtext [style*="text-align:left"] {
+    text-align: left !important;
   }
 }
 

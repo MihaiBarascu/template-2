@@ -1,4 +1,4 @@
-import type { Address, Class, Form, Media, TeamMember } from '@/payload-types'
+import type { Address, Class, Form, Media, Schedule, TeamMember } from '@/payload-types'
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
@@ -7,6 +7,7 @@ type HomeArgs = {
   classes: Class[]
   contactForm: Form
   address: Address
+  schedule: Schedule
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
@@ -15,6 +16,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
   classes,
   contactForm,
   address,
+  schedule,
 }) => {
   return {
     slug: 'home',
@@ -300,32 +302,213 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         },
       },
       {
-        blockType: 'teamPreview',
-        title: 'Salut, suntem Transilvania Gym',
-        description:
-          'Echipa noastră de antrenori profesioniști este dedicată să te ajute să îți atingi obiectivele de fitness. Cu experiență vastă și certificări internaționale, suntem aici pentru tine.',
-        teamMembers: teamMembers.map((member) => member.id),
-        showSocialLinks: true,
-        designTheme: 'transilvania',
+        blockType: 'content',
+        backgroundColor: 'light',
+        columns: [
+          {
+            size: 'oneThird',
+            textStyle: {
+              lineHeight: 'relaxed',
+              fontSize: 'lg',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Salut, suntem ',
+                        version: 1,
+                      },
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 128,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Transilvania',
+                        version: 1,
+                      },
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: ' Gym',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    tag: 'h2',
+                    version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Echipa noastră de antrenori profesioniști este dedicată să te ajute să îți atingi obiectivele de fitness. Cu experiență vastă și certificări internaționale, suntem aici pentru tine.',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    textFormat: 0,
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            },
+          },
+          {
+            size: 'twoThirds',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'base',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
+            blocks: [
+              {
+                blockType: 'previewCards',
+                style: 'team',
+                cards: teamMembers.slice(0, 2).map((member) => ({
+                  image: member.featuredImage as string,
+                  title: member.title,
+                  subtitle: member.role || 'Antrenor Fitness',
+                  link: {
+                    type: 'reference' as const,
+                    reference: {
+                      relationTo: 'team-members' as const,
+                      value: member.id,
+                    },
+                  },
+                })),
+              },
+            ],
+          },
+        ],
       },
       {
-        blockType: 'classesPreview',
-        preTitle: 'Obține un Corp Perfect',
-        title: 'Clasele Noastre de Antrenament',
-        classes: classes.map((cls) => cls.id),
-        showPrice: true,
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            textStyle: {
+              lineHeight: 'tight',
+              fontSize: 'base',
+              letterSpacing: 'wide',
+              paragraphSpacing: 'none',
+            },
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Obține un Corp Perfect',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: 'center',
+                    indent: 0,
+                    tag: 'h6',
+                    version: 1,
+                  },
+                  {
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Clasele Noastre de Antrenament',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: 'center',
+                    indent: 0,
+                    tag: 'h2',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            },
+            blocks: [
+              {
+                blockType: 'previewCards',
+                style: 'class',
+                cards: classes.slice(0, 3).map((cls) => ({
+                  image: cls.featuredImage as string,
+                  title: cls.title,
+                  subtitle: typeof cls.trainer === 'object' ? cls.trainer?.title : 'Antrenor',
+                  description: cls.description || 'Descoperă beneficiile acestei clase și transformă-ți corpul.',
+                  badge: cls.price?.dropIn ? `${cls.price.dropIn} RON` : undefined,
+                  link: {
+                    type: 'reference' as const,
+                    reference: {
+                      relationTo: 'classes' as const,
+                      value: cls.id,
+                    },
+                  },
+                })),
+              },
+            ],
+          },
+        ],
       },
       {
         blockType: 'schedule',
-        displayMode: 'full',
+        schedule: typeof schedule.id === 'string' ? schedule.id : String(schedule.id),
         customTitle: 'Programul Nostru Săptămânal',
-        designTheme: 'default',
       },
       {
         blockType: 'content',
         columns: [
           {
             size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'lg',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'lg',
+            },
             richText: {
               root: {
                 type: 'root',
@@ -366,6 +549,12 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           },
           {
             size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'base',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
             blocks: [
               {
                 blockType: 'mapBlock',

@@ -8,34 +8,21 @@ export const ScheduleBlock: Block = {
   },
   fields: [
     {
-      name: 'displayMode',
-      type: 'select',
-      label: 'Mod afișare',
-      defaultValue: 'full',
-      options: [
-        { label: 'Complet', value: 'full' },
-        { label: 'Compact', value: 'compact' },
-      ],
+      name: 'schedule',
+      type: 'relationship',
+      relationTo: 'schedules',
+      label: 'Selectează Orarul',
+      required: true,
+      admin: {
+        description: 'Alege orarul care va fi afișat',
+      },
     },
     {
       name: 'customTitle',
       type: 'text',
       label: 'Titlu personalizat (opțional)',
       admin: {
-        description: 'Lasă gol pentru a folosi titlul din setări',
-      },
-    },
-    {
-      name: 'designTheme',
-      type: 'select',
-      label: 'Tema vizuală',
-      defaultValue: 'default',
-      options: [
-        { label: 'Default', value: 'default' },
-        { label: 'Transilvania', value: 'transilvania' },
-      ],
-      admin: {
-        description: 'Alege stilul vizual pentru afișarea orarului',
+        description: 'Lasă gol pentru a folosi titlul din orar',
       },
     },
   ],

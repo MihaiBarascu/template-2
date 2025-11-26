@@ -1,4 +1,5 @@
 import type { CollectionSlug, File, GlobalSlug, Payload, PayloadRequest } from 'payload'
+import type { Media } from '@/payload-types'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -13,21 +14,23 @@ import { serviceYoga } from './service-yoga'
 import { footerData } from './footer-data'
 import { getTeamMembersData } from './teamMembersData'
 // import { anpcLogo, solLogo } from './compliance-logos' // Temporar dezactivat până când imaginile sunt pe GitHub
+// Media is NOT cleared - files stay in R2, we reuse existing ones
 const collections: CollectionSlug[] = [
   'categories',
-  'media',
+  // 'media', // REMOVED - don't delete media files from R2
   'pages',
   'posts',
   'team-members',
   'classes',
   'contacts',
   'addresses',
+  'schedules',
   'forms',
   'form-submissions',
   'search',
 ]
 
-const _globals: GlobalSlug[] = ['header', 'footer', 'schedule']
+const _globals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Classes', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -75,16 +78,6 @@ export const seed = async ({
         disableRevalidate: true,
       },
     }),
-    payload.updateGlobal({
-      slug: 'schedule',
-      data: {
-        entries: [],
-      },
-      depth: 0,
-      context: {
-        disableRevalidate: true,
-      },
-    }),
   ])
 
   await Promise.all(
@@ -109,79 +102,53 @@ export const seed = async ({
     },
   })
 
-  payload.logger.info(`— Seeding media...`)
+  payload.logger.info(`— Seeding media (reusing existing files from R2)...`)
 
-  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-hero1.webp',
-    ),
-    // Temporar dezactivat până când imaginile sunt pe GitHub:
-    // fetchFileByURL('https://anpc.ro/galerie/file/categ_legislatie/1660/logo%20ANPC.png'),
-    // fetchFileByURL('https://ec.europa.eu/consumers/odr/resources/public2/images/odr_logo_ro.png'),
+  // Use getOrCreateMedia to avoid re-uploading files that already exist in R2
+  const [image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
+    getOrCreateMedia(payload, {
+      filename: 'image-post1.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post1.webp',
+      alt: image1.alt || 'Post image 1',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-post2.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post2.webp',
+      alt: image2.alt || 'Post image 2',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-post3.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-post3.webp',
+      alt: image2.alt || 'Post image 3',
+    }),
+    getOrCreateMedia(payload, {
+      filename: 'image-hero1.webp',
+      url: 'https://raw.githubusercontent.com/MihaiBarascu/template-2/main/src/endpoints/seed/image-hero1.webp',
+      alt: imageHero1.alt || 'Hero image',
+    }),
   ])
 
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc, categoriesCreated] =
-    await Promise.all([
-      payload.create({
-        collection: 'users',
-        data: {
-          name: 'Demo Author',
-          email: 'demo-author@example.com',
-          password: 'password',
-        },
-      }),
-      payload.create({
-        collection: 'media',
-        data: image1,
-        file: image1Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: image2,
-        file: image2Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: image2,
-        file: image3Buffer,
-      }),
-      payload.create({
-        collection: 'media',
-        data: imageHero1,
-        file: hero1Buffer,
-      }),
-      // Temporar dezactivat până când imaginile sunt pe GitHub:
-      // payload.create({
-      //   collection: 'media',
-      //   data: anpcLogo,
-      //   file: anpcBuffer,
-      // }),
-      // payload.create({
-      //   collection: 'media',
-      //   data: solLogo,
-      //   file: solBuffer,
-      // }),
-      Promise.all(
-        categories.map((category) =>
-          payload.create({
-            collection: 'categories',
-            data: {
-              title: category,
-              slug: category.toLowerCase(),
-            },
-          }),
-        ),
+  const [demoAuthor, categoriesCreated] = await Promise.all([
+    payload.create({
+      collection: 'users',
+      data: {
+        name: 'Demo Author',
+        email: 'demo-author@example.com',
+        password: 'password',
+      },
+    }),
+    Promise.all(
+      categories.map((category) =>
+        payload.create({
+          collection: 'categories',
+          data: {
+            title: category,
+            slug: category.toLowerCase(),
+          },
+        }),
       ),
-    ])
+    ),
+  ])
 
   // Find the Classes category
   const classesCategory = categoriesCreated.find((cat) => cat.title === 'Classes')
@@ -746,6 +713,55 @@ export const seed = async ({
     },
   })
 
+  payload.logger.info(`— Seeding schedule...`)
+
+  // Create schedule in collection (not global anymore)
+  const mainSchedule = await payload.create({
+    collection: 'schedules',
+    depth: 0,
+    data: {
+      title: 'Orar Săptămânal',
+      description: 'Program valabil începând cu 1 Decembrie 2024',
+      simpleHours: [
+        { days: 'Luni - Vineri', hours: '07:00 - 22:00' },
+        { days: 'Sâmbătă', hours: '08:00 - 20:00' },
+        { days: 'Duminică', hours: '09:00 - 18:00' },
+      ],
+      settings: {
+        startHour: '07:00',
+        endHour: '21:00',
+      },
+      entries: [
+        // Luni
+        { day: 'monday' as const, time: '07:00', endTime: '08:00', className: 'Morning Cardio', trainer: 'Dan Popescu' },
+        { day: 'monday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
+        { day: 'monday' as const, time: '18:00', endTime: '18:45', className: 'Spinning', trainer: 'Andreea Pop' },
+        { day: 'monday' as const, time: '18:00', endTime: '19:00', className: 'TRX', trainer: 'Sala 2' },
+        { day: 'monday' as const, time: '19:00', endTime: '19:45', className: 'Kango Jumps', trainer: 'Marius David' },
+        // Marți
+        { day: 'tuesday' as const, time: '07:00', endTime: '07:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
+        { day: 'tuesday' as const, time: '09:00', endTime: '10:00', className: 'TRX Training', trainer: 'Ana Marinescu' },
+        { day: 'tuesday' as const, time: '18:00', endTime: '18:45', className: 'Spinning', trainer: 'Vlad Ionescu' },
+        // Miercuri
+        { day: 'wednesday' as const, time: '10:00', endTime: '10:50', className: 'Pilates Core', trainer: teamMembers[0].title },
+        { day: 'wednesday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
+        { day: 'wednesday' as const, time: '19:30', endTime: '20:30', className: 'Boxing Fitness', trainer: 'Radu Constantin' },
+        // Joi
+        { day: 'thursday' as const, time: '07:00', endTime: '07:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
+        { day: 'thursday' as const, time: '17:00', endTime: '17:50', className: 'Aerobic Step', trainer: 'Elena Dumitrescu' },
+        // Vineri
+        { day: 'friday' as const, time: '10:00', endTime: '10:50', className: 'Pilates Core', trainer: teamMembers[0].title },
+        { day: 'friday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
+        // Sâmbătă
+        { day: 'saturday' as const, time: '09:00', endTime: '09:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
+        { day: 'saturday' as const, time: '11:00', endTime: '12:30', className: 'Zumba Party', trainer: 'Cristina Popa' },
+        // Duminică
+        { day: 'sunday' as const, time: '10:00', endTime: '11:15', className: 'Yoga Relaxare', trainer: teamMembers[1].title },
+        { day: 'sunday' as const, time: '16:00', endTime: '17:00', className: 'Stretching & Recovery', trainer: 'Team' },
+      ],
+    },
+  })
+
   payload.logger.info(`— Seeding pages...`)
 
   // First create the home page data
@@ -753,7 +769,7 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, teamMembers, classes, contactForm, address: mainAddress }),
+      data: home({ heroImage: imageHomeDoc, teamMembers, classes, contactForm, address: mainAddress, schedule: mainSchedule }),
     }),
     payload.create({
       collection: 'pages',
@@ -773,207 +789,9 @@ export const seed = async ({
   //   data: clasePage(classesCategory),
   // })
 
-  payload.logger.info(`— Seeding schedule...`)
-
-  // Create schedule data with linked and custom entries
-  const scheduleData = {
-    title: 'Orar Săptămânal',
-    description: 'Program valabil începând cu 1 Decembrie 2024',
-    settings: {
-      startHour: '07:00',
-      endHour: '21:00',
-      timeSlotDuration: 60,
-      showEmptySlots: true,
-    },
-    entries: [
-      // Luni
-      {
-        day: 'monday' as const,
-        time: '07:00',
-        entryType: 'custom' as const,
-        customTitle: 'Morning Cardio',
-        customTrainer: 'Dan Popescu',
-        customDuration: 60,
-        customColor: '#f13a11',
-      },
-      {
-        day: 'monday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'Yoga pentru Începători',
-        customTrainer: teamMembers[1].title, // Maria Ionescu
-        customDuration: 60,
-        customColor: '#7209B7',
-      },
-      {
-        day: 'monday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'Spinning',
-        customTrainer: 'Andreea Pop',
-        customDuration: 45,
-        customColor: '#FFD93D',
-      },
-      {
-        day: 'monday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'TRX',
-        customTrainer: 'Sala 2',
-        customDuration: 60,
-        customColor: '#4ECDC4',
-      },
-      {
-        day: 'monday' as const,
-        time: '19:00',
-        entryType: 'custom' as const,
-        customTitle: 'Kango Jumps',
-        customTrainer: 'Marius David',
-        customDuration: 45,
-        customColor: '#FF6B35',
-      },
-      // Marți
-      {
-        day: 'tuesday' as const,
-        time: '07:00',
-        entryType: 'custom' as const,
-        customTitle: 'CrossFit Intensiv',
-        customTrainer: teamMembers[2].title, // Mihai Radu
-        customDuration: 45,
-        customColor: '#E63946',
-      },
-      {
-        day: 'tuesday' as const,
-        time: '09:00',
-        entryType: 'custom' as const,
-        customTitle: 'TRX Training',
-        customTrainer: 'Ana Marinescu',
-        customDuration: 60,
-        customColor: '#4ECDC4',
-      },
-      {
-        day: 'tuesday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'Spinning',
-        customTrainer: 'Vlad Ionescu',
-        customDuration: 45,
-        customColor: '#FFD93D',
-      },
-      // Miercuri
-      {
-        day: 'wednesday' as const,
-        time: '10:00',
-        entryType: 'custom' as const,
-        customTitle: 'Pilates Core',
-        customTrainer: teamMembers[0].title, // Alexandru Popescu
-        customDuration: 50,
-        customColor: '#A8DADC',
-      },
-      {
-        day: 'wednesday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'Yoga pentru Începători',
-        customTrainer: teamMembers[1].title,
-        customDuration: 60,
-        customColor: '#7209B7',
-      },
-      {
-        day: 'wednesday' as const,
-        time: '19:30',
-        entryType: 'custom' as const,
-        customTitle: 'Boxing Fitness',
-        customTrainer: 'Radu Constantin',
-        customDuration: 60,
-        customColor: '#E63946',
-      },
-      // Joi
-      {
-        day: 'thursday' as const,
-        time: '07:00',
-        entryType: 'custom' as const,
-        customTitle: 'CrossFit Intensiv',
-        customTrainer: teamMembers[2].title,
-        customDuration: 45,
-        customColor: '#E63946',
-      },
-      {
-        day: 'thursday' as const,
-        time: '17:00',
-        entryType: 'custom' as const,
-        customTitle: 'Aerobic Step',
-        customTrainer: 'Elena Dumitrescu',
-        customDuration: 50,
-        customColor: '#A8DADC',
-      },
-      // Vineri
-      {
-        day: 'friday' as const,
-        time: '10:00',
-        entryType: 'custom' as const,
-        customTitle: 'Pilates Core',
-        customTrainer: teamMembers[0].title,
-        customDuration: 50,
-        customColor: '#A8DADC',
-      },
-      {
-        day: 'friday' as const,
-        time: '18:00',
-        entryType: 'custom' as const,
-        customTitle: 'Yoga pentru Începători',
-        customTrainer: teamMembers[1].title,
-        customDuration: 60,
-        customColor: '#7209B7',
-      },
-      // Sâmbătă
-      {
-        day: 'saturday' as const,
-        time: '09:00',
-        entryType: 'custom' as const,
-        customTitle: 'CrossFit Intensiv',
-        customTrainer: teamMembers[2].title,
-        customDuration: 45,
-        customColor: '#E63946',
-      },
-      {
-        day: 'saturday' as const,
-        time: '11:00',
-        entryType: 'custom' as const,
-        customTitle: 'Zumba Party',
-        customTrainer: 'Cristina Popa',
-        customDuration: 90,
-        customColor: '#F72585',
-      },
-      // Duminică
-      {
-        day: 'sunday' as const,
-        time: '10:00',
-        entryType: 'custom' as const,
-        customTitle: 'Yoga Relaxare',
-        customTrainer: teamMembers[1].title,
-        customDuration: 75,
-        customColor: '#7209B7',
-      },
-      {
-        day: 'sunday' as const,
-        time: '16:00',
-        entryType: 'custom' as const,
-        customTitle: 'Stretching & Recovery',
-        customTrainer: 'Team',
-        customDuration: 60,
-        customColor: '#560BAD',
-      },
-    ],
-  }
-
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
-    payload.updateGlobal({
-      slug: 'schedule',
-      data: scheduleData,
-    }),
     payload.updateGlobal({
       slug: 'header',
       data: {
@@ -1050,4 +868,71 @@ async function fetchFileByURL(url: string): Promise<File> {
     mimetype: `image/${url.split('.').pop()}`,
     size: data.byteLength,
   }
+}
+
+/**
+ * Get existing media by alt text or create new one if not exists
+ * This prevents re-uploading the same files to R2 on every seed
+ *
+ * Note: We search by 'alt' instead of 'filename' because Payload may rename
+ * files on upload (e.g., image-hero1.webp → image-hero1-1.webp) if they exist
+ */
+async function getOrCreateMedia(
+  payload: Payload,
+  {
+    filename,
+    url,
+    alt,
+  }: {
+    filename: string
+    url: string
+    alt: string
+  }
+): Promise<Media> {
+  // First, try to find by alt text (most reliable for our seed data)
+  const existingByAlt = await payload.find({
+    collection: 'media',
+    where: {
+      alt: {
+        equals: alt,
+      },
+    },
+    limit: 1,
+  })
+
+  if (existingByAlt.docs.length > 0) {
+    payload.logger.info(`  → Using existing media (by alt): ${alt}`)
+    return existingByAlt.docs[0] as Media
+  }
+
+  // Fallback: try to find by filename (with 'contains' for renamed files)
+  const baseFilename = filename.replace(/\.[^.]+$/, '') // Remove extension
+  const existingByFilename = await payload.find({
+    collection: 'media',
+    where: {
+      filename: {
+        contains: baseFilename,
+      },
+    },
+    limit: 1,
+  })
+
+  if (existingByFilename.docs.length > 0) {
+    payload.logger.info(`  → Using existing media (by filename): ${existingByFilename.docs[0].filename}`)
+    return existingByFilename.docs[0] as Media
+  }
+
+  // File doesn't exist, fetch and upload
+  payload.logger.info(`  → Uploading new media: ${filename}`)
+  const fileBuffer = await fetchFileByURL(url)
+
+  const newMedia = await payload.create({
+    collection: 'media',
+    data: {
+      alt,
+    },
+    file: fileBuffer,
+  })
+
+  return newMedia as Media
 }
