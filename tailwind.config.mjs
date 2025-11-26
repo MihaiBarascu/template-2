@@ -54,16 +54,17 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       colors: {
-        // Transilvania Gym specific colors
-        'transilvania-primary': '#f13a11',
-        'transilvania-white': '#ffffff',
-        'transilvania-dark': '#171819',
-        'transilvania-about-bg': '#f9f9f9',
-        'transilvania-gray': '#909090',
-        'transilvania-link': '#404040',
-        'transilvania-text': '#666262',
+        // Theme colors (from CSS variables)
+        'theme-primary': 'var(--theme-primary)',
+        'theme-dark': 'var(--theme-dark)',
+        'theme-light': 'var(--theme-light)',
+        'theme-text': 'var(--theme-text)',
+        'theme-surface': 'var(--theme-surface)',
+        'theme-muted': 'var(--theme-muted)',
+        'theme-link': 'var(--theme-link)',
+        'theme-border': 'var(--theme-border)',
 
-        // Keep existing ShadCN colors for components
+        // ShadCN colors for components
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
@@ -104,20 +105,20 @@ const config = {
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-geist-sans)'],
-        transilvania: ['Plain', 'sans-serif'], // transilvania custom font
+        theme: ['Plain', 'sans-serif'],
       },
       fontSize: {
-        // transilvania font sizes
-        'transilvania-h1': '48px',
-        'transilvania-h2': '36px',
-        'transilvania-h3': '28px',
-        'transilvania-h4': '24px',
-        'transilvania-h5': '22px',
-        'transilvania-h6': '22px',
-        'transilvania-p': '18px',
-        'transilvania-base': '16px',
-        'transilvania-menu': '14px',
-        // Keep existing sizes
+        // Theme font sizes (from CSS variables)
+        'theme-h1': 'var(--theme-h1)',
+        'theme-h2': 'var(--theme-h2)',
+        'theme-h3': 'var(--theme-h3)',
+        'theme-h4': 'var(--theme-h4)',
+        'theme-h5': 'var(--theme-h5)',
+        'theme-h6': 'var(--theme-h6)',
+        'theme-p': 'var(--theme-p)',
+        'theme-base': 'var(--theme-base)',
+        'theme-menu': 'var(--theme-menu)',
+        // Standard sizes
         sm: '0.8rem',
         base: '1rem',
         xl: '1.25rem',
@@ -127,21 +128,18 @@ const config = {
         '5xl': '3.052rem',
       },
       fontWeight: {
-        'transilvania-thin': '100',
-        'transilvania-light': '300',
-        'transilvania-normal': '400',
-        'transilvania-bold': '700',
+        'theme-thin': '100',
+        'theme-light': '300',
+        'theme-normal': '400',
+        'theme-bold': '700',
       },
       spacing: {
-        // transilvania specific spacing
-        'transilvania-section': '7rem',
-        'transilvania-section-mobile': '5rem',
+        'theme-section': '7rem',
+        'theme-section-mobile': '5rem',
       },
       borderRadius: {
-        // transilvania border radius
-        'transilvania-large': '100%',
-        'transilvania-small': '2px',
-        // Keep existing
+        'theme-lg': 'var(--theme-radius-lg)',
+        'theme-sm': 'var(--theme-radius-sm)',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',

@@ -16,7 +16,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; className?: string }> = ({
   return (
     <nav className={cn('', className)}>
       {navItems.map(({ link }, i) => {
-        return <CMSLink key={i} {...link} appearance="transilvania-nav" />
+        return <CMSLink key={i} {...link} appearance="theme-nav" />
       })}
     </nav>
   )

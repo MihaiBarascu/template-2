@@ -6,7 +6,7 @@ import React from 'react'
 import type { Page, Post, TeamMember, Class } from '@/payload-types'
 
 type CMSLinkType = {
-  appearance?: 'inline' | 'transilvania-nav' | ButtonProps['variant']
+  appearance?: 'inline' | 'theme-nav' | ButtonProps['variant']
   children?: React.ReactNode
   className?: string
   label?: string | null
@@ -56,10 +56,10 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   }
 
   /* transilvania navigation style */
-  if (appearance === 'transilvania-nav') {
+  if (appearance === 'theme-nav') {
     return (
       <Link
-        className={cn('transilvania-nav-link transition-colors duration-300', className)}
+        className={cn('theme-nav-link transition-colors duration-300', className)}
         href={href || url || ''}
         {...newTabProps}
       >

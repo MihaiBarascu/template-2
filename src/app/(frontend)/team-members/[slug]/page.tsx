@@ -79,7 +79,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
         <nav className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <Link href="/" className="hover:text-transilvania-primary transition-colors">
+              <Link href="/" className="hover:text-theme-primary transition-colors">
                 Acasă
               </Link>
             </li>
@@ -89,7 +89,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             <li>
               <Link
                 href="/team-members"
-                className="hover:text-transilvania-primary transition-colors"
+                className="hover:text-theme-primary transition-colors"
               >
                 Echipa
               </Link>
@@ -97,7 +97,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             <li>
               <ChevronRight className="w-4 h-4" />
             </li>
-            <li className="text-transilvania-dark font-medium">{teamMember.title}</li>
+            <li className="text-theme-dark font-medium">{teamMember.title}</li>
           </ol>
         </nav>
 
@@ -117,8 +117,8 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                   />
                 </div>
               ) : (
-                <div className="h-96 lg:h-[450px] bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
-                  <div className="text-6xl font-bold text-transilvania-primary/30">
+                <div className="h-96 lg:h-[450px] bg-gradient-to-br from-theme-primary/20 to-theme-dark/20 flex items-center justify-center">
+                  <div className="text-6xl font-bold text-theme-primary/30">
                     {teamMember.title?.charAt(0).toUpperCase()}
                   </div>
                 </div>
@@ -126,9 +126,9 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
 
               <div className="p-6 space-y-4">
                 <div className="text-center">
-                  <h2 className="text-2xl font-bold text-transilvania-dark">{teamMember.title}</h2>
+                  <h2 className="text-2xl font-bold text-theme-dark">{teamMember.title}</h2>
                   {teamMember.role && (
-                    <p className="text-lg text-transilvania-primary font-medium mt-1">
+                    <p className="text-lg text-theme-primary font-medium mt-1">
                       {teamMember.role}
                     </p>
                   )}
@@ -137,9 +137,9 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                 {/* Experience Badge */}
                 {teamMember.experience && (
                   <div className="flex items-center justify-center gap-3 py-4 border-y border-gray-100">
-                    <Award className="w-8 h-8 text-transilvania-primary" />
+                    <Award className="w-8 h-8 text-theme-primary" />
                     <div>
-                      <p className="text-2xl font-bold text-transilvania-dark">
+                      <p className="text-2xl font-bold text-theme-dark">
                         {teamMember.experience}+
                       </p>
                       <p className="text-sm text-gray-600">Ani experiență</p>
@@ -153,7 +153,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                     {teamMember.contact.email && (
                       <a
                         href={`mailto:${teamMember.contact.email}`}
-                        className="flex items-center gap-3 text-gray-600 hover:text-transilvania-primary transition-colors"
+                        className="flex items-center gap-3 text-gray-600 hover:text-theme-primary transition-colors"
                       >
                         <Mail className="w-5 h-5 flex-shrink-0" />
                         <span className="text-sm break-all">{teamMember.contact.email}</span>
@@ -162,7 +162,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                     {teamMember.contact.phone && (
                       <a
                         href={`tel:${teamMember.contact.phone}`}
-                        className="flex items-center gap-3 text-gray-600 hover:text-transilvania-primary transition-colors"
+                        className="flex items-center gap-3 text-gray-600 hover:text-theme-primary transition-colors"
                       >
                         <Phone className="w-5 h-5 flex-shrink-0" />
                         <span className="text-sm">{teamMember.contact.phone}</span>
@@ -180,7 +180,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                           href={teamMember.socialMedia.facebook}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 flex items-center justify-center rounded-full bg-transilvania-primary/10 hover:bg-transilvania-primary hover:text-white transition-all"
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-theme-primary/10 hover:bg-theme-primary hover:text-white transition-all"
                           aria-label="Facebook"
                         >
                           <Facebook className="w-5 h-5" />
@@ -191,7 +191,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                           href={teamMember.socialMedia.instagram}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 flex items-center justify-center rounded-full bg-transilvania-primary/10 hover:bg-transilvania-primary hover:text-white transition-all"
+                          className="w-10 h-10 flex items-center justify-center rounded-full bg-theme-primary/10 hover:bg-theme-primary hover:text-white transition-all"
                           aria-label="Instagram"
                         >
                           <Instagram className="w-5 h-5" />
@@ -218,7 +218,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
 
               {/* Rich Text Content */}
               {teamMember.content && (
-                <div className="prose prose-lg max-w-none prose-headings:text-transilvania-dark prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-transilvania-dark prose-a:text-transilvania-primary hover:prose-a:text-transilvania-primary/80">
+                <div className="prose prose-lg max-w-none prose-headings:text-theme-dark prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-theme-dark prose-a:text-theme-primary hover:prose-a:text-theme-primary/80">
                   <RichText data={teamMember.content} />
                 </div>
               )}
@@ -228,14 +228,14 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             {teamMember.specializations && teamMember.specializations.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <Target className="w-6 h-6 text-transilvania-primary" />
-                  <h2 className="text-2xl font-bold text-transilvania-dark">Specializări</h2>
+                  <Target className="w-6 h-6 text-theme-primary" />
+                  <h2 className="text-2xl font-bold text-theme-dark">Specializări</h2>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {teamMember.specializations.map((spec, index) => (
                     <div
                       key={index}
-                      className="px-4 py-3 bg-gradient-to-r from-transilvania-primary/10 to-transparent text-transilvania-dark rounded-lg font-medium border border-transilvania-primary/20 hover:border-transilvania-primary/40 transition-colors"
+                      className="px-4 py-3 bg-gradient-to-r from-theme-primary/10 to-transparent text-theme-dark rounded-lg font-medium border border-theme-primary/20 hover:border-theme-primary/40 transition-colors"
                     >
                       {spec.name}
                     </div>
@@ -245,7 +245,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             )}
 
             {/* CTA Section */}
-            <div className="bg-gradient-to-r from-transilvania-primary to-transilvania-primary/90 rounded-xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-theme-primary to-theme-primary/90 rounded-xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">
                 Vrei să lucrezi cu {teamMember.title?.split(' ')[0]}?
               </h3>
@@ -256,7 +256,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-transilvania-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-theme-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   Contactează-ne
                 </Link>
@@ -274,7 +274,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
         {/* Other Team Members Section */}
         {otherMembers.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-transilvania-dark mb-8">Restul echipei</h2>
+            <h2 className="text-3xl font-bold text-theme-dark mb-8">Restul echipei</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherMembers.map((member) => {
                 const memberImageUrl =
@@ -297,8 +297,8 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
-                          <div className="h-full bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
-                            <div className="text-4xl font-bold text-transilvania-primary/30">
+                          <div className="h-full bg-gradient-to-br from-theme-primary/20 to-theme-dark/20 flex items-center justify-center">
+                            <div className="text-4xl font-bold text-theme-primary/30">
                               {member.title?.charAt(0).toUpperCase()}
                             </div>
                           </div>
@@ -315,7 +315,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                             {member.specializations.slice(0, 2).map((spec, idx) => (
                               <span
                                 key={idx}
-                                className="text-xs px-2 py-1 bg-transilvania-primary/10 text-transilvania-primary rounded-full"
+                                className="text-xs px-2 py-1 bg-theme-primary/10 text-theme-primary rounded-full"
                               >
                                 {spec.name}
                               </span>
@@ -338,7 +338,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             <div className="text-center mt-8">
               <Link
                 href="/team-members"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-transilvania-primary text-white font-bold rounded-lg hover:bg-transilvania-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-theme-primary text-white font-bold rounded-lg hover:bg-theme-primary/90 transition-colors"
               >
                 Vezi toată echipa
                 <ChevronRight className="w-5 h-5" />

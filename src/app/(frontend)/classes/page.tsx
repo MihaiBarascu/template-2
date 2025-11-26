@@ -44,7 +44,7 @@ export default async function ClassesPage({
   return (
     <div className="pb-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-transilvania-dark to-black text-white py-20 md:py-32">
+      <div className="bg-gradient-to-b from-theme-dark to-black text-white py-20 md:py-32">
         <div className="container text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             Clasele Noastre
@@ -62,7 +62,7 @@ export default async function ClassesPage({
             href="/classes"
             className={`px-4 py-2 rounded-full font-medium transition-all ${
               !category
-                ? 'bg-transilvania-primary text-white'
+                ? 'bg-theme-primary text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -75,7 +75,7 @@ export default async function ClassesPage({
                 href={`/classes?category=${cat}`}
                 className={`px-4 py-2 rounded-full font-medium transition-all capitalize ${
                   category === cat
-                    ? 'bg-transilvania-primary text-white'
+                    ? 'bg-theme-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -119,7 +119,7 @@ export default async function ClassesPage({
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-xl text-transilvania-text">
+            <p className="text-xl text-theme-text">
               Nu există clase disponibile momentan.
             </p>
           </div>
@@ -160,7 +160,7 @@ function ClassCard({ classItem }: { classItem: ClassType }) {
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20
+            <div className="w-full h-full bg-gradient-to-br from-theme-primary/20 to-theme-dark/20
                           flex items-center justify-center">
               <span className="text-6xl">
                 {categoryIcons[classItem.category as keyof typeof categoryIcons] || '🏋️'}
@@ -187,13 +187,13 @@ function ClassCard({ classItem }: { classItem: ClassType }) {
         </div>
 
         <div className="p-6">
-          <h3 className="text-xl font-bold text-transilvania-dark mb-2
-                       group-hover:text-transilvania-primary transition-colors">
+          <h3 className="text-xl font-bold text-theme-dark mb-2
+                       group-hover:text-theme-primary transition-colors">
             {classItem.title}
           </h3>
 
           {classItem.description && (
-            <p className="text-sm text-transilvania-text mb-4 line-clamp-2">
+            <p className="text-sm text-theme-text mb-4 line-clamp-2">
               {classItem.description}
             </p>
           )}
@@ -224,7 +224,7 @@ function ClassCard({ classItem }: { classItem: ClassType }) {
           {/* Schedule Preview */}
           {classItem.schedule && classItem.schedule.length > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex items-center gap-2 text-sm text-transilvania-primary">
+              <div className="flex items-center gap-2 text-sm text-theme-primary">
                 <Calendar className="w-4 h-4" />
                 <span>
                   {classItem.schedule.length === 1

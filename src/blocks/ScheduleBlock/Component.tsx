@@ -21,7 +21,7 @@ const dayLabels: Record<DayKey, string> = {
   sunday: 'SUN',
 }
 
-const days: DayKey[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+const days: DayKey[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 export const ScheduleBlock: React.FC<ScheduleBlockProps> = async ({
   schedule,

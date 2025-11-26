@@ -38,7 +38,7 @@ export const Card: React.FC<{
     return (
       <article
         className={cn(
-          'transilvania-class-thumb bg-transilvania-white overflow-hidden hover:cursor-pointer',
+          'theme-class-thumb bg-theme-light overflow-hidden hover:cursor-pointer',
           className,
         )}
         ref={card.ref}
@@ -52,24 +52,24 @@ export const Card: React.FC<{
               <Link
                 href={href}
                 ref={link.ref}
-                className="text-transilvania-dark hover:text-transilvania-primary"
+                className="text-theme-dark hover:text-theme-primary"
               >
                 {titleToUse}
               </Link>
             </h3>
           )}
           {serviceDetails?.trainer && (
-            <span className="text-transilvania-gray">
-              <strong className="text-transilvania-dark">Trained by</strong> -{' '}
+            <span className="text-theme-muted">
+              <strong className="text-theme-dark">Trained by</strong> -{' '}
               {serviceDetails.trainer}
             </span>
           )}
           {serviceDetails?.price && (
-            <span className="class-price block mt-3 text-3xl font-bold text-transilvania-primary">
+            <span className="class-price block mt-3 text-3xl font-bold text-theme-primary">
               {serviceDetails.price}
             </span>
           )}
-          {description && <p className="mt-3 text-transilvania-text">{sanitizedDescription}</p>}
+          {description && <p className="mt-3 text-theme-text">{sanitizedDescription}</p>}
         </div>
       </article>
     )

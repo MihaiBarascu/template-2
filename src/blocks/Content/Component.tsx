@@ -56,7 +56,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   const bgClasses: Record<string, string> = {
     white: 'bg-white',
     light: 'bg-[#f9f9f9]',
-    dark: 'bg-transilvania-dark',
+    dark: 'bg-theme-dark',
   }
 
   const isDark = backgroundColor === 'dark'

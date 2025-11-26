@@ -23,7 +23,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
       data-theme="dark"
     >
       {/* transilvania Background Overlay */}
-      <div className="transilvania-bg-overlay"></div>
+      <div className="theme-bg-overlay"></div>
 
       <div className="container mb-8 z-10 relative flex items-center justify-center">
         <div className="max-w-[36.5rem] md:text-center">
@@ -65,7 +65,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
       </div>
       <div className="absolute inset-0 select-none">
         {media && typeof media === 'object' && (
-          <Media fill imgClassName="-z-20 object-cover" priority resource={media} />
+          <Media fill imgClassName="-z-10 object-cover" priority resource={media} />
         )}
       </div>
     </div>

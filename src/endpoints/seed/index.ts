@@ -78,6 +78,20 @@ export const seed = async ({
         disableRevalidate: true,
       },
     }),
+    payload.updateGlobal({
+      slug: 'theme',
+      data: {
+        primaryColor: '',
+        darkColor: '',
+        lightColor: '',
+        textColor: '',
+        surfaceColor: '',
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
   ])
 
   await Promise.all(
@@ -844,6 +858,16 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: footerData,
+    }),
+    payload.updateGlobal({
+      slug: 'theme',
+      data: {
+        primaryColor: '#f13a11',
+        darkColor: '#171819',
+        lightColor: '#ffffff',
+        textColor: '#666262',
+        surfaceColor: '#f9f9f9',
+      },
     }),
   ])
 

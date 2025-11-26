@@ -96,7 +96,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       {
         blockName: 'Caracteristici Transilvania Gym',
         blockType: 'cta',
-        style: 'transilvania-feature',
+        style: 'theme-feature',
         links: [
           {
             link: {

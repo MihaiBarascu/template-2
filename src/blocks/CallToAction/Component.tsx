@@ -14,9 +14,9 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
   style,
   workingHours,
 }) => {
-  if (style === 'transilvania-feature') {
+  if (style === 'theme-feature') {
     return (
-      <section className="transilvania-section bg-transilvania-dark">
+      <section className="theme-section bg-theme-dark">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             {/* Left Column - Membership Info */}
@@ -30,7 +30,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
             >
               {richText && (
                 <RichText
-                  className="mb-0 [&_h2]:text-transilvania-white [&_h2]:mb-3 [&_h6]:text-transilvania-white [&_h6]:mb-4 [&_p]:text-transilvania-text"
+                  className="mb-0 [&_h2]:text-theme-light [&_h2]:mb-3 [&_h6]:text-theme-light [&_h6]:mb-4 [&_p]:text-theme-text"
                   data={richText}
                   enableGutter={false}
                 />
@@ -40,7 +40,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
                   <CMSLink
                     key={i}
                     {...link}
-                    className="transilvania-btn transilvania-btn-primary mt-6 inline-block w-fit"
+                    className="theme-btn theme-btn-primary mt-6 inline-block w-fit"
                   />
                 )
               })}
@@ -55,10 +55,10 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
               variants={fadeInUp}
               custom={animationDelays.fast}
             >
-              <div className="border-l-2 border-transilvania-primary pl-14">
+              <div className="border-l-2 border-theme-primary pl-14">
                 {workingHours && (
                   <RichText
-                    className="mb-0 [&_h2]:text-transilvania-white [&_h2]:mb-4 [&_strong]:text-transilvania-white [&_strong]:block [&_strong]:mt-3 [&_p]:text-transilvania-text [&_p]:mb-0"
+                    className="mb-0 [&_h2]:text-theme-light [&_h2]:mb-4 [&_strong]:text-theme-light [&_strong]:block [&_strong]:mt-3 [&_p]:text-theme-text [&_p]:mb-0"
                     data={workingHours}
                     enableGutter={false}
                   />

@@ -113,7 +113,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
         <nav className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <Link href="/" className="hover:text-transilvania-primary transition-colors">
+              <Link href="/" className="hover:text-theme-primary transition-colors">
                 Acasă
               </Link>
             </li>
@@ -121,14 +121,14 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
               <ChevronRight className="w-4 h-4" />
             </li>
             <li>
-              <Link href="/classes" className="hover:text-transilvania-primary transition-colors">
+              <Link href="/classes" className="hover:text-theme-primary transition-colors">
                 Clase
               </Link>
             </li>
             <li>
               <ChevronRight className="w-4 h-4" />
             </li>
-            <li className="text-transilvania-dark font-medium">{classItem.title}</li>
+            <li className="text-theme-dark font-medium">{classItem.title}</li>
           </ol>
         </nav>
 
@@ -149,7 +149,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                   />
                 </div>
               ) : (
-                <div className="h-96 lg:h-[500px] bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
+                <div className="h-96 lg:h-[500px] bg-gradient-to-br from-theme-primary/20 to-theme-dark/20 flex items-center justify-center">
                   <div className="text-8xl">🏋️‍♀️</div>
                 </div>
               )}
@@ -169,12 +169,12 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                   >
                     {difficultyLabels[classItem.difficulty as keyof typeof difficultyLabels]}
                   </span>
-                  <span className="px-4 py-2 bg-transilvania-primary/10 text-transilvania-primary rounded-full text-sm font-medium">
+                  <span className="px-4 py-2 bg-theme-primary/10 text-theme-primary rounded-full text-sm font-medium">
                     {categoryLabels[classItem.category as keyof typeof categoryLabels]}
                   </span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-transilvania-dark mb-4">
+                <h1 className="text-3xl md:text-4xl font-bold text-theme-dark mb-4">
                   {classItem.title}
                 </h1>
 
@@ -186,23 +186,23 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-gray-200">
                   <div className="text-center">
-                    <Clock className="w-8 h-8 text-transilvania-primary mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-transilvania-dark">
+                    <Clock className="w-8 h-8 text-theme-primary mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-theme-dark">
                       {classItem.duration}
                     </p>
                     <p className="text-sm text-gray-600">minute</p>
                   </div>
                   <div className="text-center">
-                    <Users className="w-8 h-8 text-transilvania-primary mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-transilvania-dark">
+                    <Users className="w-8 h-8 text-theme-primary mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-theme-dark">
                       {classItem.capacity}
                     </p>
                     <p className="text-sm text-gray-600">locuri</p>
                   </div>
                   {trainer && (
                     <div className="text-center col-span-2">
-                      <Award className="w-8 h-8 text-transilvania-primary mx-auto mb-2" />
-                      <p className="text-lg font-bold text-transilvania-dark">{trainer.title}</p>
+                      <Award className="w-8 h-8 text-theme-primary mx-auto mb-2" />
+                      <p className="text-lg font-bold text-theme-dark">{trainer.title}</p>
                       <p className="text-sm text-gray-600">Antrenor</p>
                     </div>
                   )}
@@ -210,7 +210,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
 
                 {/* Rich Text Content */}
                 {classItem.content && (
-                  <div className="mt-8 prose prose-lg max-w-none prose-headings:text-transilvania-dark prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-transilvania-dark prose-a:text-transilvania-primary hover:prose-a:text-transilvania-primary/80">
+                  <div className="mt-8 prose prose-lg max-w-none prose-headings:text-theme-dark prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-theme-dark prose-a:text-theme-primary hover:prose-a:text-theme-primary/80">
                     <RichText data={classItem.content} />
                   </div>
                 )}
@@ -221,8 +221,8 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             {classItem.benefits && classItem.benefits.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <Target className="w-6 h-6 text-transilvania-primary" />
-                  <h2 className="text-2xl font-bold text-transilvania-dark">
+                  <Target className="w-6 h-6 text-theme-primary" />
+                  <h2 className="text-2xl font-bold text-theme-dark">
                     Beneficii
                   </h2>
                 </div>
@@ -254,8 +254,8 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             {classItem.schedule && classItem.schedule.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <Calendar className="w-6 h-6 text-transilvania-primary" />
-                  <h3 className="text-xl font-bold text-transilvania-dark">Program</h3>
+                  <Calendar className="w-6 h-6 text-theme-primary" />
+                  <h3 className="text-xl font-bold text-theme-dark">Program</h3>
                 </div>
                 <div className="space-y-3">
                   {classItem.schedule.map((item, index) => (
@@ -263,10 +263,10 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                       key={index}
                       className="flex justify-between items-center py-3 border-b border-gray-100 last:border-0"
                     >
-                      <span className="font-medium text-transilvania-dark">
+                      <span className="font-medium text-theme-dark">
                         {translateDay(item.day)}
                       </span>
-                      <span className="text-transilvania-primary font-bold">{item.time}</span>
+                      <span className="text-theme-primary font-bold">{item.time}</span>
                     </div>
                   ))}
                 </div>
@@ -275,7 +275,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
 
             {/* Pricing Card */}
             {classItem.price && (
-              <div className="bg-gradient-to-br from-transilvania-primary to-transilvania-primary/90 rounded-xl shadow-lg p-6 text-white">
+              <div className="bg-gradient-to-br from-theme-primary to-theme-primary/90 rounded-xl shadow-lg p-6 text-white">
                 <div className="flex items-center gap-3 mb-6">
                   <DollarSign className="w-6 h-6" />
                   <h3 className="text-xl font-bold">Prețuri</h3>
@@ -304,7 +304,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                 </div>
                 <Link
                   href="/contact"
-                  className="mt-6 w-full block text-center bg-white text-transilvania-primary font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="mt-6 w-full block text-center bg-white text-theme-primary font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   Rezervă acum
                 </Link>
@@ -314,7 +314,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             {/* Trainer Card */}
             {trainer && (
               <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-lg font-bold text-transilvania-dark mb-4">Antrenorul tău</h3>
+                <h3 className="text-lg font-bold text-theme-dark mb-4">Antrenorul tău</h3>
                 <Link
                   href={`/team-members/${trainer.slug}`}
                   className="block group"
@@ -330,21 +330,21 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                         />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-transilvania-primary/20 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-transilvania-primary">
+                      <div className="w-16 h-16 rounded-full bg-theme-primary/20 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-theme-primary">
                           {trainer.title?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                     )}
                     <div>
-                      <p className="font-bold text-transilvania-dark group-hover:text-transilvania-primary transition-colors">
+                      <p className="font-bold text-theme-dark group-hover:text-theme-primary transition-colors">
                         {trainer.title}
                       </p>
                       {trainer.role && (
                         <p className="text-sm text-gray-600">{trainer.role}</p>
                       )}
                       {trainer.experience && (
-                        <p className="text-xs text-transilvania-primary mt-1">
+                        <p className="text-xs text-theme-primary mt-1">
                           {trainer.experience}+ ani experiență
                         </p>
                       )}
@@ -359,7 +359,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
         {/* Other Classes Section */}
         {otherClasses.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-transilvania-dark mb-8">
+            <h2 className="text-3xl font-bold text-theme-dark mb-8">
               Alte clase similare
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -384,7 +384,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
-                          <div className="h-full bg-gradient-to-br from-transilvania-primary/20 to-transilvania-dark/20 flex items-center justify-center">
+                          <div className="h-full bg-gradient-to-br from-theme-primary/20 to-theme-dark/20 flex items-center justify-center">
                             <div className="text-4xl">🏋️‍♀️</div>
                           </div>
                         )}
@@ -415,7 +415,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             <div className="text-center mt-8">
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-transilvania-primary text-white font-bold rounded-lg hover:bg-transilvania-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-theme-primary text-white font-bold rounded-lg hover:bg-theme-primary/90 transition-colors"
               >
                 Vezi toate clasele
                 <ChevronRight className="w-5 h-5" />

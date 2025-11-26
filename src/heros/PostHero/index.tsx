@@ -61,7 +61,7 @@ export const PostHero: React.FC<{
                 {serviceDetails.price && (
                   <div className="flex flex-col gap-1">
                     <p className="text-sm">Price</p>
-                    <p className="text-2xl font-bold text-transilvania-primary">
+                    <p className="text-2xl font-bold text-theme-primary">
                       {serviceDetails.price}
                     </p>
                   </div>

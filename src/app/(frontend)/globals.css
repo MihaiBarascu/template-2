@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Transilvania Gym Custom Font */
+/* Custom Font */
 @font-face {
   font-family: 'Plain';
   src:
@@ -32,35 +32,41 @@
 
 @layer base {
   :root {
-    /* Transilvania Gym Colors */
-    --transilvania-primary: #f13a11;
-    --transilvania-white: #ffffff;
-    --transilvania-dark: #171819;
-    --transilvania-about-bg: #f9f9f9;
-    --transilvania-gray: #909090;
-    --transilvania-link: #404040;
-    --transilvania-text: #666262;
+    /* === THEME COLORS (editabile din admin) === */
+    --theme-primary: #f13a11;
+    --theme-dark: #171819;
+    --theme-light: #ffffff;
+    --theme-text: #666262;
+    --theme-surface: #f9f9f9;
 
-    /* Transilvania Gym Typography Variables */
-    --transilvania-font-family: 'Plain', sans-serif;
-    --transilvania-font-weight-bold: bold;
-    --transilvania-font-weight-normal: normal;
-    --transilvania-font-weight-light: 300;
-    --transilvania-font-weight-thin: 100;
+    /* === DERIVED COLORS (calculate automat) === */
+    --theme-muted: #909090;
+    --theme-link: #404040;
+    --theme-border: color-mix(in srgb, var(--theme-dark) 15%, white);
+    --theme-primary-hover: color-mix(in srgb, var(--theme-primary) 85%, black);
 
-    --transilvania-h1-size: 48px;
-    --transilvania-h2-size: 36px;
-    --transilvania-h3-size: 28px;
-    --transilvania-h4-size: 24px;
-    --transilvania-h5-size: 22px;
-    --transilvania-h6-size: 22px;
-    --transilvania-p-size: 18px;
-    --transilvania-base-size: 16px;
-    --transilvania-menu-size: 14px;
+    /* === TYPOGRAPHY (hardcoded) === */
+    --theme-font-family: 'Plain', sans-serif;
+    --theme-font-bold: bold;
+    --theme-font-normal: normal;
+    --theme-font-light: 300;
+    --theme-font-thin: 100;
 
-    /* Transilvania Gym Border Radius */
-    --transilvania-radius-large: 100%;
-    --transilvania-radius-small: 2px;
+    --theme-h1: 48px;
+    --theme-h2: 36px;
+    --theme-h3: 28px;
+    --theme-h4: 24px;
+    --theme-h5: 22px;
+    --theme-h6: 22px;
+    --theme-p: 18px;
+    --theme-base: 16px;
+    --theme-menu: 14px;
+
+    /* === EFFECTS (hardcoded) === */
+    --theme-radius-lg: 100%;
+    --theme-radius-sm: 2px;
+    --theme-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+    --theme-transition: 0.3s ease;
 
     /* Keep existing ShadCN variables for components */
     --background: 0 0% 100%;
@@ -138,13 +144,13 @@
     @apply border-border;
   }
 
-  /* Transilvania Gym Global Styles */
+  /* Global Styles */
   body {
-    @apply bg-transilvania-white text-transilvania-text min-h-[100vh] flex flex-col;
+    @apply bg-theme-light text-theme-text min-h-[100vh] flex flex-col;
     font-family: 'Plain', sans-serif;
   }
 
-  /* Transilvania Gym Typography */
+  /* Typography */
   h1,
   h2,
   h3,
@@ -158,68 +164,68 @@
   }
 
   h1 {
-    @apply text-transilvania-h1 font-transilvania-bold uppercase;
+    @apply text-theme-h1 font-theme-bold uppercase;
     letter-spacing: -1px;
     margin: 20px 0;
   }
 
   h2 {
-    @apply text-transilvania-h2 font-transilvania-bold;
+    @apply text-theme-h2 font-theme-bold;
     letter-spacing: -2px;
   }
 
   h3 {
-    @apply text-transilvania-h3 font-transilvania-bold;
+    @apply text-theme-h3 font-theme-bold;
     letter-spacing: -1px;
     margin: 0;
   }
 
   h4 {
-    @apply text-transilvania-h4;
+    @apply text-theme-h4;
   }
 
   h5 {
-    @apply text-transilvania-h5;
+    @apply text-theme-h5;
   }
 
   h6 {
-    @apply text-transilvania-h6 text-transilvania-gray;
+    @apply text-theme-h6 text-theme-muted;
     line-height: inherit;
     margin: 0;
   }
 
   p {
-    @apply text-transilvania-text text-transilvania-p font-transilvania-light;
+    @apply text-theme-text text-theme-p font-theme-light;
     line-height: 1.5em;
   }
 
   a {
-    @apply text-transilvania-link;
+    @apply text-theme-link;
     font-weight: normal;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all var(--theme-transition);
   }
 
   a:hover,
   a:active,
   a:focus {
-    @apply text-transilvania-primary;
+    @apply text-theme-primary;
     outline: none;
     text-decoration: none;
   }
 
   b,
   strong {
-    @apply font-transilvania-bold;
+    @apply font-theme-bold;
     letter-spacing: 0;
   }
 
-  /* Transilvania Gym Utility Classes */
-  .transilvania-section {
-    @apply py-transilvania-section;
+  /* Utility Classes */
+  .theme-section {
+    @apply py-theme-section;
   }
 
-  /* Text highlight effect - cyan/teal background */
+  /* Text highlight effect */
   .text-highlight,
   mark {
     background: linear-gradient(180deg, transparent 60%, #7dd3c4 60%);
@@ -227,32 +233,40 @@
     margin: 0 -4px;
   }
 
-  .transilvania-bg-overlay {
-    @apply absolute inset-0 w-full h-full bg-transilvania-dark -z-10;
+  .theme-overlay {
+    @apply absolute inset-0 w-full h-full bg-theme-dark -z-10;
+    opacity: 0.85;
+  }
+
+  /* Hero background overlay - dark solid overlay for text readability */
+  .theme-bg-overlay {
+    @apply absolute inset-0 w-full h-full bg-theme-dark;
+    z-index: 1;
+    pointer-events: none;
     opacity: 0.85;
   }
 }
 
 @layer components {
-  /* Gymso Button Styles - Exact Match */
+  /* Button Styles */
   .custom-btn {
     background: transparent !important;
     border: 1px solid transparent !important;
-    border-radius: 2px !important;
+    border-radius: var(--theme-radius-sm) !important;
     padding: 24px 20px !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
+    color: var(--theme-light) !important;
+    font-size: var(--theme-menu) !important;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    transition: all 0.3s ease;
+    transition: all var(--theme-transition);
     display: inline-block;
     text-decoration: none !important;
   }
 
   .custom-btn:hover {
-    color: #f13a11 !important;
+    color: var(--theme-primary) !important;
     background: transparent !important;
     text-decoration: none;
   }
@@ -262,128 +276,118 @@
     outline: none;
   }
 
-  /* Bordered button variant - with visible orange border */
   .custom-btn.bordered {
-    border: 1px solid #f13a11 !important;
-    color: #f13a11 !important;
+    border: 1px solid var(--theme-primary) !important;
+    color: var(--theme-primary) !important;
     background: transparent !important;
   }
 
   .custom-btn.bordered:hover,
   .custom-btn.bordered:focus {
-    background: #ffffff !important;
-    color: #f13a11 !important;
+    background: var(--theme-light) !important;
+    color: var(--theme-primary) !important;
     border-color: transparent !important;
   }
 
-  /* Primary/BG color button variant */
   .custom-btn.bg-color {
-    background: #f13a11;
-    color: #ffffff;
-    border: 1px solid #f13a11;
+    background: var(--theme-primary);
+    color: var(--theme-light);
+    border: 1px solid var(--theme-primary);
   }
 
   .custom-btn.bg-color:hover,
   .custom-btn.bg-color:focus {
-    background: #ffffff;
-    color: #f13a11;
+    background: var(--theme-light);
+    color: var(--theme-primary);
     border-color: transparent;
   }
 
-  /* Transilvania Button Styles - Keep for other components */
-  .transilvania-btn {
-    @apply bg-transparent border border-transilvania-primary text-transilvania-white px-6 py-3 text-transilvania-menu font-transilvania-normal uppercase tracking-wide transition-all duration-300 rounded-transilvania-small;
+  /* Theme Button Styles */
+  .theme-btn {
+    @apply bg-transparent border border-theme-primary text-theme-light px-6 py-3 text-theme-menu font-theme-normal uppercase tracking-wide transition-all duration-300 rounded-theme-sm;
     letter-spacing: 0.5px;
     white-space: nowrap;
   }
 
-  .transilvania-btn:hover {
-    @apply text-transilvania-primary;
+  .theme-btn:hover {
+    @apply text-theme-primary;
   }
 
-  .transilvania-btn:focus {
+  .theme-btn:focus {
     box-shadow: none;
   }
 
-  .transilvania-btn.transilvania-btn-bordered {
-    @apply border border-transilvania-primary text-transilvania-primary;
+  .theme-btn.theme-btn-bordered {
+    @apply border border-theme-primary text-theme-primary;
   }
 
-  .transilvania-btn.transilvania-btn-bordered:hover {
-    @apply bg-transilvania-white text-transilvania-primary;
+  .theme-btn.theme-btn-bordered:hover {
+    @apply bg-theme-light text-theme-primary;
     border-color: transparent;
   }
 
-  .transilvania-btn.transilvania-btn-primary {
-    @apply bg-transilvania-primary text-transilvania-white;
+  .theme-btn.theme-btn-primary {
+    @apply bg-theme-primary text-theme-light;
   }
 
-  .transilvania-btn.transilvania-btn-primary:hover {
-    @apply bg-transilvania-white text-transilvania-primary;
+  .theme-btn.theme-btn-primary:hover {
+    @apply bg-theme-light text-theme-primary;
     border-color: transparent;
   }
 
-  /* transilvania Navigation Links */
-  .transilvania-nav-link {
+  /* Navigation Links */
+  .theme-nav-link {
     @apply text-white font-medium uppercase tracking-wide px-5;
-    font-size: 14px;
+    font-size: var(--theme-menu);
   }
 
-  .transilvania-nav-link:hover {
-    @apply text-transilvania-primary;
+  .theme-nav-link:hover {
+    @apply text-theme-primary;
   }
 
-  /* ============================================
-     Transilvania Feature Section (Dark Background)
-     ============================================ */
-  .transilvania-feature {
-    @apply bg-transilvania-dark py-20;
+  /* Feature Section (Dark Background) */
+  .theme-feature {
+    @apply bg-theme-dark py-20;
   }
 
-  /* ============================================
-     Transilvania Modal Styles
-     ============================================ */
-  .transilvania-modal-content {
+  /* Modal Styles */
+  .theme-modal-content {
     @apply p-8 md:p-12;
   }
 
-  .transilvania-modal-header,
-  .transilvania-modal-body,
-  .transilvania-modal-footer {
+  .theme-modal-header,
+  .theme-modal-body,
+  .theme-modal-footer {
     @apply border-0 p-0;
   }
 
-  /* ============================================
-     Transilvania Class Card
-     ============================================ */
-  .transilvania-class-card {
-    @apply bg-white rounded-b-transilvania-small relative;
-    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+  /* Class Card */
+  .theme-class-card {
+    @apply bg-white rounded-b-theme-sm relative;
+    box-shadow: var(--theme-shadow);
     padding: 1rem 2rem;
   }
 
-  .transilvania-class-card img {
-    @apply rounded-t-transilvania-small;
+  .theme-class-card img {
+    @apply rounded-t-theme-sm;
   }
 
-  .transilvania-class-card strong {
-    @apply text-transilvania-gray;
+  .theme-class-card strong {
+    @apply text-theme-muted;
   }
 
-  .transilvania-class-price {
-    @apply bg-transilvania-primary text-white font-bold absolute top-8 right-8 flex items-center justify-center;
-    border-radius: var(--transilvania-radius-large);
+  .theme-class-price {
+    @apply bg-theme-primary text-white font-bold absolute top-8 right-8 flex items-center justify-center;
+    border-radius: var(--theme-radius-lg);
     width: 3.5rem;
     height: 3.5rem;
     line-height: 3.5rem;
     text-align: center;
   }
 
-  /* ============================================
-     Schedule Section (Gymso Original Style)
-     ============================================ */
+  /* Schedule Section */
   .schedule {
-    background: var(--transilvania-dark);
+    background: var(--theme-dark);
   }
 
   .schedule-table {
@@ -396,39 +400,39 @@
   .schedule-table strong {
     display: block;
     text-align: center;
-    color: var(--transilvania-white);
+    color: var(--theme-light);
   }
 
   .schedule-table span {
     display: block;
     text-align: center;
-    color: var(--transilvania-gray);
-    font-size: 14px;
+    color: var(--theme-muted);
+    font-size: var(--theme-menu);
     text-transform: uppercase;
   }
 
   .schedule-table small {
-    font-size: 14px;
+    font-size: var(--theme-menu);
     text-transform: uppercase;
     position: relative;
     top: 10px;
-    color: var(--transilvania-white);
+    color: var(--theme-light);
   }
 
   .schedule-time-header,
   .schedule-day-header {
-    background: var(--transilvania-primary);
+    background: var(--theme-primary);
     border: 1px solid #212122;
-    color: var(--transilvania-white);
+    color: var(--theme-light);
     text-transform: uppercase;
     font-weight: 700;
     padding: 1rem;
   }
 
   .schedule-time-cell {
-    background: var(--transilvania-primary);
+    background: var(--theme-primary);
     border: 1px solid #212122;
-    color: var(--transilvania-white);
+    color: var(--theme-light);
     padding: 1rem;
   }
 
@@ -438,122 +442,110 @@
     padding-bottom: 22px;
   }
 
-  /* ============================================
-     Transilvania About Section
-     ============================================ */
-  .transilvania-about {
-    @apply bg-transilvania-about-bg;
+  /* About Section */
+  .theme-about {
+    @apply bg-theme-surface;
   }
 
-  .transilvania-working-hours {
+  .theme-working-hours {
     @apply border-l-2 border-current pl-14;
   }
 
-  .transilvania-working-hours strong {
+  .theme-working-hours strong {
     @apply text-white;
     opacity: 0.85;
   }
 
-  /* ============================================
-     Transilvania Team Card
-     ============================================ */
-  .transilvania-team-card {
+  /* Team Card */
+  .theme-team-card {
     @apply relative;
   }
 
-  .transilvania-team-info {
-    @apply bg-white rounded-b-transilvania-small p-5 relative;
-    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+  .theme-team-info {
+    @apply bg-white rounded-b-theme-sm p-5 relative;
+    box-shadow: var(--theme-shadow);
   }
 
-  .transilvania-team-info span {
-    @apply font-transilvania-light;
+  .theme-team-info span {
+    @apply font-theme-light;
     opacity: 0.85;
   }
 
-  .transilvania-team-info .transilvania-social-icon {
+  .theme-team-info .theme-social-icon {
     @apply absolute top-2.5 right-5;
   }
 
-  .transilvania-team-info .transilvania-social-icon li {
+  .theme-team-info .theme-social-icon li {
     @apply block;
   }
 
-  /* ============================================
-     Transilvania Contact Section
-     ============================================ */
-  .transilvania-contact h2 + p {
+  /* Contact Section */
+  .theme-contact h2 + p {
     max-width: 90%;
   }
 
-  .transilvania-google-map {
+  .theme-google-map {
     @apply border-t border-gray-200 mt-10 pt-10;
   }
 
-  .transilvania-google-map iframe {
+  .theme-google-map iframe {
     @apply w-full;
   }
 
-  /* ============================================
-     Transilvania Social Icons
-     ============================================ */
-  .transilvania-social-icon {
+  /* Social Icons */
+  .theme-social-icon {
     @apply relative p-0 m-0 mt-1;
   }
 
-  .transilvania-social-icon li {
+  .theme-social-icon li {
     @apply inline-block list-none;
   }
 
-  .transilvania-social-icon li a {
-    @apply text-transilvania-text inline-block no-underline font-transilvania-bold text-center;
-    font-size: var(--transilvania-p-size);
+  .theme-social-icon li a {
+    @apply text-theme-text inline-block no-underline font-theme-bold text-center;
+    font-size: var(--theme-p);
     margin: 5px 10px;
   }
 
-  .transilvania-social-icon li a:hover {
-    @apply text-transilvania-primary;
+  .theme-social-icon li a:hover {
+    @apply text-theme-primary;
   }
 
-  /* ============================================
-     Transilvania Footer
-     ============================================ */
-  .transilvania-footer {
+  /* Footer */
+  .theme-footer {
     @apply border-t border-gray-200 py-12;
   }
 
-  .transilvania-footer a {
-    @apply text-transilvania-text font-transilvania-light;
+  .theme-footer a {
+    @apply text-theme-text font-theme-light;
   }
 
-  .transilvania-footer p {
-    @apply text-transilvania-base;
+  .theme-footer p {
+    @apply text-theme-base;
   }
 
-  .transilvania-footer .fa,
-  .transilvania-contact .fa {
-    @apply text-transilvania-primary;
+  .theme-footer .fa,
+  .theme-contact .fa {
+    @apply text-theme-primary;
   }
 
-  /* ============================================
-     Preview Cards - Team Style (Gymso Original)
-     ============================================ */
+  /* Preview Cards - Team Style */
   .team-thumb {
     position: relative;
   }
 
   .team-info {
-    background: var(--transilvania-white);
-    border-radius: 0 0 2px 2px;
-    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
+    background: var(--theme-light);
+    border-radius: 0 0 var(--theme-radius-sm) var(--theme-radius-sm);
+    box-shadow: var(--theme-shadow);
     padding: 20px;
     position: relative;
   }
 
   .team-info h3 {
-    font-size: 28px;
+    font-size: var(--theme-h3);
     font-weight: 700;
-    color: var(--transilvania-dark);
+    color: var(--theme-dark);
     margin: 0;
     letter-spacing: -1px;
   }
@@ -565,44 +557,42 @@
     margin-top: 4px;
   }
 
-  /* ============================================
-     Preview Cards - Class Style (Gymso Original)
-     ============================================ */
+  /* Preview Cards - Class Style */
   .class-thumb {
     position: relative;
   }
 
   .class-info {
-    background: var(--transilvania-white);
-    box-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
-    border-radius: 0 0 2px 2px;
+    background: var(--theme-light);
+    box-shadow: var(--theme-shadow);
+    border-radius: 0 0 var(--theme-radius-sm) var(--theme-radius-sm);
     padding: 1rem 2rem;
     position: relative;
   }
 
   .class-info h3 {
-    font-size: 24px;
+    font-size: var(--theme-h4);
     font-weight: 700;
-    color: var(--transilvania-dark);
+    color: var(--theme-dark);
     margin: 0 0 0.25rem 0;
     letter-spacing: -1px;
   }
 
   .class-trainer {
-    font-size: 14px;
-    color: var(--transilvania-gray);
+    font-size: var(--theme-menu);
+    color: var(--theme-muted);
     display: block;
   }
 
   .class-trainer strong {
-    color: var(--transilvania-gray);
+    color: var(--theme-muted);
     font-weight: 500;
   }
 
   .class-price {
-    background: var(--transilvania-primary);
+    background: var(--theme-primary);
     border-radius: 50%;
-    color: var(--transilvania-white);
+    color: var(--theme-light);
     font-weight: 700;
     display: block;
     position: absolute;
@@ -612,44 +602,39 @@
     height: 3.5rem;
     line-height: 3.5rem;
     text-align: center;
-    font-size: 14px;
+    font-size: var(--theme-menu);
   }
 
   .class-description {
     font-size: 15px;
-    color: #6c757d;
+    color: var(--theme-muted);
     line-height: 1.6;
     margin: 0.75rem 0 0 0;
   }
 
-  /* ============================================
-     RichText Section Headers (centered headings)
-     ============================================ */
-  /* Style for centered h6 subtitle in RichText */
+  /* RichText Section Headers */
   [class*="RichText"] h6[style*="text-align: center"],
   [class*="RichText"] h6[style*="text-align:center"],
   .rich-text-section-header h6 {
-    color: #6c757d;
-    font-size: 18px;
+    color: var(--theme-muted);
+    font-size: var(--theme-p);
     font-weight: 400;
     margin: 0 0 0 0;
     line-height: 1.4;
   }
 
-  /* Style for centered h2 title in RichText */
   [class*="RichText"] h2[style*="text-align: center"],
   [class*="RichText"] h2[style*="text-align:center"],
   .rich-text-section-header h2 {
-    font-family: var(--font-plain), sans-serif;
-    font-size: 36px;
+    font-family: var(--theme-font-family);
+    font-size: var(--theme-h2);
     font-weight: 700;
-    color: var(--color-transilvania-dark);
+    color: var(--theme-dark);
     letter-spacing: -2px;
     margin: 0 0 1rem 0;
     line-height: 1.2;
   }
 
-  /* Remove gap between h6 followed by h2 in section headers */
   [class*="RichText"] h6 + h2,
   [class*="RichText"] h6[style*="text-align: center"] + h2,
   [class*="RichText"] h6[style*="text-align:center"] + h2,
@@ -657,7 +642,6 @@
     margin-top: 0 !important;
   }
 
-  /* Remove all margins from headings in Content block RichText */
   .payload-richtext h6 {
     margin-bottom: 0 !important;
   }
@@ -708,12 +692,8 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
-/* ============================================
-   Gymso Form Styling - Contact Forms
-   ============================================ */
-
-/* Remove container border and padding - clean minimal design */
-.gymso-form-style {
+/* Form Styling */
+.theme-form-style {
   border: none !important;
   padding: 0 !important;
   background: transparent !important;
@@ -721,122 +701,105 @@ html[data-theme='light'] {
   box-shadow: none !important;
 }
 
-.gymso-form-style input[type='text'],
-.gymso-form-style input[type='email'],
-.gymso-form-style input[type='tel'],
-.gymso-form-style input[type='number'],
-.gymso-form-style textarea {
-  background: #ffffff !important;
-  border: 1px solid #cccccc !important;
-  border-radius: 2px !important;
+.theme-form-style input[type='text'],
+.theme-form-style input[type='email'],
+.theme-form-style input[type='tel'],
+.theme-form-style input[type='number'],
+.theme-form-style textarea {
+  background: var(--theme-light) !important;
+  border: 1px solid var(--theme-border) !important;
+  border-radius: var(--theme-radius-sm) !important;
   padding: 18px 20px !important;
-  font-family:
-    'Plain',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif !important;
-  font-size: 16px !important;
-  color: #333333 !important;
+  font-family: var(--theme-font-family) !important;
+  font-size: var(--theme-base) !important;
+  color: var(--theme-dark) !important;
   width: 100% !important;
   margin-bottom: 20px !important;
-  transition: all 0.3s ease !important;
+  transition: all var(--theme-transition) !important;
   box-shadow: none !important;
   line-height: 1.5 !important;
 }
 
-.gymso-form-style textarea {
+.theme-form-style textarea {
   min-height: 140px !important;
   resize: vertical !important;
 }
 
-.gymso-form-style input:focus,
-.gymso-form-style textarea:focus {
-  border-color: #999999 !important;
+.theme-form-style input:focus,
+.theme-form-style textarea:focus {
+  border-color: var(--theme-muted) !important;
   outline: none !important;
   box-shadow: none !important;
-  background: #ffffff !important;
+  background: var(--theme-light) !important;
 }
 
-.gymso-form-style input::placeholder,
-.gymso-form-style textarea::placeholder {
-  color: #999999 !important;
+.theme-form-style input::placeholder,
+.theme-form-style textarea::placeholder {
+  color: var(--theme-muted) !important;
   opacity: 1 !important;
   font-weight: 400 !important;
   font-size: 15px !important;
 }
 
-.gymso-form-style button[type='submit'],
-.gymso-form-style button[form] {
-  background: var(--transilvania-dark) !important;
+.theme-form-style button[type='submit'],
+.theme-form-style button[form] {
+  background: var(--theme-dark) !important;
   border: none !important;
-  border-radius: 2px !important;
-  color: #ffffff !important;
-  font-family:
-    'Plain',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif !important;
+  border-radius: var(--theme-radius-sm) !important;
+  color: var(--theme-light) !important;
+  font-family: var(--theme-font-family) !important;
   font-weight: 700 !important;
-  font-size: 16px !important;
+  font-size: var(--theme-base) !important;
   padding: 22px 40px !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
-  transition: all 0.3s ease !important;
+  transition: all var(--theme-transition) !important;
   cursor: pointer !important;
   width: 100% !important;
   box-shadow: none !important;
 }
 
-.gymso-form-style button[type='submit']:hover,
-.gymso-form-style button[form]:hover {
-  background: var(--transilvania-primary) !important;
+.theme-form-style button[type='submit']:hover,
+.theme-form-style button[form]:hover {
+  background: var(--theme-primary) !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(241, 58, 17, 0.3) !important;
 }
 
-/* .gymso-form-style label {
-  display: none !important;
-} */
-
-/* Remove Payload default spacing */
-.gymso-form-style .mb-4,
-.gymso-form-style .mb-6,
-.gymso-form-style > div > div > div {
+.theme-form-style .mb-4,
+.theme-form-style .mb-6,
+.theme-form-style > div > div > div {
   margin-bottom: 0 !important;
 }
 
-.gymso-form-style form > div {
+.theme-form-style form > div {
   margin-bottom: 0 !important;
 }
 
-.gymso-form-style form > div > div {
+.theme-form-style form > div > div {
   margin-bottom: 20px !important;
 }
 
-.gymso-form-style form > div > div:last-of-type {
+.theme-form-style form > div > div:last-of-type {
   margin-bottom: 0 !important;
 }
 
-/* ============================================
-   Transilvania Responsive Utilities
-   ============================================ */
+/* Responsive Utilities */
 @media screen and (max-width: 992px) {
-  .transilvania-section {
+  .theme-section {
     padding-top: 5rem;
     padding-bottom: 5rem;
   }
 
-  .transilvania-nav-link {
+  .theme-nav-link {
     padding: 6px;
   }
 
-  .transilvania-schedule-table {
+  .theme-schedule-table {
     display: block;
   }
 
-  .transilvania-modal-content {
+  .theme-modal-content {
     padding: 2rem;
   }
 }
@@ -846,13 +809,13 @@ html[data-theme='light'] {
     font-size: 38px !important;
   }
 
-  .transilvania-working-hours {
+  .theme-working-hours {
     border-left: 0;
     padding-left: 0;
     padding-top: 1.5rem;
   }
 
-  .transilvania-contact h2 span {
+  .theme-contact h2 span {
     display: block;
   }
 }

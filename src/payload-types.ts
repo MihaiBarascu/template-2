@@ -121,10 +121,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    theme: Theme;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    theme: ThemeSelect<false> | ThemeSelect<true>;
   };
   locale: null;
   user: User & {
@@ -646,7 +648,7 @@ export interface Class {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  style?: ('default' | 'transilvania-feature') | null;
+  style?: ('default' | 'theme-feature') | null;
   richText?: {
     root: {
       type: string;
@@ -2543,6 +2545,35 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme".
+ */
+export interface Theme {
+  id: string;
+  /**
+   * Butoane, link-uri, accente (ex: #f13a11)
+   */
+  primaryColor?: string | null;
+  /**
+   * Header, footer, backgrounds dark (ex: #171819)
+   */
+  darkColor?: string | null;
+  /**
+   * Background principal (ex: #ffffff)
+   */
+  lightColor?: string | null;
+  /**
+   * Text body (ex: #666262)
+   */
+  textColor?: string | null;
+  /**
+   * Secțiuni alternate, carduri (ex: #f9f9f9)
+   */
+  surfaceColor?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2668,6 +2699,20 @@ export interface FooterSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme_select".
+ */
+export interface ThemeSelect<T extends boolean = true> {
+  primaryColor?: T;
+  darkColor?: T;
+  lightColor?: T;
+  textColor?: T;
+  surfaceColor?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

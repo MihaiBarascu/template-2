@@ -71,7 +71,7 @@ export const MapBlock: React.FC<Props> = async (props) => {
 
   return (
     <div
-      className={`transilvania-google-map ${showBorder ? 'border-t border-gray-200' : ''} ${topSpacingClass}`}
+      className={`theme-google-map ${showBorder ? 'border-t border-gray-200' : ''} ${topSpacingClass}`}
     >
       <div className={widthClass}>
         {mapTitle && (

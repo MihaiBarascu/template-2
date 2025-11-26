@@ -37,7 +37,7 @@ export default async function TeamMembersPage({
   return (
     <div className="pb-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-transilvania-dark to-black text-white py-20 md:py-32">
+      <div className="bg-gradient-to-b from-theme-dark to-black text-white py-20 md:py-32">
         <div className="container text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             Echipa Noastră
@@ -81,7 +81,7 @@ export default async function TeamMembersPage({
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-xl text-transilvania-text">
+            <p className="text-xl text-theme-text">
               Nu există membri ai echipei disponibili momentan.
             </p>
           </div>
@@ -105,7 +105,7 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-transilvania-gray to-transilvania-dark
+            <div className="w-full h-full bg-gradient-to-br from-theme-muted to-theme-dark
                           flex items-center justify-center">
               <span className="text-6xl text-white opacity-50">
                 {member.title.charAt(0).toUpperCase()}
@@ -115,17 +115,17 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
         </div>
 
         <div className="p-6 text-center">
-          <h3 className="text-xl font-bold text-transilvania-dark mb-1
-                       group-hover:text-transilvania-primary transition-colors">
+          <h3 className="text-xl font-bold text-theme-dark mb-1
+                       group-hover:text-theme-primary transition-colors">
             {member.title}
           </h3>
 
           {member.role && (
-            <p className="text-transilvania-primary font-medium mb-3">{member.role}</p>
+            <p className="text-theme-primary font-medium mb-3">{member.role}</p>
           )}
 
           {member.excerpt && (
-            <p className="text-sm text-transilvania-text line-clamp-2">
+            <p className="text-sm text-theme-text line-clamp-2">
               {member.excerpt}
             </p>
           )}

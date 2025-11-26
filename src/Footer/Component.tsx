@@ -176,7 +176,7 @@ const SocialMediaIcons = ({
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-transilvania-gray hover:text-transilvania-primary transition-colors duration-300"
+          className="text-theme-muted hover:text-theme-primary transition-colors duration-300"
           aria-label={link.name}
         >
           {link.icon}
@@ -192,7 +192,7 @@ export async function Footer() {
   const { companyInfo, columns, socialMedia, bottomBar } = footerData || {}
 
   return (
-    <footer className="bg-gradient-to-b from-transilvania-dark to-black text-transilvania-white">
+    <footer className="bg-gradient-to-b from-theme-dark to-black text-theme-light">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4">
         <div className="py-12 lg:py-16">
@@ -203,7 +203,7 @@ export async function Footer() {
               <div className="mb-6">
                 {companyInfo?.logoType === 'text' && companyInfo.logoText && (
                   <Link href="/" className="inline-block">
-                    <span className="text-3xl font-bold text-white hover:text-transilvania-primary transition-colors">
+                    <span className="text-3xl font-bold text-white hover:text-theme-primary transition-colors">
                       {companyInfo.logoText}
                     </span>
                   </Link>
@@ -232,7 +232,7 @@ export async function Footer() {
                         />
                       )}
                       {companyInfo.logoText && (
-                        <span className="text-2xl font-bold bg-gradient-to-r from-transilvania-primary to-red-400 bg-clip-text text-transparent">
+                        <span className="text-2xl font-bold bg-gradient-to-r from-theme-primary to-red-400 bg-clip-text text-transparent">
                           {companyInfo.logoText}
                         </span>
                       )}
@@ -243,7 +243,7 @@ export async function Footer() {
 
               {/* Description */}
               {companyInfo?.description && (
-                <p className="text-transilvania-gray mb-6 leading-relaxed">{companyInfo.description}</p>
+                <p className="text-theme-muted mb-6 leading-relaxed">{companyInfo.description}</p>
               )}
 
               {/* Social Media Icons */}
@@ -265,7 +265,7 @@ export async function Footer() {
                         <li key={i}>
                           <CMSLink
                             {...item.link}
-                            className="text-transilvania-gray hover:text-transilvania-primary transition-colors duration-300 hover:translate-x-1 transition-transform inline-block"
+                            className="text-theme-muted hover:text-theme-primary transition-colors duration-300 hover:translate-x-1 transition-transform inline-block"
                           />
                         </li>
                       ))}
@@ -276,9 +276,9 @@ export async function Footer() {
                   {column.contentType === 'text' && column.textItems && (
                     <ul className="space-y-3">
                       {column.textItems.map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-transilvania-gray">
+                        <li key={i} className="flex items-start gap-2 text-theme-muted">
                           {item.icon && item.icon !== 'none' && (
-                            <span className="text-transilvania-primary mt-1">
+                            <span className="text-theme-primary mt-1">
                               {getIcon(item.icon)}
                             </span>
                           )}
@@ -294,23 +294,23 @@ export async function Footer() {
                       {column.contactItems.map((item, i) => {
                         const icon = getIcon(item.type)
                         return (
-                          <li key={i} className="flex items-start gap-2 text-transilvania-gray">
-                            <span className="text-transilvania-primary mt-1">{icon}</span>
+                          <li key={i} className="flex items-start gap-2 text-theme-muted">
+                            <span className="text-theme-primary mt-1">{icon}</span>
                             <div>
                               {item.label && (
-                                <span className="text-xs text-transilvania-text block">{item.label}</span>
+                                <span className="text-xs text-theme-text block">{item.label}</span>
                               )}
                               {item.type === 'email' ? (
                                 <a
                                   href={`mailto:${item.value}`}
-                                  className="hover:text-transilvania-primary transition-colors"
+                                  className="hover:text-theme-primary transition-colors"
                                 >
                                   {item.value}
                                 </a>
                               ) : item.type === 'phone' || item.type === 'whatsapp' ? (
                                 <a
                                   href={`tel:${item.value}`}
-                                  className="hover:text-transilvania-primary transition-colors"
+                                  className="hover:text-theme-primary transition-colors"
                                 >
                                   {item.value}
                                 </a>
@@ -328,7 +328,7 @@ export async function Footer() {
                   {column.contentType === 'schedule' && column.scheduleItems && (
                     <ul className="space-y-3">
                       {column.scheduleItems.map((item, i) => (
-                        <li key={i} className="flex justify-between text-transilvania-gray">
+                        <li key={i} className="flex justify-between text-theme-muted">
                           <span className="font-medium">{item.label}</span>
                           <span>{item.value}</span>
                         </li>
@@ -338,7 +338,7 @@ export async function Footer() {
 
                   {/* Custom Content */}
                   {column.contentType === 'custom' && column.customContent && (
-                    <div className="text-transilvania-gray prose prose-sm prose-invert">
+                    <div className="text-theme-muted prose prose-sm prose-invert">
                       <RichText data={column.customContent} enableGutter={false} />
                     </div>
                   )}
@@ -348,10 +348,10 @@ export async function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-transilvania-dark/50">
+        <div className="border-t border-theme-dark/50">
           <div className="py-6 flex flex-col lg:flex-row items-center justify-between gap-4">
             {/* Copyright */}
-            <div className="text-transilvania-text text-sm">
+            <div className="text-theme-text text-sm">
               {bottomBar?.copyright || `© ${new Date().getFullYear()} All rights reserved.`}
             </div>
 
@@ -363,10 +363,10 @@ export async function Footer() {
                     <React.Fragment key={i}>
                       <CMSLink
                         {...item.link}
-                        className="text-transilvania-text hover:text-transilvania-primary text-sm transition-colors duration-300"
+                        className="text-theme-text hover:text-theme-primary text-sm transition-colors duration-300"
                       />
                       {bottomBar.legalLinks && i < bottomBar.legalLinks.length - 1 && (
-                        <span className="text-transilvania-gray">|</span>
+                        <span className="text-theme-muted">|</span>
                       )}
                     </React.Fragment>
                   ))}
