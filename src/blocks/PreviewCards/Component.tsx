@@ -29,9 +29,15 @@ interface Card {
   link?: CardLink | null
 }
 
+interface SpacingConfig {
+  marginTop?: string | null
+  marginBottom?: string | null
+}
+
 interface PreviewCardsProps {
   style?: 'team' | 'class'
   cards?: Card[]
+  spacing?: SpacingConfig | null
 }
 
 // Helper to generate href from link
@@ -94,7 +100,20 @@ const CardWrapper: React.FC<{
   )
 }
 
-export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', cards }) => {
+// Inline spacing classes (client component)
+const marginTopMap: Record<string, string> = {
+  none: '', xs: 'mt-1', sm: 'mt-2', md: 'mt-4', lg: 'mt-8', xl: 'mt-12', '2xl': 'mt-16', '3xl': 'mt-24',
+}
+const marginBottomMap: Record<string, string> = {
+  none: '', xs: 'mb-1', sm: 'mb-2', md: 'mb-4', lg: 'mb-8', xl: 'mb-12', '2xl': 'mb-16', '3xl': 'mb-24',
+}
+
+export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', cards, spacing }) => {
+  const spacingClass = [
+    spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
+    spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
+  ].filter(Boolean).join(' ')
+
   if (!cards || cards.length === 0) {
     return null
   }
@@ -102,7 +121,7 @@ export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', card
   // Team style - Members with social icons (Gymso original)
   if (style === 'team') {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${spacingClass}`}>
         {cards.map((card, index) => {
           const image = typeof card.image === 'object' ? card.image : null
           const href = getHref(card.link)
@@ -145,7 +164,7 @@ export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', card
 
   // Class style - Classes with price badge (Gymso original)
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${spacingClass}`}>
       {cards.map((card, index) => {
         const image = typeof card.image === 'object' ? card.image : null
         const href = getHref(card.link)

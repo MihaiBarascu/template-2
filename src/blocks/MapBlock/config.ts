@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { spacingField } from '@/fields/spacing'
 
 export const MapBlock: Block = {
   slug: 'mapBlock',
@@ -104,27 +105,7 @@ export const MapBlock: Block = {
       ],
     },
     // Display Options
-    {
-      name: 'showBorder',
-      type: 'checkbox',
-      label: 'Show Top Border',
-      defaultValue: true,
-      admin: {
-        description: 'Add a border above the map section',
-      },
-    },
-    {
-      name: 'topSpacing',
-      type: 'select',
-      label: 'Top Spacing',
-      defaultValue: 'normal',
-      options: [
-        { label: 'None', value: 'none' },
-        { label: 'Small', value: 'small' },
-        { label: 'Normal', value: 'normal' },
-        { label: 'Large', value: 'large' },
-      ],
-    },
+    spacingField,
   ],
   graphQL: {
     singularName: 'MapBlock',

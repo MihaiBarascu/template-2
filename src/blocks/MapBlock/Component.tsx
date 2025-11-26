@@ -1,5 +1,6 @@
 import React from 'react'
 import type { MapBlock as MapBlockType, Address } from '@/payload-types'
+import { getSpacingClasses } from '@/fields/spacing'
 
 type Props = MapBlockType & {
   id?: string
@@ -20,7 +21,7 @@ function extractEmbedUrl(embedCode?: string | null): string | undefined {
 }
 
 export const MapBlock: React.FC<Props> = async (props) => {
-  const { mapSource = 'fromCollection', address, customMap, showBorder = true, topSpacing = 'normal' } = props
+  const { mapSource = 'fromCollection', address, customMap, spacing } = props
 
   let mapTitle: string | undefined
   let embedURL: string | undefined
@@ -50,15 +51,7 @@ export const MapBlock: React.FC<Props> = async (props) => {
     return null
   }
 
-  // Spacing classes
-  const spacingMap = {
-    none: 'mt-0 pt-0',
-    small: 'mt-4 pt-4',
-    normal: 'mt-10 pt-10',
-    large: 'mt-16 pt-16',
-  }
-
-  const topSpacingClass = (topSpacing && spacingMap[topSpacing]) || spacingMap.normal
+  const spacingClass = getSpacingClasses(spacing)
 
   // Width classes
   const widthMap = {
@@ -71,7 +64,7 @@ export const MapBlock: React.FC<Props> = async (props) => {
 
   return (
     <div
-      className={`theme-google-map ${showBorder ? 'border-t border-gray-200' : ''} ${topSpacingClass}`}
+      className={`theme-google-map ${spacingClass}`}
     >
       <div className={widthClass}>
         {mapTitle && (

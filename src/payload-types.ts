@@ -228,6 +228,13 @@ export interface Page {
     | MapBlock
     | {
         /**
+         * Spațiu vertical între blocuri
+         */
+        spacing?: {
+          marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+          marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+        };
+        /**
          * Team = pentru membri echipă | Class = pentru clase fitness
          */
         style?: ('team' | 'class') | null;
@@ -273,6 +280,13 @@ export interface Page {
         blockType: 'previewCards';
       }
     | {
+        /**
+         * Spațiu vertical între blocuri
+         */
+        spacing?: {
+          marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+          marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+        };
         /**
          * Alege orarul care va fi afișat
          */
@@ -648,6 +662,13 @@ export interface Class {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
   style?: ('default' | 'theme-feature') | null;
   richText?: {
     root: {
@@ -721,6 +742,13 @@ export interface CallToActionBlock {
  */
 export interface ContentBlock {
   /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
+  /**
    * Culoarea de fundal a secțiunii
    */
   backgroundColor?: ('white' | 'light' | 'dark') | null;
@@ -764,6 +792,13 @@ export interface ContentBlock {
               | MapBlock
               | MediaBlock
               | {
+                  /**
+                   * Spațiu vertical între blocuri
+                   */
+                  spacing?: {
+                    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+                    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+                  };
                   /**
                    * Team = pentru membri echipă | Class = pentru clase fitness
                    */
@@ -851,6 +886,13 @@ export interface ContentBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
   form: string | Form;
   enableIntro?: boolean | null;
   introContent?: {
@@ -1104,10 +1146,12 @@ export interface MapBlock {
     borderRadius?: number | null;
   };
   /**
-   * Add a border above the map section
+   * Spațiu vertical între blocuri
    */
-  showBorder?: boolean | null;
-  topSpacing?: ('none' | 'small' | 'normal' | 'large') | null;
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'mapBlock';
@@ -1139,6 +1183,13 @@ export interface Address {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
   media: string | Media;
   id?: string | null;
   blockName?: string | null;
@@ -1149,6 +1200,13 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
   introContent?: {
     root: {
       type: string;
@@ -1548,6 +1606,12 @@ export interface PagesSelect<T extends boolean = true> {
         previewCards?:
           | T
           | {
+              spacing?:
+                | T
+                | {
+                    marginTop?: T;
+                    marginBottom?: T;
+                  };
               style?: T;
               cards?:
                 | T
@@ -1573,6 +1637,12 @@ export interface PagesSelect<T extends boolean = true> {
         schedule?:
           | T
           | {
+              spacing?:
+                | T
+                | {
+                    marginTop?: T;
+                    marginBottom?: T;
+                  };
               schedule?: T;
               customTitle?: T;
               id?: T;
@@ -1598,6 +1668,12 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   style?: T;
   richText?: T;
   workingHours?: T;
@@ -1624,6 +1700,12 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   backgroundColor?: T;
   columns?:
     | T
@@ -1648,6 +1730,12 @@ export interface ContentBlockSelect<T extends boolean = true> {
               previewCards?:
                 | T
                 | {
+                    spacing?:
+                      | T
+                      | {
+                          marginTop?: T;
+                          marginBottom?: T;
+                        };
                     style?: T;
                     cards?:
                       | T
@@ -1692,6 +1780,12 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   form?: T;
   enableIntro?: T;
   introContent?: T;
@@ -1716,8 +1810,12 @@ export interface MapBlockSelect<T extends boolean = true> {
         height?: T;
         borderRadius?: T;
       };
-  showBorder?: T;
-  topSpacing?: T;
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1726,6 +1824,12 @@ export interface MapBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   media?: T;
   id?: T;
   blockName?: T;
@@ -1735,6 +1839,12 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   introContent?: T;
   populateBy?: T;
   relationTo?: T;

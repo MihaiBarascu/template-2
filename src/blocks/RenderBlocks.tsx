@@ -40,20 +40,10 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
-              // Nested blocks don't need wrapper margins
-              if (nested) {
-                return (
-                  <div key={index}>
-                    {/* @ts-expect-error - Block components may have different prop types */}
-                    <Block {...block} />
-                  </div>
-                )
-              }
-
               return (
                 <div key={index}>
                   {/* @ts-expect-error - Block components may have different prop types */}
-                  <Block {...block} />
+                  <Block {...block} nested={nested} />
                 </div>
               )
             }

@@ -6,6 +6,7 @@ import type { ContentBlock as ContentBlockProps } from '@/payload-types'
 
 import { CMSLink } from '../../components/Link'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { getSpacingClasses } from '@/fields/spacing'
 
 // Text style utility classes - using !important to override globals.css
 const lineHeightClasses: Record<string, string> = {
@@ -43,7 +44,8 @@ const paragraphSpacingClasses: Record<string, string> = {
 }
 
 export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
-  const { columns, backgroundColor = 'white' } = props
+  const { columns, backgroundColor = 'white', spacing } = props
+  const spacingClass = getSpacingClasses(spacing)
 
   // Use full class names - Tailwind can't detect dynamic classes like `lg:col-span-${number}`
   const colsSpanClasses: Record<string, string> = {
@@ -64,7 +66,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   const bgClass = bgClasses[backgroundColor || 'white'] || bgClasses.white
 
   return (
-    <section className={cn('py-12 lg:py-20', bgClass)}>
+    <section className={cn('py-12 lg:py-20', bgClass, spacingClass)}>
       <div className="container">
         <div
           className={cn('grid grid-cols-4 lg:grid-cols-12 gap-y-6 gap-x-12 items-start', {

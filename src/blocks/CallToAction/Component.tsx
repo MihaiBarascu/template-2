@@ -8,15 +8,28 @@ import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
 import { fadeInUp, animationDelays, viewportSettings } from '@/utilities/animations'
 
+// Inline spacing classes (client component)
+const marginTopMap: Record<string, string> = {
+  none: '', xs: 'mt-1', sm: 'mt-2', md: 'mt-4', lg: 'mt-8', xl: 'mt-12', '2xl': 'mt-16', '3xl': 'mt-24',
+}
+const marginBottomMap: Record<string, string> = {
+  none: '', xs: 'mb-1', sm: 'mb-2', md: 'mb-4', lg: 'mb-8', xl: 'mb-12', '2xl': 'mb-16', '3xl': 'mb-24',
+}
+
 export const CallToActionBlock: React.FC<CTABlockProps> = ({
   links,
   richText,
   style,
   workingHours,
+  spacing,
 }) => {
+  const spacingClass = [
+    spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
+    spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
+  ].filter(Boolean).join(' ')
   if (style === 'theme-feature') {
     return (
-      <section className="theme-section bg-theme-dark">
+      <section className={`theme-section bg-theme-dark ${spacingClass}`}>
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             {/* Left Column - Membership Info */}
@@ -73,7 +86,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
 
   // Default CTA styling
   return (
-    <div className="container">
+    <div className={`container ${spacingClass}`}>
       <motion.div
         className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center"
         initial="hidden"

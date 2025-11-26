@@ -485,7 +485,7 @@
   }
 
   .theme-google-map {
-    @apply border-t border-gray-200 mt-10 pt-10;
+    /* Spacing controlled by topSpacing field */
   }
 
   .theme-google-map iframe {

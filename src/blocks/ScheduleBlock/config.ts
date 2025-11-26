@@ -1,5 +1,7 @@
 import type { Block } from 'payload'
 
+import { spacingField } from '@/fields/spacing'
+
 export const ScheduleBlock: Block = {
   slug: 'schedule',
   labels: {
@@ -7,6 +9,7 @@ export const ScheduleBlock: Block = {
     plural: 'Orare',
   },
   fields: [
+    spacingField,
     {
       name: 'schedule',
       type: 'relationship',

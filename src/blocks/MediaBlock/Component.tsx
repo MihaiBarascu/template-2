@@ -7,6 +7,7 @@ import RichText from '@/components/RichText'
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
 import { Media } from '../../components/Media'
+import { getSpacingClasses } from '@/fields/spacing'
 
 type Props = MediaBlockProps & {
   breakout?: boolean
@@ -27,7 +28,9 @@ export const MediaBlock: React.FC<Props> = (props) => {
     media,
     staticImage,
     disableInnerContainer,
+    spacing,
   } = props
+  const spacingClass = getSpacingClasses(spacing)
 
   let caption
   if (media && typeof media === 'object') caption = media.caption
@@ -35,7 +38,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
   return (
     <div
       className={cn(
-        '',
+        spacingClass,
         {
           container: enableGutter,
         },

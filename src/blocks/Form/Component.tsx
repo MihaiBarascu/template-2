@@ -12,6 +12,11 @@ import type { Contact } from '@/payload-types'
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
 
+interface SpacingConfig {
+  marginTop?: string | null
+  marginBottom?: string | null
+}
+
 export type FormBlockType = {
   blockName?: string
   blockType?: 'formBlock'
@@ -20,6 +25,8 @@ export type FormBlockType = {
   introContent?: DefaultTypedEditorState
   showContactInfo?: boolean
   contact?: Contact | string
+  nested?: boolean
+  spacing?: SpacingConfig | null
 }
 
 export const FormBlock: React.FC<
@@ -34,7 +41,21 @@ export const FormBlock: React.FC<
     introContent,
     showContactInfo,
     contact,
+    nested = false,
+    spacing,
   } = props
+
+  // Spacing classes (inline since this is a client component)
+  const marginTopMap: Record<string, string> = {
+    none: '', xs: 'mt-1', sm: 'mt-2', md: 'mt-4', lg: 'mt-8', xl: 'mt-12', '2xl': 'mt-16', '3xl': 'mt-24',
+  }
+  const marginBottomMap: Record<string, string> = {
+    none: '', xs: 'mb-1', sm: 'mb-2', md: 'mb-4', lg: 'mb-8', xl: 'mb-12', '2xl': 'mb-16', '3xl': 'mb-24',
+  }
+  const spacingClass = [
+    spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
+    spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
+  ].filter(Boolean).join(' ')
 
   // Get contact data if available
   const contactData = typeof contact === 'object' ? (contact as Contact) : null
@@ -121,13 +142,20 @@ export const FormBlock: React.FC<
     [router, formID, redirect, confirmationType],
   )
 
+  // When nested inside another block (like Content), skip the container wrapper
+  const Wrapper = nested
+    ? ({ children }: { children: React.ReactNode }) => <div className={spacingClass}>{children}</div>
+    : ({ children }: { children: React.ReactNode }) => (
+      <div className={`container ${spacingClass}`}>{children}</div>
+    )
+
   return (
-    <div className="container">
+    <Wrapper>
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
 
-      <div className={showContactInfo && contactData ? 'grid lg:grid-cols-2 gap-8' : 'lg:max-w-[48rem] mx-auto'}>
+      <div className={showContactInfo && contactData ? 'grid lg:grid-cols-2 gap-8' : nested ? '' : 'lg:max-w-[48rem] mx-auto'}>
         {/* Contact Information Sidebar */}
         {showContactInfo && contactData && (
           <div className="bg-muted/50 p-6 rounded-lg space-y-6">
@@ -189,7 +217,7 @@ export const FormBlock: React.FC<
         )}
 
         {/* Form */}
-      <div className="gymso-form-style p-4 lg:p-6 border border-border rounded-[0.8rem]">
+      <div className="theme-form-style p-4 lg:p-6 border border-border rounded-[0.8rem]">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage} />
@@ -230,6 +258,6 @@ export const FormBlock: React.FC<
         </FormProvider>
       </div>
       </div>
-    </div>
+    </Wrapper>
   )
 }

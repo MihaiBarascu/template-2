@@ -8,11 +8,13 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { linkGroup } from '../../fields/linkGroup'
+import { spacingField } from '@/fields/spacing'
 
 export const CallToAction: Block = {
   slug: 'cta',
   interfaceName: 'CallToActionBlock',
   fields: [
+    spacingField,
     {
       name: 'style',
       type: 'select',

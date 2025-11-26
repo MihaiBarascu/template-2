@@ -2,11 +2,18 @@ import React from 'react'
 import type { Schedule as ScheduleType } from '@/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getSpacingClasses } from '@/fields/spacing'
+
+interface SpacingConfig {
+  marginTop?: string | null
+  marginBottom?: string | null
+}
 
 interface ScheduleBlockProps {
   schedule?: ScheduleType | string | number
   customTitle?: string
   blockType?: string
+  spacing?: SpacingConfig | null
 }
 
 type DayKey = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
@@ -26,7 +33,9 @@ const days: DayKey[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 
 export const ScheduleBlock: React.FC<ScheduleBlockProps> = async ({
   schedule,
   customTitle,
+  spacing,
 }) => {
+  const spacingClass = getSpacingClasses(spacing)
   // Fetch schedule data if it's an ID
   let scheduleData: ScheduleType | null = null
 
@@ -85,7 +94,7 @@ export const ScheduleBlock: React.FC<ScheduleBlockProps> = async ({
   }
 
   return (
-    <section className="schedule py-16">
+    <section className={`schedule py-16 ${spacingClass}`}>
       <div className="container">
         {/* Title */}
         <div className="text-center mb-8">

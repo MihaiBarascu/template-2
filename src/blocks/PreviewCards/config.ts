@@ -1,5 +1,7 @@
 import type { Block } from 'payload'
 
+import { spacingField } from '@/fields/spacing'
+
 export const PreviewCards: Block = {
   slug: 'previewCards',
   labels: {
@@ -7,6 +9,7 @@ export const PreviewCards: Block = {
     plural: 'Preview Cards',
   },
   fields: [
+    spacingField,
     {
       name: 'style',
       type: 'select',

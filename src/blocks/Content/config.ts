@@ -8,6 +8,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
+import { spacingField } from '@/fields/spacing'
 import { CallToAction } from '../CallToAction/config'
 import { FormBlock } from '../Form/config'
 import { MapBlock } from '../MapBlock/config'
@@ -171,6 +172,7 @@ export const Content: Block = {
   slug: 'content',
   interfaceName: 'ContentBlock',
   fields: [
+    spacingField,
     {
       name: 'backgroundColor',
       type: 'select',
