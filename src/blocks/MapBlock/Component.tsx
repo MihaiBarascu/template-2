@@ -1,6 +1,8 @@
 import React from 'react'
-import type { MapBlock as MapBlockType, Address } from '@/payload-types'
+import type { MapBlock as MapBlockType, Address, BusinessInfo } from '@/payload-types'
 import { getSpacingClasses } from '@/fields/spacing'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 
 type Props = MapBlockType & {
   id?: string
@@ -21,7 +23,7 @@ function extractEmbedUrl(embedCode?: string | null): string | undefined {
 }
 
 export const MapBlock: React.FC<Props> = async (props) => {
-  const { mapSource = 'fromCollection', address, customMap, spacing } = props
+  const { mapSource = 'global', address, customMap, spacing } = props
 
   let mapTitle: string | undefined
   let embedURL: string | undefined
@@ -29,8 +31,19 @@ export const MapBlock: React.FC<Props> = async (props) => {
   let borderRadius = 8
   let width: 'full' | 'container' | 'narrow' = 'full'
 
-  // Get map data from Addresses collection or use custom settings
-  if (mapSource === 'fromCollection' && address) {
+  // Get map data based on source
+  if (mapSource === 'global') {
+    // Fetch from BusinessInfo global
+    const payload = await getPayload({ config: configPromise })
+    const businessInfo = (await payload.findGlobal({
+      slug: 'business-info',
+    })) as BusinessInfo
+
+    if (businessInfo?.googleMapsEmbed) {
+      mapTitle = businessInfo.businessName ?? undefined
+      embedURL = extractEmbedUrl(businessInfo.googleMapsEmbed)
+    }
+  } else if (mapSource === 'fromCollection' && address) {
     // Address can be an ID or a populated object
     const addressData = typeof address === 'object' ? (address as Address) : null
 

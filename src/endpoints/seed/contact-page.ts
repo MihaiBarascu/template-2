@@ -9,8 +9,7 @@ type ContactArgs = {
 
 export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   contactForm,
-  contact,
-  address,
+  address: _address,
 }) => {
   return {
     slug: 'contact',
@@ -21,44 +20,38 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
     },
     layout: [
       {
-        blockType: 'formBlock',
-        form: typeof contactForm.id === 'string' ? contactForm.id : String(contactForm.id),
-        showContactInfo: true,
-        contact: typeof contact.id === 'string' ? contact.id : String(contact.id),
-        enableIntro: true,
-        introContent: {
-          root: {
-            type: 'root',
-            children: [
-              {
-                type: 'heading',
+        blockType: 'content',
+        backgroundColor: 'white',
+        columns: [
+          {
+            size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'lg',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'lg',
+            },
+            richText: {
+              root: {
+                type: 'root',
                 children: [
                   {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Trimite-ne un mesaj',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h2',
-                version: 1,
-              },
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Suntem aici să te ajutăm! Completează formularul de mai jos și te vom contacta în cel mai scurt timp.',
+                    type: 'heading',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Trimite-ne un mesaj',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    tag: 'h2',
                     version: 1,
                   },
                 ],
@@ -66,21 +59,37 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
                 format: '',
                 indent: 0,
                 version: 1,
+              },
+            },
+            blocks: [
+              {
+                blockType: 'formBlock',
+                form: typeof contactForm.id === 'string' ? contactForm.id : String(contactForm.id),
+                enableIntro: false,
               },
             ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
           },
-        },
-      },
-      {
-        blockType: 'mapBlock',
-        mapSource: 'fromCollection',
-        address: typeof address.id === 'string' ? address.id : String(address.id),
-        showBorder: true,
-        topSpacing: 'large',
+          {
+            size: 'half',
+            textStyle: {
+              lineHeight: 'normal',
+              fontSize: 'base',
+              letterSpacing: 'normal',
+              paragraphSpacing: 'normal',
+            },
+            blocks: [
+              {
+                blockType: 'contactInfoBlock',
+                source: 'global',
+                title: 'Unde ne poți găsi',
+                showMap: true,
+                mapSource: 'global',
+                mapHeight: 250,
+                style: 'default',
+              },
+            ],
+          },
+        ],
       },
     ],
   }

@@ -12,20 +12,24 @@ export const MapBlock: Block = {
     {
       name: 'mapSource',
       type: 'select',
-      defaultValue: 'fromCollection',
+      defaultValue: 'global',
       options: [
         {
-          label: 'Select Address from Collection',
+          label: '🌐 Global (din Business Info)',
+          value: 'global',
+        },
+        {
+          label: '📍 Din Colecția Adrese',
           value: 'fromCollection',
         },
         {
-          label: 'Custom Map Settings',
+          label: '✏️ Custom',
           value: 'custom',
         },
       ],
       required: true,
       admin: {
-        description: 'Choose an address from the Addresses collection or configure a custom map',
+        description: 'Alege sursa pentru hartă',
       },
     },
     // Address from Collection (only shown when mapSource is 'fromCollection')

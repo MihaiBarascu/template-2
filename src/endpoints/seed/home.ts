@@ -15,8 +15,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
   teamMembers,
   classes,
   contactForm,
-  address,
-  schedule,
+  address: _address,
+  schedule: _schedule,
 }) => {
   return {
     slug: 'home',
@@ -245,7 +245,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: '7:00 AM - 10:00 PM',
+                    text: '07:00 - 22:00',
                     version: 1,
                   },
                 ],
@@ -283,7 +283,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: '6:00 AM - 4:00 PM',
+                    text: '06:00 - 16:00',
                     version: 1,
                   },
                 ],
@@ -495,8 +495,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
       {
         blockType: 'schedule',
-        schedule: typeof schedule.id === 'string' ? schedule.id : String(schedule.id),
-        customTitle: 'Programul Nostru Săptămânal',
+        scheduleType: 'advancedGlobal',
+        title: 'Programul Nostru Săptămânal',
+        style: 'default',
       },
       {
         blockType: 'content',
@@ -558,10 +559,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             blocks: [
               {
                 blockType: 'mapBlock',
-                mapSource: 'fromCollection',
-                address: typeof address.id === 'string' ? address.id : String(address.id),
-                showBorder: false,
-                topSpacing: 'none',
+                mapSource: 'global',
               },
             ],
           },

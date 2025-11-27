@@ -16,6 +16,7 @@ import { Classes } from './collections/Classes'
 import { Contacts } from './collections/Contacts'
 import { Addresses } from './collections/Addresses'
 import { Schedules } from './collections/Schedules'
+import { BusinessInfo } from './BusinessInfo/config'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { Theme } from './Theme/config'
@@ -70,7 +71,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Contacts, Addresses, Schedules],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, Theme],
+  globals: [Header, Footer, Theme, BusinessInfo],
   plugins: [
     ...plugins,
     // Cloudflare R2 Storage (S3-compatible)

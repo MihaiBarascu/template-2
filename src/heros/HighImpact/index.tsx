@@ -26,7 +26,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
       <div className="theme-bg-overlay"></div>
 
       <div className="container mb-8 z-10 relative flex items-center justify-center">
-        <div className="max-w-[36.5rem] md:text-center">
+        <div className="max-w-[36.5rem] text-center">
           {richText && (
             <motion.div
               initial="hidden"
@@ -42,7 +42,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
             </motion.div>
           )}
           {Array.isArray(links) && links.length > 0 && (
-            <ul className="flex md:justify-center gap-0.5 mt-8">
+            <ul className="flex justify-center gap-0.5 mt-8">
               {links.map(({ link }, i) => {
                 return (
                   <motion.li

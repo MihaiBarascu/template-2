@@ -1,7 +1,7 @@
 'use client'
 
 import type { Media, Page, TeamMember, Class } from '@/payload-types'
-import { animationDelays, fadeInUp } from '@/utilities/animations'
+import { fadeInUp, viewportSettings, getCardDelay } from '@/utilities/animations'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -70,49 +70,35 @@ function getHref(link?: CardLink | null): string | null {
   return null
 }
 
-// Wrapper component for card with link and animation
-const CardWrapper: React.FC<{
-  href: string | null
-  newTab?: boolean | null
-  children: React.ReactNode
-  index: number
-  cardId?: string
-}> = ({ href, newTab, children, index, cardId }) => {
-  const newTabProps = newTab ? { target: '_blank' as const, rel: 'noopener noreferrer' } : {}
-
-  return (
-    <motion.div
-      key={cardId || index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      variants={fadeInUp}
-      custom={animationDelays.medium + index * 0.1}
-    >
-      {href ? (
-        <Link href={href} className="group block" {...newTabProps}>
-          {children}
-        </Link>
-      ) : (
-        <div className="group block">{children}</div>
-      )}
-    </motion.div>
-  )
-}
-
 // Inline spacing classes (client component)
 const marginTopMap: Record<string, string> = {
-  none: '', xs: 'mt-1', sm: 'mt-2', md: 'mt-4', lg: 'mt-8', xl: 'mt-12', '2xl': 'mt-16', '3xl': 'mt-24',
+  none: '',
+  xs: 'mt-1',
+  sm: 'mt-2',
+  md: 'mt-4',
+  lg: 'mt-8',
+  xl: 'mt-12',
+  '2xl': 'mt-16',
+  '3xl': 'mt-24',
 }
 const marginBottomMap: Record<string, string> = {
-  none: '', xs: 'mb-1', sm: 'mb-2', md: 'mb-4', lg: 'mb-8', xl: 'mb-12', '2xl': 'mb-16', '3xl': 'mb-24',
+  none: '',
+  xs: 'mb-1',
+  sm: 'mb-2',
+  md: 'mb-4',
+  lg: 'mb-8',
+  xl: 'mb-12',
+  '2xl': 'mb-16',
+  '3xl': 'mb-24',
 }
 
 export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', cards, spacing }) => {
   const spacingClass = [
     spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
     spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
-  ].filter(Boolean).join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   if (!cards || cards.length === 0) {
     return null
@@ -125,37 +111,54 @@ export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', card
         {cards.map((card, index) => {
           const image = typeof card.image === 'object' ? card.image : null
           const href = getHref(card.link)
+          const newTabProps = card.link?.newTab
+            ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+            : {}
 
-          return (
-            <CardWrapper
-              key={card.id || index}
-              href={href}
-              newTab={card.link?.newTab}
-              index={index}
-              cardId={card.id}
+          const cardContent = (
+            <motion.div
+              className="team-thumb group"
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
+              variants={fadeInUp}
+              custom={getCardDelay(index)}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
             >
-              <div className="team-thumb">
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  {image ? (
+              {/* Image with zoom effect */}
+              <div className="relative aspect-[4/3] overflow-hidden rounded-t-sm">
+                {image ? (
+                  <motion.div
+                    className="w-full h-full"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  >
                     <Image
                       src={image.url || ''}
                       alt={image.alt || card.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover"
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200" />
-                  )}
-                </div>
-
-                {/* Info section */}
-                <div className="team-info">
-                  <h3>{card.title}</h3>
-                  {card.subtitle && <span>{card.subtitle}</span>}
-                </div>
+                  </motion.div>
+                ) : (
+                  <div className="w-full h-full bg-gray-200" />
+                )}
               </div>
-            </CardWrapper>
+
+              {/* Info section */}
+              <div className="team-info transition-shadow duration-300 group-hover:shadow-xl">
+                <h3>{card.title}</h3>
+                {card.subtitle && <span>{card.subtitle}</span>}
+              </div>
+            </motion.div>
+          )
+
+          return href ? (
+            <Link key={card.id || index} href={href} className="block" {...newTabProps}>
+              {cardContent}
+            </Link>
+          ) : (
+            <div key={card.id || index}>{cardContent}</div>
           )
         })}
       </div>
@@ -168,46 +171,80 @@ export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', card
       {cards.map((card, index) => {
         const image = typeof card.image === 'object' ? card.image : null
         const href = getHref(card.link)
+        const newTabProps = card.link?.newTab
+          ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+          : {}
 
-        return (
-          <CardWrapper
-            key={card.id || index}
-            href={href}
-            newTab={card.link?.newTab}
-            index={index}
-            cardId={card.id}
+        const cardContent = (
+          <motion.div
+            className="class-thumb group"
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            variants={fadeInUp}
+            custom={getCardDelay(index)}
+            whileHover={{ y: -8, transition: { duration: 0.3 } }}
           >
-            <div className="class-thumb">
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                {image ? (
+            {/* Image with zoom effect */}
+            <div className="relative aspect-[4/3] overflow-hidden rounded-t-sm">
+              {image ? (
+                <motion.div
+                  className="w-full h-full"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
                   <Image
                     src={image.url || ''}
                     alt={image.alt || card.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover"
                   />
-                ) : (
-                  <div className="w-full h-full bg-gray-200" />
-                )}
-              </div>
-
-              {/* Info section */}
-              <div className="class-info">
-                <h3>{card.title}</h3>
-                {card.subtitle && (
-                  <span className="class-trainer">
-                    Trained by - <strong>{card.subtitle}</strong>
-                  </span>
-                )}
-
-                {/* Price badge */}
-                {card.badge && <span className="class-price">{card.badge}</span>}
-
-                {card.description && <p className="class-description">{card.description}</p>}
-              </div>
+                </motion.div>
+              ) : (
+                <div className="w-full h-full bg-gray-200" />
+              )}
             </div>
-          </CardWrapper>
+
+            {/* Info section - fixed height */}
+            <div className="class-info transition-shadow duration-300 group-hover:shadow-xl h-[160px] flex flex-col">
+              <h3 className="line-clamp-1">{card.title}</h3>
+              {card.subtitle && (
+                <span className="class-trainer">
+                  Trained by - <strong>{card.subtitle}</strong>
+                </span>
+              )}
+
+              {/* Price badge with scale animation */}
+              {card.badge && (
+                <motion.span
+                  className="class-price"
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 260,
+                    damping: 20,
+                    delay: getCardDelay(index) / 1000 + 0.2,
+                  }}
+                >
+                  {card.badge}
+                </motion.span>
+              )}
+
+              {card.description && (
+                <p className="class-description line-clamp-3 flex-1">{card.description}</p>
+              )}
+            </div>
+          </motion.div>
+        )
+
+        return href ? (
+          <Link key={card.id || index} href={href} className="block" {...newTabProps}>
+            {cardContent}
+          </Link>
+        ) : (
+          <div key={card.id || index}>{cardContent}</div>
         )
       })}
     </div>

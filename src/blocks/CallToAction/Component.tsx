@@ -6,14 +6,28 @@ import type { CallToActionBlock as CTABlockProps } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
-import { fadeInUp, animationDelays, viewportSettings } from '@/utilities/animations'
+import { fadeInUp, viewportSettings } from '@/utilities/animations'
 
 // Inline spacing classes (client component)
 const marginTopMap: Record<string, string> = {
-  none: '', xs: 'mt-1', sm: 'mt-2', md: 'mt-4', lg: 'mt-8', xl: 'mt-12', '2xl': 'mt-16', '3xl': 'mt-24',
+  none: '',
+  xs: 'mt-1',
+  sm: 'mt-2',
+  md: 'mt-4',
+  lg: 'mt-8',
+  xl: 'mt-12',
+  '2xl': 'mt-16',
+  '3xl': 'mt-24',
 }
 const marginBottomMap: Record<string, string> = {
-  none: '', xs: 'mb-1', sm: 'mb-2', md: 'mb-4', lg: 'mb-8', xl: 'mb-12', '2xl': 'mb-16', '3xl': 'mb-24',
+  none: '',
+  xs: 'mb-1',
+  sm: 'mb-2',
+  md: 'mb-4',
+  lg: 'mb-8',
+  xl: 'mb-12',
+  '2xl': 'mb-16',
+  '3xl': 'mb-24',
 }
 
 export const CallToActionBlock: React.FC<CTABlockProps> = ({
@@ -26,15 +40,20 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
   const spacingClass = [
     spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
     spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
-  ].filter(Boolean).join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   if (style === 'theme-feature') {
+    // Gymso original: ml-lg-auto mr-lg-5 col-lg-5 | mr-lg-auto col-lg-4
+    // Uses auto margins to center content with 3rem gap between columns
     return (
-      <section className={`theme-section bg-theme-dark ${spacingClass}`}>
+      <section className={`py-20 bg-theme-dark ${spacingClass}`}>
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Left Column - Membership Info */}
+          <div className="flex flex-col lg:flex-row">
+            {/* Left Column - ml-lg-auto mr-lg-5 col-lg-5 */}
             <motion.div
-              className="flex flex-col justify-center lg:pr-8"
+              className="flex flex-col justify-center w-full lg:w-5/12 lg:ml-auto lg:mr-12"
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
@@ -43,35 +62,37 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
             >
               {richText && (
                 <RichText
-                  className="mb-0 [&_h2]:text-theme-light [&_h2]:mb-3 [&_h6]:text-theme-light [&_h6]:mb-4 [&_p]:text-theme-text"
+                  className="mb-0 [&_h2]:text-white [&_h2]:mb-3 [&_h6]:text-white [&_h6]:mb-4 [&_p]:text-[#666262] [&_p]:text-[18px] [&_p]:leading-[1.5em] [&_p]:font-light"
                   data={richText}
                   enableGutter={false}
                 />
               )}
-              {(links || []).map(({ link }, i) => {
-                return (
-                  <CMSLink
-                    key={i}
-                    {...link}
-                    className="theme-btn theme-btn-primary mt-6 inline-block w-fit"
-                  />
-                )
-              })}
+              {(links || []).length > 0 && (
+                <div className="mt-3">
+                  {links?.map(({ link }, i) => (
+                    <CMSLink
+                      key={i}
+                      {...link}
+                      className="custom-btn bg-color flex items-center justify-center w-full"
+                    />
+                  ))}
+                </div>
+              )}
             </motion.div>
 
-            {/* Right Column - Working Hours */}
+            {/* Right Column - mr-lg-auto col-lg-4 */}
             <motion.div
-              className="lg:pl-8"
+              className="w-full lg:w-4/12 lg:mr-auto mt-3 lg:mt-0"
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
               variants={fadeInUp}
-              custom={animationDelays.fast}
+              custom={200}
             >
-              <div className="border-l-2 border-theme-primary pl-14">
+              <div className="about-working-hours">
                 {workingHours && (
                   <RichText
-                    className="mb-0 [&_h2]:text-theme-light [&_h2]:mb-4 [&_strong]:text-theme-light [&_strong]:block [&_strong]:mt-3 [&_p]:text-theme-text [&_p]:mb-0"
+                    className="mb-0 [&_h2]:text-white [&_h2]:mb-4 [&_strong]:text-white [&_strong]:block [&_strong]:opacity-85 [&_strong]:mt-3 first:[&_strong]:mt-0 [&_p]:text-[#666262] [&_p]:text-[18px] [&_p]:leading-[1.5em] [&_p]:font-light [&_p]:mb-0"
                     data={workingHours}
                     enableGutter={false}
                   />

@@ -10,6 +10,7 @@ import {
 import { link } from '@/fields/link'
 import { spacingField } from '@/fields/spacing'
 import { CallToAction } from '../CallToAction/config'
+import { ContactInfoBlock } from '../ContactInfoBlock/config'
 import { FormBlock } from '../Form/config'
 import { MapBlock } from '../MapBlock/config'
 import { MediaBlock } from '../MediaBlock/config'
@@ -146,7 +147,7 @@ const columnFields: Field[] = [
   {
     name: 'blocks',
     type: 'blocks',
-    blocks: [CallToAction, FormBlock, MapBlock, MediaBlock, PreviewCards],
+    blocks: [CallToAction, ContactInfoBlock, FormBlock, MapBlock, MediaBlock, PreviewCards],
     label: 'Content Blocks',
     admin: {
       description: 'Add blocks (forms, maps, media, CTA, preview cards) to this column',

@@ -7,23 +7,24 @@ import type { ContentBlock as ContentBlockProps } from '@/payload-types'
 import { CMSLink } from '../../components/Link'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSpacingClasses } from '@/fields/spacing'
+import { AnimatedColumn } from './AnimatedColumn'
 
 // Text style utility classes - using !important to override globals.css
 const lineHeightClasses: Record<string, string> = {
-  none: '[&_*]:!leading-none',      // 1.0
-  tight: '[&_*]:!leading-tight',    // 1.25
-  snug: '[&_*]:!leading-snug',      // 1.375
-  normal: '[&_*]:!leading-normal',  // 1.5
+  none: '[&_*]:!leading-none', // 1.0
+  tight: '[&_*]:!leading-tight', // 1.25
+  snug: '[&_*]:!leading-snug', // 1.375
+  normal: '[&_*]:!leading-normal', // 1.5
   relaxed: '[&_*]:!leading-relaxed', // 1.625
-  loose: '[&_*]:!leading-loose',    // 2.0
+  loose: '[&_*]:!leading-loose', // 2.0
 }
 
 const fontSizeClasses: Record<string, string> = {
-  xs: '[&_p]:text-xs',     // 12px
-  sm: '[&_p]:text-sm',     // 14px
+  xs: '[&_p]:text-xs', // 12px
+  sm: '[&_p]:text-sm', // 14px
   base: '[&_p]:text-base', // 16px
-  lg: '[&_p]:text-lg',     // 18px
-  xl: '[&_p]:text-xl',     // 20px
+  lg: '[&_p]:text-lg', // 18px
+  xl: '[&_p]:text-xl', // 20px
   '2xl': '[&_p]:text-2xl', // 24px
 }
 
@@ -69,7 +70,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
     <section className={cn('py-12 lg:py-20', bgClass, spacingClass)}>
       <div className="container">
         <div
-          className={cn('grid grid-cols-4 lg:grid-cols-12 gap-y-6 gap-x-12 items-start', {
+          className={cn('grid grid-cols-4 lg:grid-cols-12 gap-y-6 gap-x-8 lg:gap-x-12 items-start', {
             'text-white [&_h2]:text-white [&_h3]:text-white [&_p]:text-white/85': isDark,
             '[&_h2]:text-[36px] [&_h2]:mb-4 [&_p]:text-[18px] [&_p]:leading-relaxed': isLight,
           })}
@@ -93,11 +94,12 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
               )
 
               return (
-                <div
+                <AnimatedColumn
+                  key={index}
+                  index={index}
                   className={cn('col-span-4', colsSpanClasses[size!], {
                     'md:col-span-2': size !== 'full',
                   })}
-                  key={index}
                 >
                   {richText && (
                     <div className={textStyleClasses}>
@@ -112,7 +114,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
                   )}
 
                   {enableLink && <CMSLink {...link} />}
-                </div>
+                </AnimatedColumn>
               )
             })}
         </div>

@@ -122,11 +122,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     theme: Theme;
+    'business-info': BusinessInfo;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     theme: ThemeSelect<false> | ThemeSelect<true>;
+    'business-info': BusinessInfoSelect<false> | BusinessInfoSelect<true>;
   };
   locale: null;
   user: User & {
@@ -221,6 +223,7 @@ export interface Page {
   };
   layout: (
     | CallToActionBlock
+    | ContactInfoBlock
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
@@ -279,26 +282,7 @@ export interface Page {
         blockName?: string | null;
         blockType: 'previewCards';
       }
-    | {
-        /**
-         * Spațiu vertical între blocuri
-         */
-        spacing?: {
-          marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
-          marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
-        };
-        /**
-         * Alege orarul care va fi afișat
-         */
-        schedule: string | Schedule;
-        /**
-         * Lasă gol pentru a folosi titlul din orar
-         */
-        customTitle?: string | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'schedule';
-      }
+    | ScheduleBlock
   )[];
   meta?: {
     title?: string | null;
@@ -738,6 +722,40 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactInfoBlock".
+ */
+export interface ContactInfoBlock {
+  /**
+   * Alege sursa datelor de contact
+   */
+  source: 'global' | 'custom';
+  /**
+   * Titlu afișat deasupra informațiilor
+   */
+  title?: string | null;
+  customData?: {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  showMap?: boolean | null;
+  mapSource?: ('global' | 'custom') | null;
+  customMapUrl?: string | null;
+  mapHeight?: number | null;
+  style?: ('default' | 'compact' | 'card') | null;
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactInfoBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
@@ -788,6 +806,7 @@ export interface ContentBlock {
         blocks?:
           | (
               | CallToActionBlock
+              | ContactInfoBlock
               | FormBlock
               | MapBlock
               | MediaBlock
@@ -1125,9 +1144,9 @@ export interface Contact {
  */
 export interface MapBlock {
   /**
-   * Choose an address from the Addresses collection or configure a custom map
+   * Alege sursa pentru hartă
    */
-  mapSource: 'fromCollection' | 'custom';
+  mapSource: 'global' | 'fromCollection' | 'custom';
   /**
    * Select an address from the Addresses collection. Click "Add New" to create a new address.
    */
@@ -1167,6 +1186,8 @@ export interface Address {
    */
   title: string;
   address: string;
+  phone?: string | null;
+  email?: string | null;
   /**
    * Codul iframe complet de la Google Maps (Share → Embed a map → Copy HTML)
    */
@@ -1241,6 +1262,45 @@ export interface ArchiveBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScheduleBlock".
+ */
+export interface ScheduleBlock {
+  /**
+   * Alege tipul de orar și sursa datelor
+   */
+  scheduleType: 'simpleGlobal' | 'advancedGlobal' | 'simpleCustom' | 'advancedCustom';
+  title?: string | null;
+  simpleHours?:
+    | {
+        days: string;
+        hours: string;
+        id?: string | null;
+      }[]
+    | null;
+  scheduleEntries?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        endTime?: string | null;
+        className: string;
+        trainer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  style?: ('default' | 'compact' | 'card') | null;
+  /**
+   * Spațiu vertical între blocuri
+   */
+  spacing?: {
+    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'schedule';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1598,6 +1658,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         cta?: T | CallToActionBlockSelect<T>;
+        contactInfoBlock?: T | ContactInfoBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1634,20 +1695,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        schedule?:
-          | T
-          | {
-              spacing?:
-                | T
-                | {
-                    marginTop?: T;
-                    marginBottom?: T;
-                  };
-              schedule?: T;
-              customTitle?: T;
-              id?: T;
-              blockName?: T;
-            };
+        schedule?: T | ScheduleBlockSelect<T>;
       };
   meta?:
     | T
@@ -1697,6 +1745,34 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactInfoBlock_select".
+ */
+export interface ContactInfoBlockSelect<T extends boolean = true> {
+  source?: T;
+  title?: T;
+  customData?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  showMap?: T;
+  mapSource?: T;
+  customMapUrl?: T;
+  mapHeight?: T;
+  style?: T;
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
@@ -1724,6 +1800,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
           | T
           | {
               cta?: T | CallToActionBlockSelect<T>;
+              contactInfoBlock?: T | ContactInfoBlockSelect<T>;
               formBlock?: T | FormBlockSelect<T>;
               mapBlock?: T | MapBlockSelect<T>;
               mediaBlock?: T | MediaBlockSelect<T>;
@@ -1851,6 +1928,40 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   categories?: T;
   limit?: T;
   selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScheduleBlock_select".
+ */
+export interface ScheduleBlockSelect<T extends boolean = true> {
+  scheduleType?: T;
+  title?: T;
+  simpleHours?:
+    | T
+    | {
+        days?: T;
+        hours?: T;
+        id?: T;
+      };
+  scheduleEntries?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        endTime?: T;
+        className?: T;
+        trainer?: T;
+        id?: T;
+      };
+  style?: T;
+  spacing?:
+    | T
+    | {
+        marginTop?: T;
+        marginBottom?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -2145,6 +2256,8 @@ export interface ContactsSelect<T extends boolean = true> {
 export interface AddressesSelect<T extends boolean = true> {
   title?: T;
   address?: T;
+  phone?: T;
+  email?: T;
   googleMapsEmbed?: T;
   googleMapsUrl?: T;
   updatedAt?: T;
@@ -2683,6 +2796,58 @@ export interface Theme {
   createdAt?: string | null;
 }
 /**
+ * Informații generale despre afacere - adresă, contact, program, social media
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "business-info".
+ */
+export interface BusinessInfo {
+  id: string;
+  businessName: string;
+  tagline?: string | null;
+  address: string;
+  phone?: string | null;
+  email?: string | null;
+  /**
+   * Număr pentru buton WhatsApp
+   */
+  whatsapp?: string | null;
+  workingHours?:
+    | {
+        days: string;
+        hours: string;
+        id?: string | null;
+      }[]
+    | null;
+  scheduleTitle?: string | null;
+  scheduleEntries?:
+    | {
+        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+        time: string;
+        endTime?: string | null;
+        className: string;
+        trainer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * URL-ul din iframe-ul Google Maps (Share → Embed → copiază src)
+   */
+  googleMapsEmbed?: string | null;
+  /**
+   * Link direct pentru "Deschide în Google Maps"
+   */
+  googleMapsLink?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  tiktok?: string | null;
+  youtube?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2823,6 +2988,47 @@ export interface ThemeSelect<T extends boolean = true> {
   lightColor?: T;
   textColor?: T;
   surfaceColor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "business-info_select".
+ */
+export interface BusinessInfoSelect<T extends boolean = true> {
+  businessName?: T;
+  tagline?: T;
+  address?: T;
+  phone?: T;
+  email?: T;
+  whatsapp?: T;
+  workingHours?:
+    | T
+    | {
+        days?: T;
+        hours?: T;
+        id?: T;
+      };
+  scheduleTitle?: T;
+  scheduleEntries?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        endTime?: T;
+        className?: T;
+        trainer?: T;
+        id?: T;
+      };
+  googleMapsEmbed?: T;
+  googleMapsLink?: T;
+  facebook?: T;
+  instagram?: T;
+  tiktok?: T;
+  youtube?: T;
+  linkedin?: T;
+  twitter?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

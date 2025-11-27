@@ -45,7 +45,7 @@
     --theme-border: color-mix(in srgb, var(--theme-dark) 15%, white);
     --theme-primary-hover: color-mix(in srgb, var(--theme-primary) 85%, black);
 
-    /* === TYPOGRAPHY (hardcoded) === */
+    /* === TYPOGRAPHY === */
     --theme-font-family: 'Plain', sans-serif;
     --theme-font-bold: bold;
     --theme-font-normal: normal;
@@ -62,11 +62,25 @@
     --theme-base: 16px;
     --theme-menu: 14px;
 
-    /* === EFFECTS (hardcoded) === */
+    /* === EFFECTS === */
     --theme-radius-lg: 100%;
     --theme-radius-sm: 2px;
     --theme-shadow: 6px 0 38px rgba(20, 20, 20, 0.1);
     --theme-transition: 0.3s ease;
+
+    /* === LAYOUT - FEATURE/CTA SECTION === */
+    --feature-py: 5rem;
+    --feature-col-left-width: 41.666%;
+    --feature-col-right-width: 33.333%;
+    --feature-col-gap: 3rem;
+    --feature-working-hours-border: 2px solid currentColor;
+    --feature-working-hours-pl: 3.5rem;
+
+    /* === BUTTONS === */
+    --btn-padding-y: 14px;
+    --btn-padding-x: 24px;
+    --btn-font-size: var(--theme-menu);
+    --btn-letter-spacing: 0.5px;
 
     /* Keep existing ShadCN variables for components */
     --background: 0 0% 100%;
@@ -248,17 +262,19 @@
 }
 
 @layer components {
-  /* Button Styles */
+  /* =============================================
+     BUTTON STYLES - Gymso Original
+     ============================================= */
   .custom-btn {
     background: transparent !important;
     border: 1px solid transparent !important;
     border-radius: var(--theme-radius-sm) !important;
-    padding: 24px 20px !important;
+    padding: var(--btn-padding-y) var(--btn-padding-x) !important;
     color: var(--theme-light) !important;
-    font-size: var(--theme-menu) !important;
-    font-weight: 400;
+    font-size: var(--btn-font-size) !important;
+    font-weight: var(--theme-font-normal);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: var(--btn-letter-spacing);
     white-space: nowrap;
     transition: all var(--theme-transition);
     display: inline-block;
@@ -276,6 +292,7 @@
     outline: none;
   }
 
+  /* Bordered button - orange border & text */
   .custom-btn.bordered {
     border: 1px solid var(--theme-primary) !important;
     color: var(--theme-primary) !important;
@@ -289,17 +306,18 @@
     border-color: transparent !important;
   }
 
+  /* Filled button - orange background */
   .custom-btn.bg-color {
-    background: var(--theme-primary);
-    color: var(--theme-light);
-    border: 1px solid var(--theme-primary);
+    background: var(--theme-primary) !important;
+    color: var(--theme-light) !important;
+    border: 1px solid var(--theme-primary) !important;
   }
 
   .custom-btn.bg-color:hover,
   .custom-btn.bg-color:focus {
-    background: var(--theme-light);
-    color: var(--theme-primary);
-    border-color: transparent;
+    background: var(--theme-light) !important;
+    color: var(--theme-primary) !important;
+    border-color: transparent !important;
   }
 
   /* Theme Button Styles */
@@ -453,6 +471,17 @@
 
   .theme-working-hours strong {
     @apply text-white;
+    opacity: 0.85;
+  }
+
+  /* Gymso original about-working-hours */
+  .about-working-hours {
+    border-left: 2px solid;
+    padding-left: 3.5rem;
+  }
+
+  .about-working-hours strong {
+    color: var(--theme-light);
     opacity: 0.85;
   }
 

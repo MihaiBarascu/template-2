@@ -8,7 +8,7 @@ export const Addresses: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'address', 'updatedAt'],
+    defaultColumns: ['title', 'address', 'phone', 'email', 'updatedAt'],
   },
   access: {
     read: () => true,
@@ -32,6 +32,29 @@ export const Addresses: CollectionConfig = {
       admin: {
         placeholder: 'Strada Example, Nr. 123, Cluj-Napoca, România',
       },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'phone',
+          type: 'text',
+          label: 'Telefon',
+          admin: {
+            placeholder: '+40 123 456 789',
+            width: '50%',
+          },
+        },
+        {
+          name: 'email',
+          type: 'email',
+          label: 'Email',
+          admin: {
+            placeholder: 'contact@example.com',
+            width: '50%',
+          },
+        },
+      ],
     },
     {
       name: 'googleMapsEmbed',
