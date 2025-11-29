@@ -1,15 +1,17 @@
 'use client'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-import type { Header } from '@/payload-types'
+import type { Header, Logo, Media } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
+  logo: Logo
 }
 
 const socialIcons: { [key: string]: string } = {
@@ -25,7 +27,7 @@ const socialIcons: { [key: string]: string } = {
     'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z',
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, logo }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -35,16 +37,49 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   const socialLinks = data?.socialLinks as Array<{ platform: string; url: string }> | undefined
 
+  // Get logo option1 (for dark backgrounds)
+  const logoOption = logo?.option1
+  const logoImage = logoOption?.image as Media | undefined
+
+  // Render logo based on type
+  const renderLogo = () => {
+    if (!logoOption) {
+      // Fallback if no logo configured
+      return (
+        <span className="text-3xl font-bold text-white hover:text-theme-primary transition-colors">
+          Logo
+        </span>
+      )
+    }
+
+    if (logoOption.type === 'image' && logoImage?.url) {
+      return (
+        <Image
+          src={logoImage.url}
+          alt={logoImage.alt || 'Logo'}
+          width={150}
+          height={48}
+          className="h-12 w-auto"
+          priority
+        />
+      )
+    }
+
+    // Default to text logo
+    return (
+      <span className="text-3xl font-bold text-white hover:text-theme-primary transition-colors">
+        {logoOption.text || 'Logo'}
+      </span>
+    )
+  }
+
   return (
     <header className="relative z-20 bg-theme-dark">
       <div className="container mx-auto max-w-6.5xl">
         <nav className="flex items-center justify-between h-20 px-4">
           {/* Logo */}
-          <Link
-            href="/"
-            className="text-3xl font-bold text-white hover:text-theme-primary transition-colors"
-          >
-            Transilvania Gym
+          <Link href="/" className="inline-flex items-center">
+            {renderLogo()}
           </Link>
 
           {/* Desktop Navigation */}

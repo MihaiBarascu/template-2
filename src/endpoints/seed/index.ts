@@ -28,7 +28,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const _globals: GlobalSlug[] = ['header', 'footer']
+const _globals: GlobalSlug[] = ['header', 'footer', 'logo']
 
 const categories = ['Classes', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -110,6 +110,23 @@ export const seed = async ({
         youtube: '',
         linkedin: '',
         twitter: '',
+      },
+      depth: 0,
+      context: {
+        disableRevalidate: true,
+      },
+    }),
+    payload.updateGlobal({
+      slug: 'logo',
+      data: {
+        option1: {
+          type: 'text',
+          text: '',
+        },
+        option2: {
+          type: 'text',
+          text: '',
+        },
       },
       depth: 0,
       context: {
@@ -992,6 +1009,20 @@ export const seed = async ({
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
+    // Logo Global - Text logo "Transilvania Gym"
+    payload.updateGlobal({
+      slug: 'logo',
+      data: {
+        option1: {
+          type: 'text',
+          text: 'Transilvania Gym',
+        },
+        option2: {
+          type: 'text',
+          text: 'Transilvania Gym',
+        },
+      },
+    }),
     payload.updateGlobal({
       slug: 'header',
       data: {

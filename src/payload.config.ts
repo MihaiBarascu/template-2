@@ -18,6 +18,7 @@ import { BusinessInfo } from './BusinessInfo/config'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { Theme } from './Theme/config'
+import { Logo } from './Logo/config'
 import { PaginiAbonamente } from './PaginiAbonamente/config'
 import { PaginiClase } from './PaginiClase/config'
 import { PaginiEchipa } from './PaginiEchipa/config'
@@ -72,7 +73,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Abonamente],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, Theme, BusinessInfo, PaginiAbonamente, PaginiClase, PaginiEchipa],
+  globals: [Header, Footer, Theme, Logo, BusinessInfo, PaginiAbonamente, PaginiClase, PaginiEchipa],
   plugins: [
     ...plugins,
     // Cloudflare R2 Storage (S3-compatible)

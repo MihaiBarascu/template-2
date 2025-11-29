@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import type { Footer, Media } from '@/payload-types'
+import type { Footer, Logo, Media } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
@@ -187,9 +187,16 @@ const SocialMediaIcons = ({
 }
 
 export async function Footer() {
-  const footerData = (await getCachedGlobal('footer', 1)()) as Footer
+  const [footerData, logoData] = await Promise.all([
+    getCachedGlobal('footer', 1)() as Promise<Footer>,
+    getCachedGlobal('logo', 1)() as Promise<Logo>,
+  ])
 
   const { companyInfo, columns, socialMedia, bottomBar } = footerData || {}
+
+  // Get logo from Logo global (option1 for dark backgrounds)
+  const logoOption = logoData?.option1
+  const logoImage = logoOption?.image as Media | undefined
 
   return (
     <footer className="bg-gradient-to-b from-theme-dark to-black text-theme-light">
@@ -199,46 +206,23 @@ export async function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Company Info Section */}
             <div className="lg:col-span-4">
-              {/* Logo */}
+              {/* Logo - from Logo global */}
               <div className="mb-6">
-                {companyInfo?.logoType === 'text' && companyInfo.logoText && (
-                  <Link href="/" className="inline-block">
-                    <span className="text-3xl font-bold text-white hover:text-theme-primary transition-colors">
-                      {companyInfo.logoText}
-                    </span>
-                  </Link>
-                )}
-                {companyInfo?.logoType === 'image' && companyInfo.logoImage && (
-                  <Link href="/" className="inline-block">
+                <Link href="/" className="inline-block">
+                  {logoOption?.type === 'image' && logoImage?.url ? (
                     <Image
-                      src={(companyInfo.logoImage as Media).url!}
-                      alt={(companyInfo.logoImage as Media).alt || 'Logo'}
+                      src={logoImage.url}
+                      alt={logoImage.alt || 'Logo'}
                       width={150}
                       height={60}
                       className="h-12 w-auto"
                     />
-                  </Link>
-                )}
-                {companyInfo?.logoType === 'both' && (
-                  <Link href="/" className="inline-block">
-                    <div className="flex items-center gap-3">
-                      {companyInfo.logoImage && (
-                        <Image
-                          src={(companyInfo.logoImage as Media).url!}
-                          alt={(companyInfo.logoImage as Media).alt || 'Logo'}
-                          width={40}
-                          height={40}
-                          className="h-10 w-10"
-                        />
-                      )}
-                      {companyInfo.logoText && (
-                        <span className="text-2xl font-bold bg-gradient-to-r from-theme-primary to-red-400 bg-clip-text text-transparent">
-                          {companyInfo.logoText}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
-                )}
+                  ) : (
+                    <span className="text-3xl font-bold text-white hover:text-theme-primary transition-colors">
+                      {logoOption?.text || 'Logo'}
+                    </span>
+                  )}
+                </Link>
               </div>
 
               {/* Description */}

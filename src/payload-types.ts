@@ -118,6 +118,7 @@ export interface Config {
     header: Header;
     footer: Footer;
     theme: Theme;
+    logo: Logo;
     'business-info': BusinessInfo;
     'pagini-abonamente': PaginiAbonamente;
     'pagini-clase': PaginiClase;
@@ -127,6 +128,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     theme: ThemeSelect<false> | ThemeSelect<true>;
+    logo: LogoSelect<false> | LogoSelect<true>;
     'business-info': BusinessInfoSelect<false> | BusinessInfoSelect<true>;
     'pagini-abonamente': PaginiAbonamenteSelect<false> | PaginiAbonamenteSelect<true>;
     'pagini-clase': PaginiClaseSelect<false> | PaginiClaseSelect<true>;
@@ -2837,6 +2839,39 @@ export interface Theme {
   createdAt?: string | null;
 }
 /**
+ * Logo-ul site-ului - 2 variante pentru fundal deschis/inchis
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo".
+ */
+export interface Logo {
+  id: string;
+  /**
+   * Logo deschis la culoare - folosit pe Header/Footer cu fundal dark
+   */
+  option1: {
+    type: 'text' | 'image';
+    text?: string | null;
+    /**
+     * Recomandat: PNG transparent sau SVG
+     */
+    image?: (string | null) | Media;
+  };
+  /**
+   * Logo inchis la culoare - pentru pagini cu fundal light (rezervat pentru viitor)
+   */
+  option2: {
+    type: 'text' | 'image';
+    text?: string | null;
+    /**
+     * Recomandat: PNG transparent sau SVG
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Informatii generale despre afacere - adresa, contact, program, social media
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3130,6 +3165,29 @@ export interface ThemeSelect<T extends boolean = true> {
   lightColor?: T;
   textColor?: T;
   surfaceColor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo_select".
+ */
+export interface LogoSelect<T extends boolean = true> {
+  option1?:
+    | T
+    | {
+        type?: T;
+        text?: T;
+        image?: T;
+      };
+  option2?:
+    | T
+    | {
+        type?: T;
+        text?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
