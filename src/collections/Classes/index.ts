@@ -5,6 +5,11 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateClass, revalidateDelete } from './hooks/revalidateClass'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+} from '@payloadcms/plugin-seo/fields'
 
 export const Classes: CollectionConfig<'classes'> = {
   slug: 'classes',
@@ -24,7 +29,6 @@ export const Classes: CollectionConfig<'classes'> = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'trainer', 'schedule', 'capacity', 'updatedAt'],
-    group: 'Conținut',
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -227,6 +231,24 @@ export const Classes: CollectionConfig<'classes'> = {
       admin: {
         position: 'sidebar',
       },
+    },
+    // SEO for individual class pages
+    {
+      name: 'meta',
+      type: 'group',
+      label: 'SEO',
+      admin: {
+        description: 'SEO pentru pagina individuala a clasei',
+      },
+      fields: [
+        MetaTitleField({
+          hasGenerateFn: false,
+        }),
+        MetaImageField({
+          relationTo: 'media',
+        }),
+        MetaDescriptionField({}),
+      ],
     },
   ],
   hooks: {

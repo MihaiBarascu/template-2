@@ -9,8 +9,9 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import type { TeamMember } from '@/payload-types'
+import type { TeamMember, PaginiEchipa } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -38,7 +39,7 @@ type Args = {
 }
 
 // Helper function to get other team members
-const getOtherTeamMembers = cache(async (currentId: string) => {
+const getOtherTeamMembers = cache(async (currentId: string, limit: number = 3) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
@@ -46,7 +47,7 @@ const getOtherTeamMembers = cache(async (currentId: string) => {
     where: {
       id: { not_equals: currentId },
     },
-    limit: 3,
+    limit,
     depth: 2,
   })
 
@@ -58,13 +59,31 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
   const decodedSlug = decodeURIComponent(slug)
 
   const teamMember = await queryTeamMemberBySlug({ slug: decodedSlug })
+  const settings = (await getCachedGlobal('pagini-echipa', 1)()) as PaginiEchipa
 
   if (!teamMember) {
     notFound()
   }
 
+  // Settings with defaults
+  const showExperience = settings?.showExperience ?? true
+  const showSpecializations = settings?.showSpecializations ?? true
+  const showContact = settings?.showContact ?? true
+  const showSocialMedia = settings?.showSocialMedia ?? true
+  const showCTA = settings?.showCTA ?? true
+  const showRelatedMembers = settings?.showRelatedMembers ?? true
+  const relatedMembersCount = settings?.relatedMembersCount ?? 3
+  const relatedMembersTitle = settings?.relatedMembersTitle || 'Restul echipei'
+
+  // CTA texts
+  const firstName = teamMember.title?.split(' ')[0] || ''
+  const ctaTitle = (settings?.ctaTitle || 'Vrei sa lucrezi cu {name}?').replace('{name}', firstName)
+  const ctaDescription = settings?.ctaDescription || 'Contacteaza-ne pentru a programa o sesiune de antrenament sau pentru mai multe informatii despre serviciile noastre.'
+  const ctaButtonText = settings?.ctaButtonText || 'Contacteaza-ne'
+  const ctaSecondaryButtonText = settings?.ctaSecondaryButtonText || 'Vezi clasele disponibile'
+
   // Get other team members for the "Meet the Team" section
-  const otherMembers = await getOtherTeamMembers(teamMember.id)
+  const otherMembers = showRelatedMembers ? await getOtherTeamMembers(teamMember.id, relatedMembersCount) : []
 
   // Get the image URL safely
   const imageUrl =
@@ -135,7 +154,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                 </div>
 
                 {/* Experience Badge */}
-                {teamMember.experience && (
+                {showExperience && teamMember.experience && (
                   <div className="flex items-center justify-center gap-3 py-4 border-y border-gray-100">
                     <Award className="w-8 h-8 text-theme-primary" />
                     <div>
@@ -148,7 +167,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                 )}
 
                 {/* Contact Info */}
-                {teamMember.contact && (
+                {showContact && teamMember.contact && (
                   <div className="space-y-3">
                     {teamMember.contact.email && (
                       <a
@@ -172,7 +191,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                 )}
 
                 {/* Social Media */}
-                {teamMember.socialMedia && (
+                {showSocialMedia && teamMember.socialMedia && (
                   <div className="pt-4">
                     <div className="flex justify-center gap-3">
                       {teamMember.socialMedia.facebook && (
@@ -225,7 +244,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             </div>
 
             {/* Specializations Card */}
-            {teamMember.specializations && teamMember.specializations.length > 0 && (
+            {showSpecializations && teamMember.specializations && teamMember.specializations.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <Target className="w-6 h-6 text-theme-primary" />
@@ -245,36 +264,37 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
             )}
 
             {/* CTA Section */}
-            <div className="bg-gradient-to-r from-theme-primary to-theme-primary/90 rounded-xl shadow-lg p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">
-                Vrei să lucrezi cu {teamMember.title?.split(' ')[0]}?
-              </h3>
-              <p className="mb-6 text-white/90">
-                Contactează-ne pentru a programa o sesiune de antrenament sau pentru mai multe
-                informații despre serviciile noastre.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-theme-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  Contactează-ne
-                </Link>
-                <Link
-                  href="/classes"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-transparent text-white font-bold rounded-lg border-2 border-white hover:bg-white/10 transition-colors"
-                >
-                  Vezi clasele disponibile
-                </Link>
+            {showCTA && (
+              <div className="bg-gradient-to-r from-theme-primary to-theme-primary/90 rounded-xl shadow-lg p-8 text-white">
+                <h3 className="text-2xl font-bold mb-4">
+                  {ctaTitle}
+                </h3>
+                <p className="mb-6 text-white/90">
+                  {ctaDescription}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-white text-theme-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    {ctaButtonText}
+                  </Link>
+                  <Link
+                    href="/classes"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-transparent text-white font-bold rounded-lg border-2 border-white hover:bg-white/10 transition-colors"
+                  >
+                    {ctaSecondaryButtonText}
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Other Team Members Section */}
-        {otherMembers.length > 0 && (
+        {showRelatedMembers && otherMembers.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-theme-dark mb-8">Restul echipei</h2>
+            <h2 className="text-3xl font-bold text-theme-dark mb-8">{relatedMembersTitle}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherMembers.map((member) => {
                 const memberImageUrl =

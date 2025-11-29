@@ -1,19 +1,28 @@
 import type { Metadata } from 'next'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
+import { StaticPageHero } from '@/components/StaticPageHero'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { TeamMember } from '@/payload-types'
+import type { TeamMember, PaginiEchipa } from '@/payload-types'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-export const metadata: Metadata = {
-  title: 'Echipa Noastră | Transilvania Fitness',
-  description: 'Întâlnește echipa de profesioniști dedicați de la Transilvania Fitness',
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = (await getCachedGlobal('pagini-echipa', 1)()) as PaginiEchipa
+
+  return {
+    title: settings?.meta?.title || 'Echipa Noastra | Transilvania Fitness',
+    description: settings?.meta?.description || 'Intalneste echipa de profesionisti dedicati de la Transilvania Fitness',
+    openGraph: settings?.meta?.image && typeof settings.meta.image === 'object' ? {
+      images: [{ url: settings.meta.image.url || '' }],
+    } : undefined,
+  }
 }
 
 export default async function TeamMembersPage({
@@ -25,6 +34,7 @@ export default async function TeamMembersPage({
   const currentPage = parseInt(page)
 
   const payload = await getPayload({ config: configPromise })
+  const settings = (await getCachedGlobal('pagini-echipa', 1)()) as PaginiEchipa
 
   const teamMembers = await payload.find({
     collection: 'team-members',
@@ -37,16 +47,11 @@ export default async function TeamMembersPage({
   return (
     <div className="pb-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-theme-dark to-black text-white py-20 md:py-32">
-        <div className="container text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            Echipa Noastră
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            Profesioniști dedicați și pasionați care te vor ghida către obiectivele tale de fitness
-          </p>
-        </div>
-      </div>
+      <StaticPageHero
+        title={settings?.heroTitle || 'Echipa Noastra'}
+        description={settings?.heroSubtitle || 'Profesionisti dedicati si pasionati care te vor ghida catre obiectivele tale de fitness'}
+        backgroundImage={settings?.heroBackground && typeof settings.heroBackground === 'object' ? settings.heroBackground.url : null}
+      />
 
       {/* Team Members Grid */}
       <div className="container mt-16">

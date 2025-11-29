@@ -2,10 +2,10 @@ import type { GlobalConfig } from 'payload'
 
 export const BusinessInfo: GlobalConfig = {
   slug: 'business-info',
-  label: 'Informații Business',
+  label: 'Informatii Business',
   admin: {
-    description: 'Informații generale despre afacere - adresă, contact, program, social media',
-    group: 'Setări',
+    description: 'Informatii generale despre afacere - adresa, contact, program, social media',
+    group: 'Setari',
   },
   access: {
     read: () => true,

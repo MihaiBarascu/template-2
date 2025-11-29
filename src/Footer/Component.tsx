@@ -187,7 +187,7 @@ const SocialMediaIcons = ({
 }
 
 export async function Footer() {
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
+  const footerData = (await getCachedGlobal('footer', 1)()) as Footer
 
   const { companyInfo, columns, socialMedia, bottomBar } = footerData || {}
 

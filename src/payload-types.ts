@@ -77,6 +77,7 @@ export interface Config {
     contacts: Contact;
     addresses: Address;
     schedules: Schedule;
+    abonamente: Abonamente;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -104,6 +105,7 @@ export interface Config {
     contacts: ContactsSelect<false> | ContactsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
     schedules: SchedulesSelect<false> | SchedulesSelect<true>;
+    abonamente: AbonamenteSelect<false> | AbonamenteSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -123,12 +125,18 @@ export interface Config {
     footer: Footer;
     theme: Theme;
     'business-info': BusinessInfo;
+    'pagini-abonamente': PaginiAbonamente;
+    'pagini-clase': PaginiClase;
+    'pagini-echipa': PaginiEchipa;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     theme: ThemeSelect<false> | ThemeSelect<true>;
     'business-info': BusinessInfoSelect<false> | BusinessInfoSelect<true>;
+    'pagini-abonamente': PaginiAbonamenteSelect<false> | PaginiAbonamenteSelect<true>;
+    'pagini-clase': PaginiClaseSelect<false> | PaginiClaseSelect<true>;
+    'pagini-echipa': PaginiEchipaSelect<false> | PaginiEchipaSelect<true>;
   };
   locale: null;
   user: User & {
@@ -171,7 +179,7 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'pageHero';
     richText?: {
       root: {
         type: string;
@@ -219,6 +227,9 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Pentru Page Hero: imaginea este opțională - fără imagine va apărea doar gradientul
+     */
     media?: (string | null) | Media;
   };
   layout: (
@@ -283,6 +294,48 @@ export interface Page {
         blockType: 'previewCards';
       }
     | ScheduleBlock
+    | {
+        /**
+         * Spațiu vertical între blocuri
+         */
+        spacing?: {
+          marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+          marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+        };
+        /**
+         * Alege stilul vizual al cardului
+         */
+        variant?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'simple') | null;
+        title: string;
+        subtitle?: string | null;
+        description?: string | null;
+        image?: (string | null) | Media;
+        imagePosition?: ('top' | 'background') | null;
+        price?: {
+          amount: number;
+          period?: string | null;
+          oldPrice?: number | null;
+        };
+        features?:
+          | {
+              text: string;
+              included?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        badge?: string | null;
+        highlighted?: boolean | null;
+        cta?: {
+          label?: string | null;
+          linkType?: ('page' | 'custom') | null;
+          page?: (string | null) | Page;
+          url?: string | null;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'variantCard';
+      }
   )[];
   meta?: {
     title?: string | null;
@@ -575,6 +628,17 @@ export interface TeamMember {
     twitter?: string | null;
   };
   publishedAt?: string | null;
+  /**
+   * SEO pentru pagina individuala a membrului
+   */
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -637,6 +701,17 @@ export interface Class {
   requirements?: string | null;
   active?: boolean | null;
   publishedAt?: string | null;
+  /**
+   * SEO pentru pagina individuala a clasei
+   */
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1336,6 +1411,53 @@ export interface Schedule {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abonamente".
+ */
+export interface Abonamente {
+  id: string;
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Determină în ce secțiune apare pe pagina Abonamente
+   */
+  type: 'gym' | 'spa' | 'solar' | 'fitness-spa' | 'aerobic-spa';
+  /**
+   * Opțional - pentru carduri cu poze (SPA, Solar)
+   */
+  image?: (string | null) | Media;
+  price: {
+    amount: number;
+    period?: string | null;
+    /**
+     * Afișează prețul vechi tăiat dacă există
+     */
+    oldPrice?: number | null;
+  };
+  features?:
+    | {
+        text: string;
+        included?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    label?: string | null;
+    linkType?: ('page' | 'custom') | null;
+    page?: (string | null) | Page;
+    url?: string | null;
+  };
+  highlighted?: boolean | null;
+  highlightLabel?: string | null;
+  /**
+   * Număr mai mic = apare primul
+   */
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1565,6 +1687,10 @@ export interface PayloadLockedDocument {
         value: string | Schedule;
       } | null)
     | ({
+        relationTo: 'abonamente';
+        value: string | Abonamente;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1696,6 +1822,49 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
         schedule?: T | ScheduleBlockSelect<T>;
+        variantCard?:
+          | T
+          | {
+              spacing?:
+                | T
+                | {
+                    marginTop?: T;
+                    marginBottom?: T;
+                  };
+              variant?: T;
+              title?: T;
+              subtitle?: T;
+              description?: T;
+              image?: T;
+              imagePosition?: T;
+              price?:
+                | T
+                | {
+                    amount?: T;
+                    period?: T;
+                    oldPrice?: T;
+                  };
+              features?:
+                | T
+                | {
+                    text?: T;
+                    included?: T;
+                    id?: T;
+                  };
+              badge?: T;
+              highlighted?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    page?: T;
+                    url?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -2176,6 +2345,13 @@ export interface TeamMembersSelect<T extends boolean = true> {
         twitter?: T;
       };
   publishedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2224,6 +2400,13 @@ export interface ClassesSelect<T extends boolean = true> {
   requirements?: T;
   active?: T;
   publishedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2293,6 +2476,44 @@ export interface SchedulesSelect<T extends boolean = true> {
         trainer?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abonamente_select".
+ */
+export interface AbonamenteSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  type?: T;
+  image?: T;
+  price?:
+    | T
+    | {
+        amount?: T;
+        period?: T;
+        oldPrice?: T;
+      };
+  features?:
+    | T
+    | {
+        text?: T;
+        included?: T;
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        page?: T;
+        url?: T;
+      };
+  highlighted?: T;
+  highlightLabel?: T;
+  order?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2796,7 +3017,7 @@ export interface Theme {
   createdAt?: string | null;
 }
 /**
- * Informații generale despre afacere - adresă, contact, program, social media
+ * Informatii generale despre afacere - adresa, contact, program, social media
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "business-info".
@@ -2844,6 +3065,107 @@ export interface BusinessInfo {
   youtube?: string | null;
   linkedin?: string | null;
   twitter?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Setari pentru pagina de listare abonamente
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-abonamente".
+ */
+export interface PaginiAbonamente {
+  id: string;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroBackground?: (string | null) | Media;
+  showFilters?: boolean | null;
+  columns?: ('2' | '3' | '4') | null;
+  defaultFilter?: ('all' | 'gym' | 'spa' | 'solar' | 'fitness-spa' | 'aerobic-spa') | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Setari pentru pagina de listare clase fitness
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-clase".
+ */
+export interface PaginiClase {
+  id: string;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroBackground?: (string | null) | Media;
+  showScheduleLink?: boolean | null;
+  columns?: ('2' | '3' | '4') | null;
+  cardStyle?: ('overlay' | 'simple' | 'bordered') | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  individualLayout?: ('sidebar' | 'fullwidth') | null;
+  showSchedule?: boolean | null;
+  showPricing?: boolean | null;
+  showTrainer?: boolean | null;
+  showBenefits?: boolean | null;
+  showRequirements?: boolean | null;
+  showRelatedClasses?: boolean | null;
+  relatedClassesTitle?: string | null;
+  relatedClassesCount?: number | null;
+  ctaButtonText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Setari pentru pagina de listare echipa si pagini individuale membri
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-echipa".
+ */
+export interface PaginiEchipa {
+  id: string;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroBackground?: (string | null) | Media;
+  columns?: ('2' | '3' | '4') | null;
+  cardStyle?: ('photo' | 'compact' | 'social') | null;
+  showSpecialization?: boolean | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  individualLayout?: ('sidebar' | 'fullwidth' | 'hero-cover') | null;
+  showExperience?: boolean | null;
+  showSpecializations?: boolean | null;
+  showContact?: boolean | null;
+  showSocialMedia?: boolean | null;
+  showCTA?: boolean | null;
+  showRelatedMembers?: boolean | null;
+  /**
+   * Foloseste {name} pentru prenumele membrului
+   */
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  ctaButtonText?: string | null;
+  ctaSecondaryButtonText?: string | null;
+  relatedMembersTitle?: string | null;
+  relatedMembersCount?: number | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3029,6 +3351,95 @@ export interface BusinessInfoSelect<T extends boolean = true> {
   youtube?: T;
   linkedin?: T;
   twitter?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-abonamente_select".
+ */
+export interface PaginiAbonamenteSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroBackground?: T;
+  showFilters?: T;
+  columns?: T;
+  defaultFilter?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-clase_select".
+ */
+export interface PaginiClaseSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroBackground?: T;
+  showScheduleLink?: T;
+  columns?: T;
+  cardStyle?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  individualLayout?: T;
+  showSchedule?: T;
+  showPricing?: T;
+  showTrainer?: T;
+  showBenefits?: T;
+  showRequirements?: T;
+  showRelatedClasses?: T;
+  relatedClassesTitle?: T;
+  relatedClassesCount?: T;
+  ctaButtonText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pagini-echipa_select".
+ */
+export interface PaginiEchipaSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroBackground?: T;
+  columns?: T;
+  cardStyle?: T;
+  showSpecialization?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  individualLayout?: T;
+  showExperience?: T;
+  showSpecializations?: T;
+  showContact?: T;
+  showSocialMedia?: T;
+  showCTA?: T;
+  showRelatedMembers?: T;
+  ctaTitle?: T;
+  ctaDescription?: T;
+  ctaButtonText?: T;
+  ctaSecondaryButtonText?: T;
+  relatedMembersTitle?: T;
+  relatedMembersCount?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

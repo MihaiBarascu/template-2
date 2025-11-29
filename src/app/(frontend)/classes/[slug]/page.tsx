@@ -18,8 +18,9 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import type { Class as ClassType, TeamMember } from '@/payload-types'
+import type { Class as ClassType, TeamMember, PaginiClase } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -47,7 +48,7 @@ type Args = {
 }
 
 // Helper function to get other classes
-const getOtherClasses = cache(async (currentId: string, category: string) => {
+const getOtherClasses = cache(async (currentId: string, category: string, limit: number = 3) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
@@ -59,7 +60,7 @@ const getOtherClasses = cache(async (currentId: string, category: string) => {
         { category: { equals: category } },
       ],
     },
-    limit: 3,
+    limit,
     depth: 2,
   })
 
@@ -71,14 +72,26 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
   const decodedSlug = decodeURIComponent(slug)
 
   const classItem = await queryClassBySlug({ slug: decodedSlug })
+  const settings = (await getCachedGlobal('pagini-clase', 1)()) as PaginiClase
 
   if (!classItem || !classItem.active) {
     notFound()
   }
 
+  // Settings with defaults
+  const showSchedule = settings?.showSchedule ?? true
+  const showPricing = settings?.showPricing ?? true
+  const showTrainer = settings?.showTrainer ?? true
+  const showBenefits = settings?.showBenefits ?? true
+  const showRequirements = settings?.showRequirements ?? true
+  const showRelatedClasses = settings?.showRelatedClasses ?? true
+  const relatedClassesCount = settings?.relatedClassesCount ?? 3
+  const relatedClassesTitle = settings?.relatedClassesTitle || 'Alte clase similare'
+  const ctaButtonText = settings?.ctaButtonText || 'Rezerva acum'
+
   // Get other classes in same category
-  const otherClasses = classItem.category
-    ? await getOtherClasses(classItem.id, classItem.category)
+  const otherClasses = showRelatedClasses && classItem.category
+    ? await getOtherClasses(classItem.id, classItem.category, relatedClassesCount)
     : []
 
   // Get trainer details
@@ -218,7 +231,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             </div>
 
             {/* Benefits */}
-            {classItem.benefits && classItem.benefits.length > 0 && (
+            {showBenefits && classItem.benefits && classItem.benefits.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <Target className="w-6 h-6 text-theme-primary" />
@@ -238,7 +251,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             )}
 
             {/* Requirements */}
-            {classItem.requirements && (
+            {showRequirements && classItem.requirements && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
                 <h3 className="font-bold text-lg text-yellow-900 mb-3">
                   Echipament necesar / Cerințe
@@ -251,7 +264,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
           {/* Right Column - Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Schedule Card */}
-            {classItem.schedule && classItem.schedule.length > 0 && (
+            {showSchedule && classItem.schedule && classItem.schedule.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
                 <div className="flex items-center gap-3 mb-6">
                   <Calendar className="w-6 h-6 text-theme-primary" />
@@ -274,7 +287,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             )}
 
             {/* Pricing Card */}
-            {classItem.price && (
+            {showPricing && classItem.price && (
               <div className="bg-gradient-to-br from-theme-primary to-theme-primary/90 rounded-xl shadow-lg p-6 text-white">
                 <div className="flex items-center gap-3 mb-6">
                   <DollarSign className="w-6 h-6" />
@@ -306,13 +319,13 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                   href="/contact"
                   className="mt-6 w-full block text-center bg-white text-theme-primary font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors"
                 >
-                  Rezervă acum
+                  {ctaButtonText}
                 </Link>
               </div>
             )}
 
             {/* Trainer Card */}
-            {trainer && (
+            {showTrainer && trainer && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-lg font-bold text-theme-dark mb-4">Antrenorul tău</h3>
                 <Link
@@ -357,10 +370,10 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
         </div>
 
         {/* Other Classes Section */}
-        {otherClasses.length > 0 && (
+        {showRelatedClasses && otherClasses.length > 0 && (
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-theme-dark mb-8">
-              Alte clase similare
+              {relatedClassesTitle}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherClasses.map((otherClass) => {

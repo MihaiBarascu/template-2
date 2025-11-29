@@ -228,6 +228,21 @@
     text-decoration: none;
   }
 
+  /* Exclude buttons from global link hover color */
+  a.bg-theme-primary:hover,
+  a.bg-theme-dark:hover,
+  a.bg-white:hover,
+  a[class*="bg-theme"]:hover {
+    color: inherit;
+  }
+
+  /* Force white text on button hovers */
+  a.bg-theme-primary:hover,
+  a.bg-theme-dark:hover,
+  a.hover\:bg-theme-primary:hover {
+    @apply text-white;
+  }
+
   b,
   strong {
     @apply font-theme-bold;
@@ -847,4 +862,66 @@ html[data-theme='light'] {
   .theme-contact h2 span {
     display: block;
   }
+}
+
+/* =============================================
+   VARIANT CARD STYLES
+   ============================================= */
+
+/* Base card styles */
+.variant-card {
+  @apply transition-all duration-300;
+}
+
+/* Pricing card specific */
+.variant-card-pricing {
+  @apply flex flex-col;
+}
+
+.variant-card-pricing.highlighted {
+  @apply relative z-10;
+}
+
+/* Product card specific - uses 'group' class directly in JSX */
+.variant-card-product {
+  /* group class applied directly on element */
+}
+
+/* Abonamente page sections */
+.abonamente-section {
+  @apply py-12;
+}
+
+.abonamente-section:first-of-type {
+  @apply pt-0;
+}
+
+.abonamente-section-title {
+  @apply text-2xl font-bold text-theme-dark mb-8 pb-4 border-b border-gray-200;
+}
+
+/* Section type labels */
+.abonamente-type-gym .abonamente-section-title {
+  @apply border-theme-primary;
+}
+
+.abonamente-type-spa .abonamente-section-title {
+  @apply border-blue-400;
+}
+
+.abonamente-type-solar .abonamente-section-title {
+  @apply border-yellow-400;
+}
+
+/* Card grid layouts */
+.abonamente-grid {
+  @apply grid gap-6 items-stretch;
+}
+
+.abonamente-grid-pricing {
+  @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.abonamente-grid-product {
+  @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
 }

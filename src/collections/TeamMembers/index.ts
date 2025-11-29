@@ -5,6 +5,11 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateTeamMember, revalidateDelete } from './hooks/revalidateTeamMember'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+} from '@payloadcms/plugin-seo/fields'
 
 export const TeamMembers: CollectionConfig<'team-members'> = {
   slug: 'team-members',
@@ -21,7 +26,6 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'role', 'updatedAt'],
-    group: 'Conținut',
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -140,6 +144,24 @@ export const TeamMembers: CollectionConfig<'team-members'> = {
       admin: {
         position: 'sidebar',
       },
+    },
+    // SEO for individual member pages
+    {
+      name: 'meta',
+      type: 'group',
+      label: 'SEO',
+      admin: {
+        description: 'SEO pentru pagina individuala a membrului',
+      },
+      fields: [
+        MetaTitleField({
+          hasGenerateFn: false,
+        }),
+        MetaImageField({
+          relationTo: 'media',
+        }),
+        MetaDescriptionField({}),
+      ],
     },
   ],
   hooks: {

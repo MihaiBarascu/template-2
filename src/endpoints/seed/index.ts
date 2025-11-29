@@ -25,6 +25,7 @@ const collections: CollectionSlug[] = [
   'contacts',
   'addresses',
   'schedules',
+  'abonamente',
   'forms',
   'form-submissions',
   'search',
@@ -804,6 +805,248 @@ export const seed = async ({
     },
   })
 
+  payload.logger.info(`— Seeding abonamente...`)
+
+  // Create abonamente (subscriptions)
+  await Promise.all([
+    // GYM Subscriptions
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Basic',
+        subtitle: 'Intrare liberă',
+        type: 'gym',
+        image: image1Doc.id,
+        price: {
+          amount: 150,
+          period: '/lună',
+        },
+        features: [
+          { text: 'Acces nelimitat la sală', included: true },
+          { text: 'Program Luni-Vineri 07:00-22:00', included: true },
+          { text: 'Vestiare și dușuri', included: true },
+          { text: 'Clase fitness gratuite', included: false },
+          { text: 'Antrenor personal', included: false },
+        ],
+        cta: {
+          label: 'Alege Basic',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: false,
+        order: 1,
+        active: true,
+      },
+    }),
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Premium',
+        subtitle: 'Cel mai popular',
+        type: 'gym',
+        image: image2Doc.id,
+        price: {
+          amount: 250,
+          period: '/lună',
+          oldPrice: 300,
+        },
+        features: [
+          { text: 'Acces nelimitat la sală', included: true },
+          { text: 'Program 07:00-22:00 (7 zile)', included: true },
+          { text: 'Vestiare și dușuri premium', included: true },
+          { text: 'Toate clasele fitness incluse', included: true },
+          { text: '1 sesiune antrenor personal/lună', included: true },
+        ],
+        cta: {
+          label: 'Alege Premium',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: true,
+        highlightLabel: 'Popular',
+        order: 2,
+        active: true,
+      },
+    }),
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'VIP',
+        subtitle: 'Experiență completă',
+        type: 'gym',
+        image: image3Doc.id,
+        price: {
+          amount: 450,
+          period: '/lună',
+        },
+        features: [
+          { text: 'Acces nelimitat la sală 24/7', included: true },
+          { text: 'Toate clasele fitness incluse', included: true },
+          { text: 'Vestiare VIP cu saună', included: true },
+          { text: '4 sesiuni antrenor personal/lună', included: true },
+          { text: 'Plan nutrițional personalizat', included: true },
+          { text: 'Acces gratuit SPA', included: true },
+        ],
+        cta: {
+          label: 'Alege VIP',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: false,
+        order: 3,
+        active: true,
+      },
+    }),
+
+    // SPA Subscriptions
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Relaxare SPA',
+        subtitle: '5 intrări',
+        type: 'spa',
+        image: image1Doc.id,
+        price: {
+          amount: 200,
+          period: '/5 vizite',
+        },
+        features: [
+          { text: 'Acces saună și jacuzzi', included: true },
+          { text: 'Prosop și halat inclus', included: true },
+          { text: 'Valabilitate 2 luni', included: true },
+        ],
+        cta: {
+          label: 'Rezervă acum',
+          linkType: 'custom',
+          url: 'tel:+40264123456',
+        },
+        highlighted: false,
+        order: 1,
+        active: true,
+      },
+    }),
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Wellness Nelimitat',
+        subtitle: 'Acces lunar',
+        type: 'spa',
+        image: image2Doc.id,
+        price: {
+          amount: 350,
+          period: '/lună',
+        },
+        features: [
+          { text: 'Acces nelimitat SPA', included: true },
+          { text: 'Toate facilitățile incluse', included: true },
+          { text: 'Reducere 20% la masaje', included: true },
+        ],
+        cta: {
+          label: 'Contactează-ne',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: true,
+        highlightLabel: 'Best Value',
+        order: 2,
+        active: true,
+      },
+    }),
+
+    // Solar Subscriptions
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Solar Basic',
+        subtitle: '100 minute',
+        type: 'solar',
+        image: image3Doc.id,
+        price: {
+          amount: 80,
+          period: '',
+        },
+        features: [
+          { text: '100 minute solar', included: true },
+          { text: 'Valabilitate 3 luni', included: true },
+        ],
+        cta: {
+          label: 'Cumpără',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: false,
+        order: 1,
+        active: true,
+      },
+    }),
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Solar Premium',
+        subtitle: '300 minute',
+        type: 'solar',
+        image: image1Doc.id,
+        price: {
+          amount: 200,
+          period: '',
+          oldPrice: 240,
+        },
+        features: [
+          { text: '300 minute solar', included: true },
+          { text: 'Valabilitate 6 luni', included: true },
+          { text: 'Cremă bronzantă gratuită', included: true },
+        ],
+        cta: {
+          label: 'Cumpără',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: true,
+        highlightLabel: 'Economie 17%',
+        order: 2,
+        active: true,
+      },
+    }),
+
+    // Combo Package: Fitness + SPA
+    payload.create({
+      collection: 'abonamente',
+      depth: 0,
+      data: {
+        title: 'Fitness + SPA',
+        subtitle: 'Pachet complet',
+        type: 'fitness-spa',
+        image: image2Doc.id,
+        price: {
+          amount: 380,
+          period: '/lună',
+          oldPrice: 450,
+        },
+        features: [
+          { text: 'Abonament Premium Sală', included: true },
+          { text: 'Acces nelimitat SPA', included: true },
+          { text: 'Reducere 15%', included: true },
+        ],
+        cta: {
+          label: 'Alege pachetul',
+          linkType: 'custom',
+          url: '/contact',
+        },
+        highlighted: true,
+        highlightLabel: 'Economie 15%',
+        order: 1,
+        active: true,
+      },
+    }),
+  ])
+
   payload.logger.info(`— Seeding pages...`)
 
   // First create the home page data
@@ -850,6 +1093,13 @@ export const seed = async ({
               type: 'custom',
               label: 'Clase',
               url: '/classes',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Abonamente',
+              url: '/abonamente',
             },
           },
           {
@@ -939,6 +1189,79 @@ export const seed = async ({
         youtube: 'https://youtube.com/@transilvaniagym',
         linkedin: '',
         twitter: '',
+      },
+    }),
+    // Pagini Echipa - Team pages settings
+    payload.updateGlobal({
+      slug: 'pagini-echipa',
+      data: {
+        heroTitle: 'Echipa Noastră',
+        heroSubtitle: 'Cunoaște antrenorii noștri profesioniști, dedicați să te ajute să îți atingi obiectivele',
+        heroBackground: imageHomeDoc.id,
+        columns: '3',
+        cardStyle: 'photo',
+        showSpecialization: true,
+        meta: {
+          title: 'Echipa | Transilvania Fitness',
+          description: 'Cunoaște echipa de antrenori profesioniști de la Transilvania Fitness. Experți în fitness, yoga, CrossFit și nutriție.',
+        },
+        // Individual page settings
+        individualLayout: 'sidebar',
+        showExperience: true,
+        showSpecializations: true,
+        showContact: true,
+        showSocialMedia: true,
+        showCTA: true,
+        showRelatedMembers: true,
+        ctaTitle: 'Vrei să lucrezi cu {name}?',
+        ctaDescription: 'Contactează-ne pentru a programa o sesiune de antrenament sau pentru mai multe informații despre serviciile noastre.',
+        ctaButtonText: 'Contactează-ne',
+        ctaSecondaryButtonText: 'Vezi clasele disponibile',
+        relatedMembersTitle: 'Restul echipei',
+        relatedMembersCount: 3,
+      },
+    }),
+    // Pagini Clase - Classes pages settings
+    payload.updateGlobal({
+      slug: 'pagini-clase',
+      data: {
+        heroTitle: 'Clasele Noastre',
+        heroSubtitle: 'Descoperă programul complet de clase fitness pentru toate nivelurile',
+        heroBackground: imageHomeDoc.id,
+        showScheduleLink: true,
+        columns: '3',
+        cardStyle: 'overlay',
+        meta: {
+          title: 'Clase Fitness | Transilvania Fitness',
+          description: 'Explorează clasele noastre de fitness: Yoga, CrossFit, Pilates, Spinning și multe altele. Program variat pentru începători și avansați.',
+        },
+        // Individual page settings
+        individualLayout: 'sidebar',
+        showSchedule: true,
+        showPricing: true,
+        showTrainer: true,
+        showBenefits: true,
+        showRequirements: true,
+        showRelatedClasses: true,
+        relatedClassesTitle: 'Alte clase similare',
+        relatedClassesCount: 3,
+        ctaButtonText: 'Rezervă acum',
+      },
+    }),
+    // Pagini Abonamente - Subscriptions pages settings
+    payload.updateGlobal({
+      slug: 'pagini-abonamente',
+      data: {
+        heroTitle: 'Abonamente',
+        heroSubtitle: 'Alege abonamentul potrivit pentru stilul tău de viață și obiectivele tale',
+        heroBackground: imageHomeDoc.id,
+        showFilters: true,
+        columns: '3',
+        defaultFilter: 'all',
+        meta: {
+          title: 'Abonamente | Transilvania Fitness',
+          description: 'Descoperă abonamentele noastre flexibile: Sală, SPA, Solar și pachete combo. Prețuri competitive și beneficii exclusive.',
+        },
       },
     }),
   ])

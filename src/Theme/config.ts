@@ -4,12 +4,12 @@ import { revalidateTheme } from './hooks/revalidateTheme'
 
 export const Theme: GlobalConfig = {
   slug: 'theme',
-  label: 'Theme',
+  label: 'Tema',
   access: {
     read: () => true,
   },
   admin: {
-    group: 'Site Settings',
+    group: 'Setari',
   },
   fields: [
     {
