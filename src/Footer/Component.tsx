@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import type { Footer, Logo, Media } from '@/payload-types'
+import type { Footer, Logo, BusinessInfo, Media } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
@@ -147,23 +147,24 @@ const getIcon = (iconName: string) => {
   return Icons[iconName as keyof typeof Icons] || null
 }
 
+// Social Media Icons - now uses BusinessInfo data
 const SocialMediaIcons = ({
-  socialMedia,
+  businessInfo,
   className = '',
 }: {
-  socialMedia: Footer['socialMedia']
+  businessInfo: BusinessInfo | null
   className?: string
 }) => {
-  if (!socialMedia) return null
+  if (!businessInfo) return null
 
   const socialLinks = [
-    { name: 'facebook', url: socialMedia.facebook || '', icon: Icons.facebook },
-    { name: 'instagram', url: socialMedia.instagram || '', icon: Icons.instagram },
-    { name: 'tiktok', url: socialMedia.tiktok || '', icon: Icons.tiktok },
-    { name: 'youtube', url: socialMedia.youtube || '', icon: Icons.youtube },
-    { name: 'whatsapp', url: socialMedia.whatsapp || '', icon: Icons.whatsapp },
-    { name: 'linkedin', url: socialMedia.linkedin || '', icon: Icons.linkedin },
-    { name: 'twitter', url: socialMedia.twitter || '', icon: Icons.twitter },
+    { name: 'facebook', url: businessInfo.facebook || '', icon: Icons.facebook },
+    { name: 'instagram', url: businessInfo.instagram || '', icon: Icons.instagram },
+    { name: 'tiktok', url: businessInfo.tiktok || '', icon: Icons.tiktok },
+    { name: 'youtube', url: businessInfo.youtube || '', icon: Icons.youtube },
+    { name: 'whatsapp', url: businessInfo.whatsapp ? `https://wa.me/${businessInfo.whatsapp.replace(/\D/g, '')}` : '', icon: Icons.whatsapp },
+    { name: 'linkedin', url: businessInfo.linkedin || '', icon: Icons.linkedin },
+    { name: 'twitter', url: businessInfo.twitter || '', icon: Icons.twitter },
   ].filter((link) => link.url)
 
   if (socialLinks.length === 0) return null
@@ -187,12 +188,13 @@ const SocialMediaIcons = ({
 }
 
 export async function Footer() {
-  const [footerData, logoData] = await Promise.all([
+  const [footerData, logoData, businessInfo] = await Promise.all([
     getCachedGlobal('footer', 1)() as Promise<Footer>,
     getCachedGlobal('logo', 1)() as Promise<Logo>,
+    getCachedGlobal('business-info', 1)() as Promise<BusinessInfo>,
   ])
 
-  const { companyInfo, columns, socialMedia, bottomBar } = footerData || {}
+  const { companyInfo, columns, bottomBar } = footerData || {}
 
   // Get logo from Logo global (option1 for dark backgrounds)
   const logoOption = logoData?.option1
@@ -230,9 +232,9 @@ export async function Footer() {
                 <p className="text-theme-muted mb-6 leading-relaxed">{companyInfo.description}</p>
               )}
 
-              {/* Social Media Icons */}
-              {companyInfo?.showSocialHere && socialMedia && (
-                <SocialMediaIcons socialMedia={socialMedia} />
+              {/* Social Media Icons - from BusinessInfo */}
+              {companyInfo?.showSocialHere && (
+                <SocialMediaIcons businessInfo={businessInfo} />
               )}
             </div>
 
@@ -242,7 +244,7 @@ export async function Footer() {
                 <div key={index} className="lg:col-span-2">
                   <h3 className="text-lg font-semibold mb-4 text-white">{column.title}</h3>
 
-                  {/* Links Content */}
+                  {/* Links Content (manual) */}
                   {column.contentType === 'links' && column.links && (
                     <ul className="space-y-3">
                       {column.links.map((item, i) => (
@@ -256,7 +258,7 @@ export async function Footer() {
                     </ul>
                   )}
 
-                  {/* Text Items */}
+                  {/* Text Items (manual) */}
                   {column.contentType === 'text' && column.textItems && (
                     <ul className="space-y-3">
                       {column.textItems.map((item, i) => (
@@ -272,55 +274,66 @@ export async function Footer() {
                     </ul>
                   )}
 
-                  {/* Contact Items */}
-                  {column.contentType === 'contact' && column.contactItems && (
+                  {/* Contact Info - from BusinessInfo */}
+                  {column.contentType === 'contact' && businessInfo && (
                     <ul className="space-y-3">
-                      {column.contactItems.map((item, i) => {
-                        const icon = getIcon(item.type)
-                        return (
-                          <li key={i} className="flex items-start gap-2 text-theme-muted">
-                            <span className="text-theme-primary mt-1">{icon}</span>
-                            <div>
-                              {item.label && (
-                                <span className="text-xs text-theme-text block">{item.label}</span>
-                              )}
-                              {item.type === 'email' ? (
-                                <a
-                                  href={`mailto:${item.value}`}
-                                  className="hover:text-theme-primary transition-colors"
-                                >
-                                  {item.value}
-                                </a>
-                              ) : item.type === 'phone' || item.type === 'whatsapp' ? (
-                                <a
-                                  href={`tel:${item.value}`}
-                                  className="hover:text-theme-primary transition-colors"
-                                >
-                                  {item.value}
-                                </a>
-                              ) : (
-                                <span>{item.value}</span>
-                              )}
-                            </div>
-                          </li>
-                        )
-                      })}
+                      {businessInfo.phone && (
+                        <li className="flex items-start gap-2 text-theme-muted">
+                          <span className="text-theme-primary mt-1">{Icons.phone}</span>
+                          <a
+                            href={`tel:${businessInfo.phone}`}
+                            className="hover:text-theme-primary transition-colors"
+                          >
+                            {businessInfo.phone}
+                          </a>
+                        </li>
+                      )}
+                      {businessInfo.email && (
+                        <li className="flex items-start gap-2 text-theme-muted">
+                          <span className="text-theme-primary mt-1">{Icons.email}</span>
+                          <a
+                            href={`mailto:${businessInfo.email}`}
+                            className="hover:text-theme-primary transition-colors"
+                          >
+                            {businessInfo.email}
+                          </a>
+                        </li>
+                      )}
+                      {businessInfo.address && (
+                        <li className="flex items-start gap-2 text-theme-muted">
+                          <span className="text-theme-primary mt-1">{Icons.location}</span>
+                          <span>{businessInfo.address}</span>
+                        </li>
+                      )}
+                      {businessInfo.whatsapp && (
+                        <li className="flex items-start gap-2 text-theme-muted">
+                          <span className="text-theme-primary mt-1">{Icons.whatsapp}</span>
+                          <a
+                            href={`https://wa.me/${businessInfo.whatsapp.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-theme-primary transition-colors"
+                          >
+                            WhatsApp
+                          </a>
+                        </li>
+                      )}
                     </ul>
                   )}
 
-                  {/* Schedule Items */}
-                  {column.contentType === 'schedule' && column.scheduleItems && (
+                  {/* Schedule - from BusinessInfo */}
+                  {column.contentType === 'schedule' && businessInfo?.workingHours && (
                     <ul className="space-y-3">
-                      {column.scheduleItems.map((item, i) => (
+                      {businessInfo.workingHours.map((item, i) => (
                         <li key={i} className="flex justify-between text-theme-muted">
-                          <span className="font-medium">{item.label}</span>
-                          <span>{item.value}</span>
+                          <span className="font-medium">{item.days}</span>
+                          <span>{item.hours}</span>
                         </li>
                       ))}
                     </ul>
                   )}
 
-                  {/* Custom Content */}
+                  {/* Custom Content (manual) */}
                   {column.contentType === 'custom' && column.customContent && (
                     <div className="text-theme-muted prose prose-sm prose-invert">
                       <RichText data={column.customContent} enableGutter={false} />

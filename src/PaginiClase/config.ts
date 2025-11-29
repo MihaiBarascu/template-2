@@ -100,7 +100,7 @@ export const PaginiClase: GlobalConfig = {
         // Individual Page Settings Tab
         {
           label: 'Pagini Individuale',
-          description: 'Setari pentru paginile individuale ale claselor (ex: /classes/yoga)',
+          description: 'Setari pentru paginile individuale ale claselor (ex: /clase/yoga)',
           fields: [
             {
               name: 'individualLayout',

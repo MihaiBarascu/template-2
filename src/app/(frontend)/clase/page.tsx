@@ -3,7 +3,7 @@ import { StaticPageHero } from '@/components/StaticPageHero'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import type { Class as ClassType, PaginiClase } from '@/payload-types'
+import type { Clase as ClassType, PaginiClase } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { ClassesFilter } from './ClassesFilter'
 
@@ -28,7 +28,7 @@ export default async function ClassesPage() {
 
   // Fetch all active classes (client-side filtering)
   const classes = await payload.find({
-    collection: 'classes',
+    collection: 'clase',
     depth: 2,
     limit: 100,
     where: { active: { equals: true } },

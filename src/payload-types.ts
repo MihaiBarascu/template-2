@@ -73,7 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     'team-members': TeamMember;
-    classes: Class;
+    clase: Clase;
     abonamente: Abonamente;
     redirects: Redirect;
     forms: Form;
@@ -98,7 +98,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
-    classes: ClassesSelect<false> | ClassesSelect<true>;
+    clase: ClaseSelect<false> | ClaseSelect<true>;
     abonamente: AbonamenteSelect<false> | AbonamenteSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -210,8 +210,8 @@ export interface Page {
                   value: string | TeamMember;
                 } | null)
               | ({
-                  relationTo: 'classes';
-                  value: string | Class;
+                  relationTo: 'clase';
+                  value: string | Clase;
                 } | null);
             url?: string | null;
             label: string;
@@ -276,8 +276,8 @@ export interface Page {
                       value: string | TeamMember;
                     } | null)
                   | ({
-                      relationTo: 'classes';
-                      value: string | Class;
+                      relationTo: 'clase';
+                      value: string | Clase;
                     } | null);
                 url?: string | null;
                 newTab?: boolean | null;
@@ -641,9 +641,9 @@ export interface TeamMember {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "classes".
+ * via the `definition` "clase".
  */
-export interface Class {
+export interface Clase {
   id: string;
   title: string;
   /**
@@ -774,8 +774,8 @@ export interface CallToActionBlock {
                 value: string | TeamMember;
               } | null)
             | ({
-                relationTo: 'classes';
-                value: string | Class;
+                relationTo: 'clase';
+                value: string | Clase;
               } | null);
           url?: string | null;
           label: string;
@@ -921,8 +921,8 @@ export interface ContentBlock {
                                 value: string | TeamMember;
                               } | null)
                             | ({
-                                relationTo: 'classes';
-                                value: string | Class;
+                                relationTo: 'clase';
+                                value: string | Clase;
                               } | null);
                           url?: string | null;
                           newTab?: boolean | null;
@@ -954,8 +954,8 @@ export interface ContentBlock {
                 value: string | TeamMember;
               } | null)
             | ({
-                relationTo: 'classes';
-                value: string | Class;
+                relationTo: 'clase';
+                value: string | Clase;
               } | null);
           url?: string | null;
           label: string;
@@ -1576,8 +1576,8 @@ export interface PayloadLockedDocument {
         value: string | TeamMember;
       } | null)
     | ({
-        relationTo: 'classes';
-        value: string | Class;
+        relationTo: 'clase';
+        value: string | Clase;
       } | null)
     | ({
         relationTo: 'abonamente';
@@ -2248,9 +2248,9 @@ export interface TeamMembersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "classes_select".
+ * via the `definition` "clase_select".
  */
-export interface ClassesSelect<T extends boolean = true> {
+export interface ClaseSelect<T extends boolean = true> {
   title?: T;
   generateSlug?: T;
   slug?: T;
@@ -2620,9 +2620,13 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  /**
+   * Adauga linkuri de navigare sau iconite social media. Social media preia URL-urile din Business Info.
+   */
   navItems?:
     | {
-        link: {
+        itemType: 'link' | 'linkWithSubItems' | 'socialMedia';
+        link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2639,19 +2643,75 @@ export interface Header {
                 value: string | TeamMember;
               } | null)
             | ({
-                relationTo: 'classes';
-                value: string | Class;
+                relationTo: 'clase';
+                value: string | Clase;
               } | null);
           url?: string | null;
           label: string;
         };
-        id?: string | null;
-      }[]
-    | null;
-  socialLinks?:
-    | {
-        platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube';
-        url: string;
+        /**
+         * Unde navighează când dai click pe dropdown (ex: pagina Clase)
+         */
+        parentLink?: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null)
+            | ({
+                relationTo: 'team-members';
+                value: string | TeamMember;
+              } | null)
+            | ({
+                relationTo: 'clase';
+                value: string | Clase;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        /**
+         * Linkurile care apar în dropdown
+         */
+        subItems?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'team-members';
+                      value: string | TeamMember;
+                    } | null)
+                  | ({
+                      relationTo: 'clase';
+                      value: string | Clase;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * URL-urile sunt preluate automat din "Business Info". Selecteaza doar platformele pe care vrei sa le afisezi in header.
+         */
+        socialPlatforms?:
+          | ('facebook' | 'instagram' | 'tiktok' | 'youtube' | 'twitter' | 'linkedin' | 'whatsapp')[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -2664,13 +2724,19 @@ export interface Header {
  */
 export interface Footer {
   id: string;
+  /**
+   * Logo-ul vine din global "Logo". Social media vine din "Business Info".
+   */
   companyInfo?: {
-    logoType?: ('text' | 'image' | 'both') | null;
-    logoText?: string | null;
-    logoImage?: (string | null) | Media;
     description?: string | null;
+    /**
+     * Afiseaza iconitele social media din Business Info
+     */
     showSocialHere?: boolean | null;
   };
+  /**
+   * Contact si Schedule iau datele automat din Business Info
+   */
   columns?:
     | {
         title: string;
@@ -2694,8 +2760,8 @@ export interface Footer {
                       value: string | TeamMember;
                     } | null)
                   | ({
-                      relationTo: 'classes';
-                      value: string | Class;
+                      relationTo: 'clase';
+                      value: string | Clase;
                     } | null);
                 url?: string | null;
                 label: string;
@@ -2724,21 +2790,6 @@ export interface Footer {
               id?: string | null;
             }[]
           | null;
-        contactItems?:
-          | {
-              type: 'phone' | 'email' | 'address' | 'whatsapp';
-              value: string;
-              label?: string | null;
-              id?: string | null;
-            }[]
-          | null;
-        scheduleItems?:
-          | {
-              label: string;
-              value: string;
-              id?: string | null;
-            }[]
-          | null;
         customContent?: {
           root: {
             type: string;
@@ -2757,15 +2808,6 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
-  socialMedia?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    tiktok?: string | null;
-    youtube?: string | null;
-    whatsapp?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-  };
   bottomBar?: {
     copyright?: string | null;
     legalLinks?:
@@ -2787,8 +2829,8 @@ export interface Footer {
                   value: string | TeamMember;
                 } | null)
               | ({
-                  relationTo: 'classes';
-                  value: string | Class;
+                  relationTo: 'clase';
+                  value: string | Clase;
                 } | null);
             url?: string | null;
             label: string;
@@ -3032,6 +3074,7 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
+        itemType?: T;
         link?:
           | T
           | {
@@ -3041,13 +3084,30 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
-        id?: T;
-      };
-  socialLinks?:
-    | T
-    | {
-        platform?: T;
-        url?: T;
+        parentLink?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        subItems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        socialPlatforms?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -3062,9 +3122,6 @@ export interface FooterSelect<T extends boolean = true> {
   companyInfo?:
     | T
     | {
-        logoType?: T;
-        logoText?: T;
-        logoImage?: T;
         description?: T;
         showSocialHere?: T;
       };
@@ -3094,34 +3151,8 @@ export interface FooterSelect<T extends boolean = true> {
               text?: T;
               id?: T;
             };
-        contactItems?:
-          | T
-          | {
-              type?: T;
-              value?: T;
-              label?: T;
-              id?: T;
-            };
-        scheduleItems?:
-          | T
-          | {
-              label?: T;
-              value?: T;
-              id?: T;
-            };
         customContent?: T;
         id?: T;
-      };
-  socialMedia?:
-    | T
-    | {
-        facebook?: T;
-        instagram?: T;
-        tiktok?: T;
-        youtube?: T;
-        whatsapp?: T;
-        linkedin?: T;
-        twitter?: T;
       };
   bottomBar?:
     | T

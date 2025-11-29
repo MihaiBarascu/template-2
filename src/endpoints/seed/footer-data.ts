@@ -2,11 +2,10 @@ import type { Footer } from '@/payload-types'
 
 export const footerData: Partial<Footer> = {
   companyInfo: {
-    logoType: 'text',
-    logoText: 'Transilvania Gym',
+    // Logo comes from Logo global
     description:
       'Transformă-ți corpul și mintea cu programele noastre profesionale de fitness. Alătură-te comunității noastre și începe călătoria ta către o viață sănătoasă!',
-    showSocialHere: true,
+    showSocialHere: true, // Social media icons from BusinessInfo
   },
   columns: [
     {
@@ -79,59 +78,15 @@ export const footerData: Partial<Footer> = {
     {
       title: 'Contact',
       contentType: 'contact',
-      contactItems: [
-        {
-          type: 'phone',
-          value: '+40 721 123 456',
-          label: 'Sună-ne',
-        },
-        {
-          type: 'email',
-          value: 'contact@transilvaniafitness.ro',
-        },
-        {
-          type: 'address',
-          value: 'Str. Victoriei nr. 10, Cluj-Napoca, România',
-        },
-        {
-          type: 'whatsapp',
-          value: '+40 721 123 456',
-          label: 'WhatsApp',
-        },
-      ],
+      // Contact data comes automatically from BusinessInfo global
     },
     {
       title: 'Program de Lucru',
       contentType: 'schedule',
-      scheduleItems: [
-        {
-          label: 'Luni - Vineri',
-          value: '06:00 - 22:00',
-        },
-        {
-          label: 'Sâmbătă',
-          value: '08:00 - 20:00',
-        },
-        {
-          label: 'Duminică',
-          value: '09:00 - 18:00',
-        },
-        {
-          label: 'Sărbători Legale',
-          value: 'Închis',
-        },
-      ],
+      // Schedule data comes automatically from BusinessInfo global
     },
   ],
-  socialMedia: {
-    facebook: 'https://facebook.com/transilvaniafitness',
-    instagram: 'https://instagram.com/transilvaniafitness',
-    tiktok: 'https://tiktok.com/@transilvaniafitness',
-    youtube: 'https://youtube.com/transilvaniafitness',
-    whatsapp: '+40721123456',
-    linkedin: 'https://linkedin.com/company/transilvaniafitness',
-    twitter: 'https://twitter.com/transilvaniafitness',
-  },
+  // Social Media removed - comes from BusinessInfo global
   bottomBar: {
     copyright: `© ${new Date().getFullYear()} Transilvania Gym toate drepturile rezervate.`,
     legalLinks: [

@@ -21,7 +21,7 @@ const collections: CollectionSlug[] = [
   'pages',
   'posts',
   'team-members',
-  'classes',
+  'clase',
   'abonamente',
   'forms',
   'form-submissions',
@@ -68,7 +68,6 @@ export const seed = async ({
       data: {
         companyInfo: {},
         columns: [],
-        socialMedia: {},
         bottomBar: {},
       },
       depth: 0,
@@ -302,7 +301,7 @@ export const seed = async ({
   // Create classes
   const classes = await Promise.all([
     payload.create({
-      collection: 'classes',
+      collection: 'clase',
       depth: 0,
       data: {
         title: 'Yoga pentru Începători',
@@ -446,7 +445,7 @@ export const seed = async ({
       },
     }),
     payload.create({
-      collection: 'classes',
+      collection: 'clase',
       depth: 0,
       data: {
         title: 'CrossFit Intensiv',
@@ -586,7 +585,7 @@ export const seed = async ({
       },
     }),
     payload.create({
-      collection: 'classes',
+      collection: 'clase',
       depth: 0,
       data: {
         title: 'Pilates Core',
@@ -1028,6 +1027,7 @@ export const seed = async ({
       data: {
         navItems: [
           {
+            itemType: 'link',
             link: {
               type: 'custom',
               label: 'Acasă',
@@ -1035,13 +1035,54 @@ export const seed = async ({
             },
           },
           {
-            link: {
+            itemType: 'linkWithSubItems',
+            parentLink: {
               type: 'custom',
               label: 'Clase',
-              url: '/classes',
+              url: '/clase',
             },
+            subItems: [
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Toate Clasele',
+                  url: '/clase',
+                },
+              },
+              {
+                link: {
+                  type: 'reference',
+                  label: 'Yoga',
+                  reference: {
+                    relationTo: 'clase',
+                    value: classes[0].id,
+                  },
+                },
+              },
+              {
+                link: {
+                  type: 'reference',
+                  label: 'CrossFit',
+                  reference: {
+                    relationTo: 'clase',
+                    value: classes[1].id,
+                  },
+                },
+              },
+              {
+                link: {
+                  type: 'reference',
+                  label: 'Pilates',
+                  reference: {
+                    relationTo: 'clase',
+                    value: classes[2].id,
+                  },
+                },
+              },
+            ],
           },
           {
+            itemType: 'link',
             link: {
               type: 'custom',
               label: 'Abonamente',
@@ -1049,6 +1090,7 @@ export const seed = async ({
             },
           },
           {
+            itemType: 'link',
             link: {
               type: 'custom',
               label: 'Echipa',
@@ -1056,25 +1098,16 @@ export const seed = async ({
             },
           },
           {
+            itemType: 'link',
             link: {
               type: 'custom',
               label: 'Contact',
               url: '/contact',
             },
           },
-        ],
-        socialLinks: [
           {
-            platform: 'facebook',
-            url: 'https://facebook.com/transilvaniagym',
-          },
-          {
-            platform: 'twitter',
-            url: 'https://twitter.com/transilvaniagym',
-          },
-          {
-            platform: 'instagram',
-            url: 'https://instagram.com/transilvaniagym',
+            itemType: 'socialMedia',
+            socialPlatforms: ['facebook', 'instagram', 'tiktok'],
           },
         ],
       },

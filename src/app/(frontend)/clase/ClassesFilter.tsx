@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { Class as ClassType, TeamMember } from '@/payload-types'
+import type { Clase as ClassType, TeamMember } from '@/payload-types'
 import { Clock, Users, Award, Calendar } from 'lucide-react'
+import { getCollectionUrl } from '@/utilities/getCollectionUrl'
 
 interface ClassesFilterProps {
   classes: ClassType[]
@@ -143,7 +144,7 @@ function ClassCard({ classItem }: { classItem: ClassType }) {
 
   return (
     <article className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
-      <Link href={`/classes/${classItem.slug}`} className="block">
+      <Link href={getCollectionUrl('clase', classItem.slug)} className="block">
         <div className="relative aspect-[4/3] bg-gray-100">
           {classItem.featuredImage && typeof classItem.featuredImage === 'object' ? (
             <Image

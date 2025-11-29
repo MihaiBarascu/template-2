@@ -9,49 +9,22 @@ export const Footer: GlobalConfig = {
     read: () => true,
   },
   fields: [
-    // Company Info Section
+    // Company Info Section (Logo comes from Logo global, Social from BusinessInfo)
     {
       type: 'group',
       name: 'companyInfo',
       label: 'Company Information',
+      admin: {
+        description: 'Logo-ul vine din global "Logo". Social media vine din "Business Info".',
+      },
       fields: [
-        {
-          name: 'logoType',
-          type: 'select',
-          label: 'Logo Type',
-          defaultValue: 'text',
-          options: [
-            { label: 'Text Logo', value: 'text' },
-            { label: 'Image Logo', value: 'image' },
-            { label: 'Both', value: 'both' },
-          ],
-        },
-        {
-          name: 'logoText',
-          type: 'text',
-          label: 'Logo Text',
-          admin: {
-            condition: (data, siblingData) =>
-              siblingData?.logoType === 'text' || siblingData?.logoType === 'both',
-            placeholder: 'e.g., GymFit',
-          },
-        },
-        {
-          name: 'logoImage',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Logo Image',
-          admin: {
-            condition: (data, siblingData) =>
-              siblingData?.logoType === 'image' || siblingData?.logoType === 'both',
-          },
-        },
         {
           name: 'description',
           type: 'textarea',
           label: 'Company Description',
           admin: {
             rows: 3,
+            placeholder: 'Scurta descriere a companiei pentru footer...',
           },
         },
         {
@@ -59,17 +32,24 @@ export const Footer: GlobalConfig = {
           type: 'checkbox',
           label: 'Show Social Media Icons in Company Section',
           defaultValue: true,
+          admin: {
+            description: 'Afiseaza iconitele social media din Business Info',
+          },
         },
       ],
     },
 
-    // Dynamic Columns - Fully Flexible
+    // Dynamic Columns - Simplified
     {
       name: 'columns',
       type: 'array',
       label: 'Footer Columns',
       minRows: 0,
       maxRows: 5,
+      admin: {
+        description: 'Contact si Schedule iau datele automat din Business Info',
+        initCollapsed: false,
+      },
       fields: [
         {
           name: 'title',
@@ -83,14 +63,14 @@ export const Footer: GlobalConfig = {
           label: 'Content Type',
           defaultValue: 'links',
           options: [
-            { label: 'Links', value: 'links' },
-            { label: 'Text Items', value: 'text' },
-            { label: 'Contact Info', value: 'contact' },
-            { label: 'Schedule', value: 'schedule' },
-            { label: 'Custom Content', value: 'custom' },
+            { label: 'Links (manual)', value: 'links' },
+            { label: 'Text Items (manual)', value: 'text' },
+            { label: 'Contact Info (din Business Info)', value: 'contact' },
+            { label: 'Schedule (din Business Info)', value: 'schedule' },
+            { label: 'Custom Content (manual)', value: 'custom' },
           ],
         },
-        // Links array for link type
+        // Links array for link type (MANUAL)
         {
           name: 'links',
           type: 'array',
@@ -107,7 +87,7 @@ export const Footer: GlobalConfig = {
             },
           },
         },
-        // Text items for text type
+        // Text items for text type (MANUAL)
         {
           name: 'textItems',
           type: 'array',
@@ -143,70 +123,13 @@ export const Footer: GlobalConfig = {
             condition: (data, siblingData) => siblingData?.contentType === 'text',
           },
         },
-        // Contact items for contact type
-        {
-          name: 'contactItems',
-          type: 'array',
-          label: 'Contact Items',
-          fields: [
-            {
-              name: 'type',
-              type: 'select',
-              label: 'Type',
-              options: [
-                { label: 'Phone', value: 'phone' },
-                { label: 'Email', value: 'email' },
-                { label: 'Address', value: 'address' },
-                { label: 'WhatsApp', value: 'whatsapp' },
-              ],
-              required: true,
-            },
-            {
-              name: 'value',
-              type: 'text',
-              label: 'Value',
-              required: true,
-            },
-            {
-              name: 'label',
-              type: 'text',
-              label: 'Label (optional)',
-            },
-          ],
-          admin: {
-            condition: (data, siblingData) => siblingData?.contentType === 'contact',
-          },
-        },
-        // Schedule items for schedule type
-        {
-          name: 'scheduleItems',
-          type: 'array',
-          label: 'Schedule',
-          fields: [
-            {
-              name: 'label',
-              type: 'text',
-              label: 'Label',
-              required: true,
-              admin: {
-                placeholder: 'e.g., Luni - Vineri',
-              },
-            },
-            {
-              name: 'value',
-              type: 'text',
-              label: 'Value',
-              required: true,
-              admin: {
-                placeholder: 'e.g., 06:00 - 23:00',
-              },
-            },
-          ],
-          admin: {
-            condition: (data, siblingData) => siblingData?.contentType === 'schedule',
-          },
-        },
-        // Custom HTML content
+        // Contact type - NO MANUAL FIELDS, uses BusinessInfo
+        // (no contactItems field needed - will be rendered from BusinessInfo)
+
+        // Schedule type - NO MANUAL FIELDS, uses BusinessInfo
+        // (no scheduleItems field needed - will be rendered from BusinessInfo)
+
+        // Custom HTML content (MANUAL)
         {
           name: 'customContent',
           type: 'richText',
@@ -216,57 +139,10 @@ export const Footer: GlobalConfig = {
           },
         },
       ],
-      admin: {
-        initCollapsed: false,
-      },
     },
 
-    // Social Media
-    {
-      type: 'group',
-      name: 'socialMedia',
-      label: 'Social Media',
-      fields: [
-        {
-          name: 'facebook',
-          type: 'text',
-          label: 'Facebook URL',
-        },
-        {
-          name: 'instagram',
-          type: 'text',
-          label: 'Instagram URL',
-        },
-        {
-          name: 'tiktok',
-          type: 'text',
-          label: 'TikTok URL',
-        },
-        {
-          name: 'youtube',
-          type: 'text',
-          label: 'YouTube URL',
-        },
-        {
-          name: 'whatsapp',
-          type: 'text',
-          label: 'WhatsApp Number',
-          admin: {
-            placeholder: 'e.g., +40712345678',
-          },
-        },
-        {
-          name: 'linkedin',
-          type: 'text',
-          label: 'LinkedIn URL',
-        },
-        {
-          name: 'twitter',
-          type: 'text',
-          label: 'Twitter/X URL',
-        },
-      ],
-    },
+    // Social Media - REMOVED (now comes from BusinessInfo)
+    // socialMedia group removed - Footer Component will fetch from BusinessInfo
 
     // Bottom Bar
     {

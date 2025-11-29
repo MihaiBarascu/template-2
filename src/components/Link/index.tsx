@@ -1,9 +1,10 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
+import { getCollectionUrl } from '@/utilities/getCollectionUrl'
 import Link from 'next/link'
 import React from 'react'
 
-import type { Page, Post, TeamMember, Class } from '@/payload-types'
+import type { Page, Post, TeamMember, Clase } from '@/payload-types'
 
 type CMSLinkType = {
   appearance?: 'inline' | 'theme-nav' | ButtonProps['variant']
@@ -12,8 +13,8 @@ type CMSLinkType = {
   label?: string | null
   newTab?: boolean | null
   reference?: {
-    relationTo: 'pages' | 'posts' | 'team-members' | 'classes'
-    value: Page | Post | TeamMember | Class | string | number
+    relationTo: 'pages' | 'posts' | 'team-members' | 'clase'
+    value: Page | Post | TeamMember | Clase | string | number
   } | null
   size?: ButtonProps['size'] | null
   type?: 'custom' | 'reference' | null
@@ -35,9 +36,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   const href =
     type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
-      ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
-          reference.value.slug
-        }`
+      ? getCollectionUrl(reference.relationTo, reference.value.slug)
       : url
 
   if (!href) return null

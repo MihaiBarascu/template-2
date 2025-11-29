@@ -11,8 +11,8 @@ import {
   MetaTitleField,
 } from '@payloadcms/plugin-seo/fields'
 
-export const Classes: CollectionConfig<'classes'> = {
-  slug: 'classes',
+export const Classes: CollectionConfig<'clase'> = {
+  slug: 'clase',
   labels: {
     singular: 'Clasă',
     plural: 'Clase',
@@ -33,14 +33,14 @@ export const Classes: CollectionConfig<'classes'> = {
       url: ({ data, req }) =>
         generatePreviewPath({
           slug: data?.slug,
-          collection: 'classes',
+          collection: 'clase',
           req,
         }),
     },
     preview: (data, { req }) =>
       generatePreviewPath({
         slug: data?.slug as string,
-        collection: 'classes',
+        collection: 'clase',
         req,
       }),
   },

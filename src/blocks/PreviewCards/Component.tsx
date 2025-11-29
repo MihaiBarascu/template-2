@@ -1,18 +1,19 @@
 'use client'
 
-import type { Media, Page, TeamMember, Class } from '@/payload-types'
+import type { Media, Page, TeamMember, Clase } from '@/payload-types'
 import { fadeInUp, viewportSettings, getCardDelay } from '@/utilities/animations'
+import { getCollectionUrl } from '@/utilities/getCollectionUrl'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-type ReferenceValue = Page | TeamMember | Class
+type ReferenceValue = Page | TeamMember | Clase
 
 interface CardLink {
   type?: 'reference' | 'custom' | null
   reference?: {
-    relationTo: 'pages' | 'team-members' | 'classes'
+    relationTo: 'pages' | 'team-members' | 'clase'
     value: ReferenceValue | string | number
   } | null
   url?: string | null
@@ -52,18 +53,7 @@ function getHref(link?: CardLink | null): string | null {
     const { relationTo, value } = link.reference
 
     if (typeof value === 'object' && value !== null && 'slug' in value) {
-      const slug = value.slug
-
-      switch (relationTo) {
-        case 'pages':
-          return `/${slug}`
-        case 'team-members':
-          return `/team-members/${slug}`
-        case 'classes':
-          return `/classes/${slug}`
-        default:
-          return `/${slug}`
-      }
+      return getCollectionUrl(relationTo, value.slug)
     }
   }
 

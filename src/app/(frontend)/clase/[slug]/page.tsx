@@ -18,14 +18,15 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
-import type { Class as ClassType, TeamMember, PaginiClase } from '@/payload-types'
+import type { Clase as ClassType, TeamMember, PaginiClase } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getCollectionUrl, getCollectionListUrl } from '@/utilities/getCollectionUrl'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const classes = await payload.find({
-    collection: 'classes',
+    collection: 'clase',
     limit: 1000,
     overrideAccess: false,
     pagination: false,
@@ -52,7 +53,7 @@ const getOtherClasses = cache(async (currentId: string, category: string, limit:
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'classes',
+    collection: 'clase',
     where: {
       and: [
         { id: { not_equals: currentId } },
@@ -134,7 +135,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
               <ChevronRight className="w-4 h-4" />
             </li>
             <li>
-              <Link href="/classes" className="hover:text-theme-primary transition-colors">
+              <Link href={getCollectionListUrl('clase')} className="hover:text-theme-primary transition-colors">
                 Clase
               </Link>
             </li>
@@ -387,7 +388,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
                     key={otherClass.id}
                     className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow group"
                   >
-                    <Link href={`/classes/${otherClass.slug}`}>
+                    <Link href={getCollectionUrl('clase', otherClass.slug)}>
                       <div className="relative h-48">
                         {otherImageUrl ? (
                           <Image
@@ -427,7 +428,7 @@ export default async function ClassPage({ params: paramsPromise }: Args) {
             {/* View All Classes Button */}
             <div className="text-center mt-8">
               <Link
-                href="/classes"
+                href={getCollectionListUrl('clase')}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-theme-primary text-white font-bold rounded-lg hover:bg-theme-primary/90 transition-colors"
               >
                 Vezi toate clasele
@@ -452,7 +453,7 @@ const queryClassBySlug = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'classes',
+    collection: 'clase',
     limit: 1,
     pagination: false,
     where: {

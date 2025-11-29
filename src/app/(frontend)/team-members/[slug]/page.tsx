@@ -280,7 +280,7 @@ export default async function TeamMemberPage({ params: paramsPromise }: Args) {
                     {ctaButtonText}
                   </Link>
                   <Link
-                    href="/classes"
+                    href="/clase"
                     className="inline-flex items-center justify-center px-6 py-3 bg-transparent text-white font-bold rounded-lg border-2 border-white hover:bg-white/10 transition-colors"
                   >
                     {ctaSecondaryButtonText}
