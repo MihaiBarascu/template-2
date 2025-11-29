@@ -1,5 +1,5 @@
 import React from 'react'
-import type { MapBlock as MapBlockType, Address, BusinessInfo } from '@/payload-types'
+import type { MapBlock as MapBlockType, BusinessInfo } from '@/payload-types'
 import { getSpacingClasses } from '@/fields/spacing'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -23,7 +23,7 @@ function extractEmbedUrl(embedCode?: string | null): string | undefined {
 }
 
 export const MapBlock: React.FC<Props> = async (props) => {
-  const { mapSource = 'global', address, customMap, spacing } = props
+  const { mapSource = 'global', customMap, spacing } = props
 
   let mapTitle: string | undefined
   let embedURL: string | undefined
@@ -42,14 +42,6 @@ export const MapBlock: React.FC<Props> = async (props) => {
     if (businessInfo?.googleMapsEmbed) {
       mapTitle = businessInfo.businessName ?? undefined
       embedURL = extractEmbedUrl(businessInfo.googleMapsEmbed)
-    }
-  } else if (mapSource === 'fromCollection' && address) {
-    // Address can be an ID or a populated object
-    const addressData = typeof address === 'object' ? (address as Address) : null
-
-    if (addressData) {
-      mapTitle = addressData.title ?? undefined
-      embedURL = extractEmbedUrl(addressData.googleMapsEmbed) ?? addressData.googleMapsUrl ?? undefined
     }
   } else if (mapSource === 'custom' && customMap) {
     mapTitle = customMap.mapTitle ?? undefined

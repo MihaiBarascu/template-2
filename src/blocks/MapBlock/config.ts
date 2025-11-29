@@ -19,10 +19,6 @@ export const MapBlock: Block = {
           value: 'global',
         },
         {
-          label: '📍 Din Colecția Adrese',
-          value: 'fromCollection',
-        },
-        {
           label: '✏️ Custom',
           value: 'custom',
         },
@@ -30,17 +26,6 @@ export const MapBlock: Block = {
       required: true,
       admin: {
         description: 'Alege sursa pentru hartă',
-      },
-    },
-    // Address from Collection (only shown when mapSource is 'fromCollection')
-    {
-      name: 'address',
-      type: 'relationship',
-      relationTo: 'addresses',
-      required: true,
-      admin: {
-        condition: (_, siblingData) => siblingData?.mapSource === 'fromCollection',
-        description: 'Select an address from the Addresses collection. Click "Add New" to create a new address.',
       },
     },
     // Custom Map Settings (only shown when mapSource is 'custom')

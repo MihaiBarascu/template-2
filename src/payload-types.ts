@@ -74,9 +74,6 @@ export interface Config {
     users: User;
     'team-members': TeamMember;
     classes: Class;
-    contacts: Contact;
-    addresses: Address;
-    schedules: Schedule;
     abonamente: Abonamente;
     redirects: Redirect;
     forms: Form;
@@ -102,9 +99,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     classes: ClassesSelect<false> | ClassesSelect<true>;
-    contacts: ContactsSelect<false> | ContactsSelect<true>;
-    addresses: AddressesSelect<false> | AddressesSelect<true>;
-    schedules: SchedulesSelect<false> | SchedulesSelect<true>;
     abonamente: AbonamenteSelect<false> | AbonamenteSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -1004,14 +998,6 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
-  /**
-   * Display contact details next to the form
-   */
-  showContactInfo?: boolean | null;
-  /**
-   * Select contact information to display. Click "Add New" to create new contact.
-   */
-  contact?: (string | null) | Contact;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -1192,40 +1178,13 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contacts".
- */
-export interface Contact {
-  id: string;
-  phone: string;
-  email?: string | null;
-  socialMedia?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    tiktok?: string | null;
-    youtube?: string | null;
-    /**
-     * Număr de telefon pentru WhatsApp (fără spații)
-     */
-    whatsapp?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MapBlock".
  */
 export interface MapBlock {
   /**
    * Alege sursa pentru hartă
    */
-  mapSource: 'global' | 'fromCollection' | 'custom';
-  /**
-   * Select an address from the Addresses collection. Click "Add New" to create a new address.
-   */
-  address?: (string | null) | Address;
+  mapSource: 'global' | 'custom';
   customMap?: {
     /**
      * Optional title above the map
@@ -1249,30 +1208,6 @@ export interface MapBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'mapBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "addresses".
- */
-export interface Address {
-  id: string;
-  /**
-   * Un nume identificator pentru această adresă
-   */
-  title: string;
-  address: string;
-  phone?: string | null;
-  email?: string | null;
-  /**
-   * Codul iframe complet de la Google Maps (Share → Embed a map → Copy HTML)
-   */
-  googleMapsEmbed?: string | null;
-  /**
-   * Link direct către locație pe Google Maps
-   */
-  googleMapsUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1376,38 +1311,6 @@ export interface ScheduleBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'schedule';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "schedules".
- */
-export interface Schedule {
-  id: string;
-  title: string;
-  description?: string | null;
-  simpleHours?:
-    | {
-        days: string;
-        hours: string;
-        id?: string | null;
-      }[]
-    | null;
-  settings?: {
-    startHour?: string | null;
-    endHour?: string | null;
-  };
-  entries?:
-    | {
-        day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-        time: string;
-        endTime?: string | null;
-        className: string;
-        trainer?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1673,18 +1576,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'classes';
         value: string | Class;
-      } | null)
-    | ({
-        relationTo: 'contacts';
-        value: string | Contact;
-      } | null)
-    | ({
-        relationTo: 'addresses';
-        value: string | Address;
-      } | null)
-    | ({
-        relationTo: 'schedules';
-        value: string | Schedule;
       } | null)
     | ({
         relationTo: 'abonamente';
@@ -2035,8 +1926,6 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
-  showContactInfo?: T;
-  contact?: T;
   id?: T;
   blockName?: T;
 }
@@ -2046,7 +1935,6 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface MapBlockSelect<T extends boolean = true> {
   mapSource?: T;
-  address?: T;
   customMap?:
     | T
     | {
@@ -2410,74 +2298,6 @@ export interface ClassesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contacts_select".
- */
-export interface ContactsSelect<T extends boolean = true> {
-  phone?: T;
-  email?: T;
-  socialMedia?:
-    | T
-    | {
-        facebook?: T;
-        instagram?: T;
-        tiktok?: T;
-        youtube?: T;
-        whatsapp?: T;
-        linkedin?: T;
-        twitter?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "addresses_select".
- */
-export interface AddressesSelect<T extends boolean = true> {
-  title?: T;
-  address?: T;
-  phone?: T;
-  email?: T;
-  googleMapsEmbed?: T;
-  googleMapsUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "schedules_select".
- */
-export interface SchedulesSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  simpleHours?:
-    | T
-    | {
-        days?: T;
-        hours?: T;
-        id?: T;
-      };
-  settings?:
-    | T
-    | {
-        startHour?: T;
-        endHour?: T;
-      };
-  entries?:
-    | T
-    | {
-        day?: T;
-        time?: T;
-        endTime?: T;
-        className?: T;
-        trainer?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

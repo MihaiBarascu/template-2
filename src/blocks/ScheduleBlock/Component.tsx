@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Schedule as ScheduleType, BusinessInfo as BusinessInfoType } from '@/payload-types'
+import type { BusinessInfo as BusinessInfoType } from '@/payload-types'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { getSpacingClasses } from '@/fields/spacing'
@@ -31,9 +31,6 @@ interface ScheduleBlockProps {
   scheduleEntries?: ScheduleEntry[] | null
   style?: 'default' | 'compact' | 'card' | null
   spacing?: SpacingConfig | null
-  // Legacy support
-  schedule?: ScheduleType | string | number
-  customTitle?: string
   blockType?: string
 }
 
@@ -58,9 +55,6 @@ export const ScheduleBlock: React.FC<ScheduleBlockProps> = async ({
   scheduleEntries,
   style = 'default',
   spacing,
-  // Legacy props
-  schedule,
-  customTitle,
 }) => {
   const spacingClass = getSpacingClasses(spacing)
 
@@ -118,25 +112,6 @@ export const ScheduleBlock: React.FC<ScheduleBlockProps> = async ({
     scheduleTitle = title || businessInfo?.scheduleTitle || 'Orar Săptămânal'
   } else if (scheduleType === 'advancedCustom') {
     entries = scheduleEntries || []
-  } else if (schedule) {
-    // Legacy support - fetch from Schedules collection
-    let scheduleData: ScheduleType | null = null
-
-    if (typeof schedule === 'object' && schedule !== null) {
-      scheduleData = schedule
-    } else {
-      const payload = await getPayload({ config: configPromise })
-      const result = await payload.findByID({
-        collection: 'schedules',
-        id: String(schedule),
-      })
-      scheduleData = result as ScheduleType
-    }
-
-    if (scheduleData) {
-      entries = (scheduleData.entries || []) as ScheduleEntry[]
-      scheduleTitle = customTitle || scheduleData.title || 'Orar Săptămânal'
-    }
   }
 
   if (!entries || entries.length === 0) {

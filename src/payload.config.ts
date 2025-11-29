@@ -13,9 +13,6 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { TeamMembers } from './collections/TeamMembers'
 import { Classes } from './collections/Classes'
-import { Contacts } from './collections/Contacts'
-import { Addresses } from './collections/Addresses'
-import { Schedules } from './collections/Schedules'
 import { Abonamente } from './collections/Abonamente'
 import { BusinessInfo } from './BusinessInfo/config'
 import { Footer } from './Footer/config'
@@ -73,7 +70,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Contacts, Addresses, Schedules, Abonamente],
+  collections: [Pages, Posts, Media, Categories, Users, TeamMembers, Classes, Abonamente],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Theme, BusinessInfo, PaginiAbonamente, PaginiClase, PaginiEchipa],
   plugins: [

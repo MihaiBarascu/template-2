@@ -22,9 +22,6 @@ const collections: CollectionSlug[] = [
   'posts',
   'team-members',
   'classes',
-  'contacts',
-  'addresses',
-  'schedules',
   'abonamente',
   'forms',
   'form-submissions',
@@ -725,86 +722,6 @@ export const seed = async ({
     data: contactFormData,
   })
 
-  payload.logger.info(`— Seeding contacts and addresses...`)
-
-  // Create Contact entry
-  const mainContact = await payload.create({
-    collection: 'contacts',
-    depth: 0,
-    data: {
-      phone: '+40 264 123 456',
-      email: 'contact@transilvaniagym.ro',
-      socialMedia: {
-        facebook: 'https://facebook.com/transilvaniagym',
-        instagram: 'https://instagram.com/transilvaniagym',
-        whatsapp: '+40264123456',
-      },
-    },
-  })
-
-  // Create Address entry
-  const mainAddress = await payload.create({
-    collection: 'addresses',
-    depth: 0,
-    data: {
-      title: 'Sediul Principal Transilvania Fitness',
-      address: 'Str. Moților nr. 54, Cluj-Napoca, România',
-      phone: '+40 264 123 456',
-      email: 'contact@transilvaniagym.ro',
-      googleMapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2732.4729182042995!2d23.588416315676973!3d46.77121097913861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47490e8a9c5b81d1%3A0x3c8e3a1f8f7c8b9!2sCluj-Napoca%2C%20Romania!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s',
-      googleMapsUrl: 'https://goo.gl/maps/cluj-napoca',
-    },
-  })
-
-  payload.logger.info(`— Seeding schedule...`)
-
-  // Create schedule in collection (not global anymore)
-  const mainSchedule = await payload.create({
-    collection: 'schedules',
-    depth: 0,
-    data: {
-      title: 'Orar Săptămânal',
-      description: 'Program valabil începând cu 1 Decembrie 2024',
-      simpleHours: [
-        { days: 'Luni - Vineri', hours: '07:00 - 22:00' },
-        { days: 'Sâmbătă', hours: '08:00 - 20:00' },
-        { days: 'Duminică', hours: '09:00 - 18:00' },
-      ],
-      settings: {
-        startHour: '07:00',
-        endHour: '21:00',
-      },
-      entries: [
-        // Luni
-        { day: 'monday' as const, time: '07:00', endTime: '08:00', className: 'Morning Cardio', trainer: 'Dan Popescu' },
-        { day: 'monday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
-        { day: 'monday' as const, time: '18:00', endTime: '18:45', className: 'Spinning', trainer: 'Andreea Pop' },
-        { day: 'monday' as const, time: '18:00', endTime: '19:00', className: 'TRX', trainer: 'Sala 2' },
-        { day: 'monday' as const, time: '19:00', endTime: '19:45', className: 'Kango Jumps', trainer: 'Marius David' },
-        // Marți
-        { day: 'tuesday' as const, time: '07:00', endTime: '07:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
-        { day: 'tuesday' as const, time: '09:00', endTime: '10:00', className: 'TRX Training', trainer: 'Ana Marinescu' },
-        { day: 'tuesday' as const, time: '18:00', endTime: '18:45', className: 'Spinning', trainer: 'Vlad Ionescu' },
-        // Miercuri
-        { day: 'wednesday' as const, time: '10:00', endTime: '10:50', className: 'Pilates Core', trainer: teamMembers[0].title },
-        { day: 'wednesday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
-        { day: 'wednesday' as const, time: '19:30', endTime: '20:30', className: 'Boxing Fitness', trainer: 'Radu Constantin' },
-        // Joi
-        { day: 'thursday' as const, time: '07:00', endTime: '07:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
-        { day: 'thursday' as const, time: '17:00', endTime: '17:50', className: 'Aerobic Step', trainer: 'Elena Dumitrescu' },
-        // Vineri
-        { day: 'friday' as const, time: '10:00', endTime: '10:50', className: 'Pilates Core', trainer: teamMembers[0].title },
-        { day: 'friday' as const, time: '18:00', endTime: '19:00', className: 'Yoga pentru Începători', trainer: teamMembers[1].title },
-        // Sâmbătă
-        { day: 'saturday' as const, time: '09:00', endTime: '09:45', className: 'CrossFit Intensiv', trainer: teamMembers[2].title },
-        { day: 'saturday' as const, time: '11:00', endTime: '12:30', className: 'Zumba Party', trainer: 'Cristina Popa' },
-        // Duminică
-        { day: 'sunday' as const, time: '10:00', endTime: '11:15', className: 'Yoga Relaxare', trainer: teamMembers[1].title },
-        { day: 'sunday' as const, time: '16:00', endTime: '17:00', className: 'Stretching & Recovery', trainer: 'Team' },
-      ],
-    },
-  })
-
   payload.logger.info(`— Seeding abonamente...`)
 
   // Create abonamente (subscriptions)
@@ -1054,15 +971,13 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, teamMembers, classes, contactForm, address: mainAddress, schedule: mainSchedule }),
+      data: home({ heroImage: imageHomeDoc, teamMembers, classes, contactForm }),
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       data: contactPageData({
         contactForm: contactForm,
-        contact: mainContact,
-        address: mainAddress,
       }),
     }),
   ])

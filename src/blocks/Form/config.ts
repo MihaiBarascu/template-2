@@ -43,23 +43,6 @@ export const FormBlock: Block = {
       }),
       label: 'Intro Content',
     },
-    {
-      name: 'showContactInfo',
-      type: 'checkbox',
-      label: 'Show Contact Information',
-      admin: {
-        description: 'Display contact details next to the form',
-      },
-    },
-    {
-      name: 'contact',
-      type: 'relationship',
-      relationTo: 'contacts',
-      admin: {
-        condition: (_, { showContactInfo }) => Boolean(showContactInfo),
-        description: 'Select contact information to display. Click "Add New" to create new contact.',
-      },
-    },
   ],
   graphQL: {
     singularName: 'FormBlock',

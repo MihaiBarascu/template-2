@@ -1,4 +1,4 @@
-import type { Address, Class, Form, Media, Schedule, TeamMember } from '@/payload-types'
+import type { Class, Form, Media, TeamMember } from '@/payload-types'
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
 type HomeArgs = {
@@ -6,8 +6,6 @@ type HomeArgs = {
   teamMembers: TeamMember[]
   classes: Class[]
   contactForm: Form
-  address: Address
-  schedule: Schedule
 }
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
@@ -15,8 +13,6 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
   teamMembers,
   classes,
   contactForm,
-  address: _address,
-  schedule: _schedule,
 }) => {
   return {
     slug: 'home',
