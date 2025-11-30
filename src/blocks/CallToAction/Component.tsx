@@ -1,12 +1,12 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion'
 
 import type { CallToActionBlock as CTABlockProps } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
-import { fadeInUp, viewportSettings } from '@/utilities/animations'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/utilities/ui'
 
 // Inline spacing classes (client component)
 const marginTopMap: Record<string, string> = {
@@ -37,6 +37,10 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
   workingHours,
   spacing,
 }) => {
+  const { ref: leftRef, isVisible: leftVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+  const { ref: rightRef, isVisible: rightVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+  const { ref: defaultRef, isVisible: defaultVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+
   const spacingClass = [
     spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
     spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
@@ -52,13 +56,13 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
         <div className="container">
           <div className="flex flex-col lg:flex-row">
             {/* Left Column - ml-lg-auto mr-lg-5 col-lg-5 */}
-            <motion.div
-              className="flex flex-col justify-center w-full lg:w-5/12 lg:ml-auto lg:mr-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-              variants={fadeInUp}
-              custom={0}
+            <div
+              ref={leftRef}
+              className={cn(
+                'flex flex-col justify-center w-full lg:w-5/12 lg:ml-auto lg:mr-12',
+                'transition-all duration-700 ease-out',
+                leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+              )}
             >
               {richText && (
                 <RichText
@@ -78,16 +82,17 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
                   ))}
                 </div>
               )}
-            </motion.div>
+            </div>
 
             {/* Right Column - mr-lg-auto col-lg-4 */}
-            <motion.div
-              className="w-full lg:w-4/12 lg:mr-auto mt-3 lg:mt-0"
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-              variants={fadeInUp}
-              custom={200}
+            <div
+              ref={rightRef}
+              className={cn(
+                'w-full lg:w-4/12 lg:mr-auto mt-3 lg:mt-0',
+                'transition-all duration-700 ease-out',
+                rightVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+              )}
+              style={{ transitionDelay: '200ms' }}
             >
               <div className="about-working-hours">
                 {workingHours && (
@@ -98,7 +103,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
                   />
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -108,12 +113,13 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
   // Default CTA styling
   return (
     <div className={`container ${spacingClass}`}>
-      <motion.div
-        className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center"
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
+      <div
+        ref={defaultRef}
+        className={cn(
+          'bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center',
+          'transition-all duration-700 ease-out',
+          defaultVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+        )}
       >
         <div className="max-w-[48rem] flex items-center">
           {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}
@@ -123,7 +129,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({
             return <CMSLink key={i} size="lg" {...link} />
           })}
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

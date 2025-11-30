@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { motion, Variants } from 'framer-motion'
-import { fadeInUp, fadeIn, scaleIn, viewportSettings } from '@/utilities/animations'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/utilities/ui'
 
 interface AnimationWrapperProps {
   children: React.ReactNode
@@ -11,29 +11,42 @@ interface AnimationWrapperProps {
   animation?: 'fadeInUp' | 'fadeIn' | 'scaleIn'
 }
 
+const animationStyles: Record<string, { initial: string; visible: string }> = {
+  fadeInUp: {
+    initial: 'opacity-0 translate-y-6',
+    visible: 'opacity-100 translate-y-0',
+  },
+  fadeIn: {
+    initial: 'opacity-0',
+    visible: 'opacity-100',
+  },
+  scaleIn: {
+    initial: 'opacity-0 scale-95',
+    visible: 'opacity-100 scale-100',
+  },
+}
+
 const AnimationWrapper: React.FC<AnimationWrapperProps> = ({
   children,
   delay = 0,
   className = '',
   animation = 'fadeInUp',
 }) => {
-  const animations: Record<string, Variants> = {
-    fadeInUp,
-    fadeIn,
-    scaleIn,
-  }
+  const { ref, isVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+  const style = animationStyles[animation] || animationStyles.fadeInUp
 
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportSettings}
-      variants={animations[animation]}
-      custom={delay}
-      className={className}
+    <div
+      ref={ref}
+      className={cn(
+        className,
+        'transition-all duration-700 ease-out',
+        isVisible ? style.visible : style.initial,
+      )}
+      style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }
 

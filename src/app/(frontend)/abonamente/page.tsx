@@ -3,8 +3,9 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import Link from 'next/link'
-import type { Abonamente as AbonamentType, Media as MediaType, PaginiAbonamente } from '@/payload-types'
-import { VariantCard, type CardVariant } from '@/components/VariantCard'
+import type { Abonamente as AbonamentType, PaginiAbonamente } from '@/payload-types'
+import { UniversalCard, type CardType } from '@/components/UniversalCard'
+import { abonamenteToCardProps } from '@/utilities/cardAdapters'
 import { StaticPageHero } from '@/components/StaticPageHero'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
@@ -41,38 +42,6 @@ const typeDescriptions: Record<string, string> = {
   'aerobic-spa': 'Cardio și relaxare într-un singur pachet.',
 }
 
-// Helper to get CTA href
-function getCtaHref(cta: AbonamentType['cta']): string {
-  if (!cta) return '/contact'
-
-  if (cta.linkType === 'custom' && cta.url) {
-    return cta.url
-  }
-
-  if (cta.linkType === 'page' && cta.page) {
-    if (typeof cta.page === 'object' && cta.page !== null && 'slug' in cta.page) {
-      return `/${cta.page.slug}`
-    }
-  }
-
-  return '/contact'
-}
-
-// Get card variant based on type
-function getCardVariant(type: AbonamentType['type']): CardVariant {
-  switch (type) {
-    case 'gym':
-      return 'pricing'
-    case 'spa':
-    case 'solar':
-    case 'fitness-spa':
-    case 'aerobic-spa':
-      return 'product'
-    default:
-      return 'pricing'
-  }
-}
-
 export default async function AbonamentePage() {
   const payload = await getPayload({ config: configPromise })
   const settings = (await getCachedGlobal('pagini-abonamente', 1)()) as PaginiAbonamente
@@ -81,6 +50,7 @@ export default async function AbonamentePage() {
   const showFilters = settings?.showFilters ?? true
   const columns = settings?.columns || '3'
   const defaultFilter = settings?.defaultFilter || 'all'
+  const adminCardType = settings?.cardType as CardType | undefined
 
   const { docs } = await payload.find({
     collection: 'abonamente',
@@ -163,8 +133,6 @@ export default async function AbonamentePage() {
           const items = grouped[type]
           if (!items || items.length === 0) return null
 
-          const variant = getCardVariant(type as AbonamentType['type'])
-
           return (
             <section
               key={type}
@@ -183,25 +151,19 @@ export default async function AbonamentePage() {
 
               {/* Cards Grid */}
               <div className={`grid grid-cols-1 md:grid-cols-2 ${getGridCols()} gap-6`}>
-                {items.map((item, index) => (
-                  <VariantCard
-                    key={item.id}
-                    variant={variant}
-                    title={item.title}
-                    subtitle={item.subtitle}
-                    image={item.image as MediaType | null}
-                    imagePosition={type === 'gym' ? 'background' : 'top'}
-                    price={item.price}
-                    features={item.features}
-                    badge={item.highlighted ? item.highlightLabel || 'Popular' : undefined}
-                    highlighted={item.highlighted}
-                    cta={{
-                      label: item.cta?.label || 'Contactează-ne',
-                      href: getCtaHref(item.cta),
-                    }}
-                    index={index}
-                  />
-                ))}
+                {items.map((item, index) => {
+                  const cardProps = abonamenteToCardProps(item, {
+                    cardType: adminCardType,
+                    imagePosition: type === 'gym' ? 'background' : 'top',
+                  })
+                  return (
+                    <UniversalCard
+                      key={item.id}
+                      {...cardProps}
+                      index={index}
+                    />
+                  )
+                })}
               </div>
             </section>
           )

@@ -1,12 +1,9 @@
 'use client'
 
 import type { Media, Page, TeamMember, Clase } from '@/payload-types'
-import { fadeInUp, viewportSettings, getCardDelay } from '@/utilities/animations'
 import { getCollectionUrl } from '@/utilities/getCollectionUrl'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
+import { UniversalCard, type CardType, type UniversalCardProps } from '@/components/UniversalCard'
 
 type ReferenceValue = Page | TeamMember | Clase
 
@@ -27,6 +24,13 @@ interface Card {
   subtitle?: string | null
   description?: string | null
   badge?: string | null
+  badgeColor?: 'primary' | 'success' | 'warning' | 'dark' | null
+  price?: {
+    amount?: number | null
+    period?: string | null
+    oldPrice?: number | null
+  } | null
+  highlighted?: boolean | null
   link?: CardLink | null
 }
 
@@ -36,9 +40,12 @@ interface SpacingConfig {
 }
 
 interface PreviewCardsProps {
-  style?: 'team' | 'class'
+  cardType?: CardType
+  columns?: '2' | '3' | '4'
   cards?: Card[]
   spacing?: SpacingConfig | null
+  // Legacy support
+  style?: 'team' | 'class'
 }
 
 // Helper to generate href from link
@@ -82,7 +89,25 @@ const marginBottomMap: Record<string, string> = {
   '3xl': 'mb-24',
 }
 
-export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', cards, spacing }) => {
+// Get grid columns class
+const getGridCols = (columns?: '2' | '3' | '4') => {
+  switch (columns) {
+    case '2':
+      return 'lg:grid-cols-2'
+    case '4':
+      return 'lg:grid-cols-4'
+    default:
+      return 'lg:grid-cols-3'
+  }
+}
+
+export const PreviewCards: React.FC<PreviewCardsProps> = ({
+  cardType,
+  columns = '3',
+  cards,
+  spacing,
+  style, // Legacy support
+}) => {
   const spacingClass = [
     spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
     spacing?.marginBottom ? marginBottomMap[spacing.marginBottom] : '',
@@ -94,149 +119,53 @@ export const PreviewCards: React.FC<PreviewCardsProps> = ({ style = 'team', card
     return null
   }
 
-  // Team style - Members with social icons (Gymso original)
-  if (style === 'team') {
-    return (
-      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${spacingClass}`}>
+  // Map legacy style to cardType for backwards compatibility
+  const effectiveCardType: CardType = cardType || (style === 'class' ? 'class' : 'team')
+
+  // For team cards, use smaller max-width per item
+  const gridItemClass = effectiveCardType === 'team' ? 'max-w-[280px] w-full' : ''
+  const gridClass = effectiveCardType === 'team' ? 'justify-items-center' : ''
+
+  return (
+    <div className={`container ${spacingClass}`}>
+      <div className={`grid md:grid-cols-2 ${getGridCols(columns)} gap-6 ${gridClass}`}>
         {cards.map((card, index) => {
-          const image = typeof card.image === 'object' ? card.image : null
           const href = getHref(card.link)
-          const newTabProps = card.link?.newTab
-            ? { target: '_blank' as const, rel: 'noopener noreferrer' }
-            : {}
 
-          const cardContent = (
-            <motion.div
-              className="team-thumb group"
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-              variants={fadeInUp}
-              custom={getCardDelay(index)}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
-            >
-              {/* Image with zoom effect */}
-              <div className="relative aspect-[4/3] overflow-hidden rounded-t-sm">
-                {image ? (
-                  <motion.div
-                    className="w-full h-full"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  >
-                    <Image
-                      src={image.url || ''}
-                      alt={image.alt || card.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </motion.div>
-                ) : (
-                  <div className="w-full h-full bg-gray-200" />
-                )}
-              </div>
+          // Convert card data to UniversalCard props
+          const cardProps: UniversalCardProps = {
+            cardType: effectiveCardType,
+            title: card.title,
+            subtitle: card.subtitle,
+            description: card.description,
+            image: typeof card.image === 'object' ? card.image : null,
+            badge: card.badge,
+            badgeColor: card.badgeColor,
+            highlighted: card.highlighted,
+            price: card.price?.amount
+              ? {
+                  amount: card.price.amount,
+                  period: card.price.period,
+                  oldPrice: card.price.oldPrice,
+                }
+              : undefined,
+            cta: href
+              ? {
+                  label: 'Vezi detalii',
+                  href,
+                  newTab: card.link?.newTab || false,
+                }
+              : undefined,
+            index,
+          }
 
-              {/* Info section */}
-              <div className="team-info transition-shadow duration-300 group-hover:shadow-xl">
-                <h3>{card.title}</h3>
-                {card.subtitle && <span>{card.subtitle}</span>}
-              </div>
-            </motion.div>
-          )
-
-          return href ? (
-            <Link key={card.id || index} href={href} className="block" {...newTabProps}>
-              {cardContent}
-            </Link>
-          ) : (
-            <div key={card.id || index}>{cardContent}</div>
+          return (
+            <div key={card.id || index} className={gridItemClass}>
+              <UniversalCard {...cardProps} />
+            </div>
           )
         })}
       </div>
-    )
-  }
-
-  // Class style - Classes with price badge (Gymso original)
-  return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${spacingClass}`}>
-      {cards.map((card, index) => {
-        const image = typeof card.image === 'object' ? card.image : null
-        const href = getHref(card.link)
-        const newTabProps = card.link?.newTab
-          ? { target: '_blank' as const, rel: 'noopener noreferrer' }
-          : {}
-
-        const cardContent = (
-          <motion.div
-            className="class-thumb group"
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-            variants={fadeInUp}
-            custom={getCardDelay(index)}
-            whileHover={{ y: -8, transition: { duration: 0.3 } }}
-          >
-            {/* Image with zoom effect */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-t-sm">
-              {image ? (
-                <motion.div
-                  className="w-full h-full"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                >
-                  <Image
-                    src={image.url || ''}
-                    alt={image.alt || card.title}
-                    fill
-                    className="object-cover"
-                  />
-                </motion.div>
-              ) : (
-                <div className="w-full h-full bg-gray-200" />
-              )}
-            </div>
-
-            {/* Info section - fixed height */}
-            <div className="class-info transition-shadow duration-300 group-hover:shadow-xl h-[160px] flex flex-col">
-              <h3 className="line-clamp-1">{card.title}</h3>
-              {card.subtitle && (
-                <span className="class-trainer">
-                  Trained by - <strong>{card.subtitle}</strong>
-                </span>
-              )}
-
-              {/* Price badge with scale animation */}
-              {card.badge && (
-                <motion.span
-                  className="class-price"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 20,
-                    delay: getCardDelay(index) / 1000 + 0.2,
-                  }}
-                >
-                  {card.badge}
-                </motion.span>
-              )}
-
-              {card.description && (
-                <p className="class-description line-clamp-3 flex-1">{card.description}</p>
-              )}
-            </div>
-          </motion.div>
-        )
-
-        return href ? (
-          <Link key={card.id || index} href={href} className="block" {...newTabProps}>
-            {cardContent}
-          </Link>
-        ) : (
-          <div key={card.id || index}>{cardContent}</div>
-        )
-      })}
     </div>
   )
 }

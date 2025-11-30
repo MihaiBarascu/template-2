@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion'
-import { fadeInUp, viewportSettings } from '@/utilities/animations'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/utilities/ui'
 
 interface SimpleHour {
   days?: string | null
@@ -21,15 +21,18 @@ export const SimpleSchedule: React.FC<SimpleScheduleProps> = ({
   style = 'default',
   spacingClass = '',
 }) => {
+  const { ref, isVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+
   // Card style
   if (style === 'card') {
     return (
-      <motion.div
-        className={`bg-white rounded-lg shadow-lg p-6 ${spacingClass}`}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
+      <div
+        ref={ref}
+        className={cn(
+          `bg-white rounded-lg shadow-lg p-6 ${spacingClass}`,
+          'transition-all duration-700 ease-out',
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+        )}
       >
         <h3 className="text-xl font-bold text-theme-dark mb-4">{title}</h3>
         <div className="space-y-2">
@@ -40,19 +43,20 @@ export const SimpleSchedule: React.FC<SimpleScheduleProps> = ({
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     )
   }
 
   // Compact style (for sidebar)
   if (style === 'compact') {
     return (
-      <motion.div
-        className={`${spacingClass}`}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
+      <div
+        ref={ref}
+        className={cn(
+          spacingClass,
+          'transition-all duration-700 ease-out',
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+        )}
       >
         <h4 className="text-lg font-bold text-theme-dark mb-3">{title}</h4>
         <div className="space-y-1 text-sm">
@@ -63,7 +67,7 @@ export const SimpleSchedule: React.FC<SimpleScheduleProps> = ({
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     )
   }
 
@@ -71,33 +75,34 @@ export const SimpleSchedule: React.FC<SimpleScheduleProps> = ({
   return (
     <section className={`py-12 ${spacingClass}`}>
       <div className="container">
-        <motion.div
-          className="max-w-lg mx-auto"
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportSettings}
-          variants={fadeInUp}
+        <div
+          ref={ref}
+          className={cn(
+            'max-w-lg mx-auto',
+            'transition-all duration-700 ease-out',
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+          )}
         >
           <h2 className="text-2xl md:text-3xl font-bold text-theme-dark mb-6 text-center">
             {title}
           </h2>
           <div className="space-y-3">
             {hours.map((item, index) => (
-              <motion.div
+              <div
                 key={index}
-                className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0"
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={fadeInUp}
-                custom={index * 100}
+                className={cn(
+                  'flex justify-between items-center py-2 border-b border-gray-200 last:border-0',
+                  'transition-all duration-500 ease-out',
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+                )}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <span className="font-medium text-theme-dark text-lg">{item.days}</span>
                 <span className="text-theme-primary font-bold text-lg">{item.hours}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

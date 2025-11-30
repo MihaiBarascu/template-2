@@ -1178,7 +1178,7 @@ export const seed = async ({
         heroSubtitle: 'Cunoaște antrenorii noștri profesioniști, dedicați să te ajute să îți atingi obiectivele',
         heroBackground: imageHomeDoc.id,
         columns: '3',
-        cardStyle: 'photo',
+        cardType: 'team',
         showSpecialization: true,
         meta: {
           title: 'Echipa | Transilvania Fitness',
@@ -1209,7 +1209,7 @@ export const seed = async ({
         heroBackground: imageHomeDoc.id,
         showScheduleLink: true,
         columns: '3',
-        cardStyle: 'overlay',
+        cardType: 'class',
         meta: {
           title: 'Clase Fitness | Transilvania Fitness',
           description: 'Explorează clasele noastre de fitness: Yoga, CrossFit, Pilates, Spinning și multe altele. Program variat pentru începători și avansați.',

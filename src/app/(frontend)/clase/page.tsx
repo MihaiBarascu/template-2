@@ -6,6 +6,7 @@ import React from 'react'
 import type { Clase as ClassType, PaginiClase } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { ClassesFilter } from './ClassesFilter'
+import type { CardType } from '@/components/UniversalCard'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -48,6 +49,7 @@ export default async function ClassesPage() {
       <ClassesFilter
         classes={classes.docs as ClassType[]}
         columns={settings?.columns || '3'}
+        cardType={(settings?.cardType as CardType) || 'class'}
       />
     </div>
   )

@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion'
-import { fadeInUp, viewportSettings } from '@/utilities/animations'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/utilities/ui'
 
 interface ContactInfoClientProps {
   title?: string | null
@@ -91,6 +91,8 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
   style = 'default',
   spacing,
 }) => {
+  const { ref, isVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+
   // Get spacing classes
   const spacingClass = [
     spacing?.marginTop ? marginTopMap[spacing.marginTop] : '',
@@ -118,15 +120,17 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
     )
   }
 
+  const animationClasses = cn(
+    'transition-all duration-700 ease-out',
+    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+  )
+
   // Card style
   if (style === 'card') {
     return (
-      <motion.div
-        className={`contact-info-card bg-white rounded-lg shadow-lg p-6 ${spacingClass}`}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
+      <div
+        ref={ref}
+        className={cn(`contact-info-card bg-white rounded-lg shadow-lg p-6 ${spacingClass}`, animationClasses)}
       >
         {title && <h3 className="text-xl font-bold text-theme-dark mb-4">{renderTitle(title)}</h3>}
 
@@ -182,19 +186,16 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
             />
           </div>
         )}
-      </motion.div>
+      </div>
     )
   }
 
   // Compact style (inline)
   if (style === 'compact') {
     return (
-      <motion.div
-        className={`contact-info-compact ${spacingClass}`}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
+      <div
+        ref={ref}
+        className={cn(`contact-info-compact ${spacingClass}`, animationClasses)}
       >
         {title && <h3 className="text-lg font-bold text-theme-dark mb-3">{renderTitle(title)}</h3>}
 
@@ -250,18 +251,15 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
             />
           </div>
         )}
-      </motion.div>
+      </div>
     )
   }
 
   // Default style (Gymso-like)
   return (
-    <motion.div
-      className={`contact-info ${spacingClass}`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportSettings}
-      variants={fadeInUp}
+    <div
+      ref={ref}
+      className={cn(`contact-info ${spacingClass}`, animationClasses)}
     >
       {title && (
         <h2 className="text-2xl md:text-3xl font-bold text-theme-dark mb-6">{renderTitle(title)}</h2>
@@ -269,29 +267,29 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
 
       <div className="space-y-4">
         {address && (
-          <motion.div
-            className="flex items-start gap-3 text-theme-text"
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-            variants={fadeInUp}
-            custom={100}
+          <div
+            className={cn(
+              'flex items-start gap-3 text-theme-text',
+              'transition-all duration-500 ease-out',
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+            )}
+            style={{ transitionDelay: '100ms' }}
           >
             <span className="text-theme-primary mt-1">
               <MapPinIcon />
             </span>
             <p className="text-[18px] leading-relaxed">{address}</p>
-          </motion.div>
+          </div>
         )}
 
         {phone && (
-          <motion.div
-            className="flex items-center gap-3 text-theme-text"
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-            variants={fadeInUp}
-            custom={200}
+          <div
+            className={cn(
+              'flex items-center gap-3 text-theme-text',
+              'transition-all duration-500 ease-out',
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+            )}
+            style={{ transitionDelay: '200ms' }}
           >
             <span className="text-theme-primary">
               <PhoneIcon />
@@ -302,17 +300,17 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
             >
               {phone}
             </a>
-          </motion.div>
+          </div>
         )}
 
         {email && (
-          <motion.div
-            className="flex items-center gap-3 text-theme-text"
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-            variants={fadeInUp}
-            custom={300}
+          <div
+            className={cn(
+              'flex items-center gap-3 text-theme-text',
+              'transition-all duration-500 ease-out',
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+            )}
+            style={{ transitionDelay: '300ms' }}
           >
             <span className="text-theme-primary">
               <EmailIcon />
@@ -323,18 +321,18 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
             >
               {email}
             </a>
-          </motion.div>
+          </div>
         )}
       </div>
 
       {showMap && mapUrl && (
-        <motion.div
-          className="mt-6 rounded-lg overflow-hidden"
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportSettings}
-          variants={fadeInUp}
-          custom={400}
+        <div
+          className={cn(
+            'mt-6 rounded-lg overflow-hidden',
+            'transition-all duration-500 ease-out',
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+          )}
+          style={{ transitionDelay: '400ms' }}
         >
           <iframe
             src={mapUrl}
@@ -345,8 +343,8 @@ export const ContactInfoClient: React.FC<ContactInfoClientProps> = ({
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   )
 }

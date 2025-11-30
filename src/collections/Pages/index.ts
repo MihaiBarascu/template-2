@@ -11,7 +11,7 @@ import { MapBlock } from '../../blocks/MapBlock/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { PreviewCards } from '../../blocks/PreviewCards/config'
 import { ScheduleBlock } from '../../blocks/ScheduleBlock/config'
-import { VariantCardBlock } from '../../blocks/VariantCard/config'
+import { UniversalCardBlock } from '../../blocks/UniversalCard/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -77,7 +77,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, ContactInfoBlock, Content, MediaBlock, Archive, FormBlock, MapBlock, PreviewCards, ScheduleBlock, VariantCardBlock],
+              blocks: [CallToAction, ContactInfoBlock, Content, MediaBlock, Archive, FormBlock, MapBlock, PreviewCards, ScheduleBlock, UniversalCardBlock],
               required: true,
               admin: {
                 initCollapsed: true,

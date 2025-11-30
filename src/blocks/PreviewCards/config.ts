@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { spacingField } from '@/fields/spacing'
+import { cardTypeOptions } from '@/blocks/UniversalCard/config'
 
 export const PreviewCards: Block = {
   slug: 'previewCards',
@@ -11,17 +12,25 @@ export const PreviewCards: Block = {
   fields: [
     spacingField,
     {
-      name: 'style',
+      name: 'cardType',
       type: 'select',
-      label: 'Stil Carduri',
+      label: 'Tip Card (UniversalCard)',
       defaultValue: 'team',
-      options: [
-        { label: 'Team (echipă cu social icons)', value: 'team' },
-        { label: 'Class (clase cu preț badge)', value: 'class' },
-      ],
+      options: cardTypeOptions,
       admin: {
-        description: 'Team = pentru membri echipă | Class = pentru clase fitness',
+        description: 'Alege stilul vizual al cardurilor',
       },
+    },
+    {
+      name: 'columns',
+      type: 'select',
+      label: 'Numar coloane',
+      defaultValue: '3',
+      options: [
+        { label: '2 coloane', value: '2' },
+        { label: '3 coloane', value: '3' },
+        { label: '4 coloane', value: '4' },
+      ],
     },
     {
       name: 'cards',
@@ -64,8 +73,54 @@ export const PreviewCards: Block = {
           type: 'text',
           label: 'Badge',
           admin: {
-            description: 'Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)',
+            description: 'Ex: "Popular", "Reducere 20%", "Nou"',
           },
+        },
+        {
+          name: 'badgeColor',
+          type: 'select',
+          label: 'Culoare Badge',
+          defaultValue: 'primary',
+          options: [
+            { label: 'Primary (Roșu)', value: 'primary' },
+            { label: 'Success (Verde)', value: 'success' },
+            { label: 'Warning (Galben)', value: 'warning' },
+            { label: 'Dark (Negru)', value: 'dark' },
+          ],
+          admin: {
+            condition: (_, siblingData) => !!siblingData?.badge,
+          },
+        },
+        {
+          name: 'price',
+          type: 'group',
+          label: 'Preț',
+          fields: [
+            {
+              name: 'amount',
+              type: 'number',
+              label: 'Sumă (RON)',
+            },
+            {
+              name: 'period',
+              type: 'text',
+              label: 'Perioadă',
+              admin: {
+                placeholder: '/lună, /ședință',
+              },
+            },
+            {
+              name: 'oldPrice',
+              type: 'number',
+              label: 'Preț Vechi (reducere)',
+            },
+          ],
+        },
+        {
+          name: 'highlighted',
+          type: 'checkbox',
+          label: 'Evidențiat (stil special)',
+          defaultValue: false,
         },
         {
           name: 'link',

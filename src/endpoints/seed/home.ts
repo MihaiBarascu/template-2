@@ -388,7 +388,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             blocks: [
               {
                 blockType: 'previewCards',
-                style: 'team',
+                cardType: 'team',
+                columns: '2',
                 cards: teamMembers.slice(0, 2).map((member) => ({
                   image: member.featuredImage as string,
                   title: member.title,
@@ -469,7 +470,11 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             blocks: [
               {
                 blockType: 'previewCards',
-                style: 'class',
+                cardType: 'class',
+                columns: '3',
+                spacing: {
+                  marginTop: 'lg',
+                },
                 cards: classes.slice(0, 3).map((cls) => ({
                   image: cls.featuredImage as string,
                   title: cls.title,

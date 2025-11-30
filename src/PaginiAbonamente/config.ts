@@ -5,6 +5,8 @@ import {
   MetaImageField,
   MetaTitleField,
 } from '@payloadcms/plugin-seo/fields'
+import { cardTypeOptions } from '@/blocks/UniversalCard/config'
+import { revalidatePaginiAbonamente } from './hooks/revalidatePaginiAbonamente'
 
 export const PaginiAbonamente: GlobalConfig = {
   slug: 'pagini-abonamente',
@@ -15,6 +17,9 @@ export const PaginiAbonamente: GlobalConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePaginiAbonamente],
   },
   fields: [
     {
@@ -83,6 +88,15 @@ export const PaginiAbonamente: GlobalConfig = {
                 { label: 'Fitness + SPA', value: 'fitness-spa' },
                 { label: 'Aerobic + SPA', value: 'aerobic-spa' },
               ],
+            },
+            {
+              name: 'cardType',
+              type: 'select',
+              label: 'Tip Card (UniversalCard)',
+              options: cardTypeOptions,
+              admin: {
+                description: 'Opțional - dacă nu este setat, cardType se determină automat (gym=pricing, spa/solar=product)',
+              },
             },
           ],
         },

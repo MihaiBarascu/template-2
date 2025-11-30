@@ -15,6 +15,7 @@ import { FormBlock } from '../Form/config'
 import { MapBlock } from '../MapBlock/config'
 import { MediaBlock } from '../MediaBlock/config'
 import { PreviewCards } from '../PreviewCards/config'
+import { UniversalCardBlock } from '../UniversalCard/config'
 
 const columnFields: Field[] = [
   {
@@ -147,7 +148,7 @@ const columnFields: Field[] = [
   {
     name: 'blocks',
     type: 'blocks',
-    blocks: [CallToAction, ContactInfoBlock, FormBlock, MapBlock, MediaBlock, PreviewCards],
+    blocks: [CallToAction, ContactInfoBlock, FormBlock, MapBlock, MediaBlock, PreviewCards, UniversalCardBlock],
     label: 'Content Blocks',
     admin: {
       description: 'Add blocks (forms, maps, media, CTA, preview cards) to this column',

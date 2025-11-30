@@ -5,6 +5,8 @@ import {
   MetaImageField,
   MetaTitleField,
 } from '@payloadcms/plugin-seo/fields'
+import { cardTypeOptions } from '@/blocks/UniversalCard/config'
+import { revalidatePaginiClase } from './hooks/revalidatePaginiClase'
 
 export const PaginiClase: GlobalConfig = {
   slug: 'pagini-clase',
@@ -15,6 +17,9 @@ export const PaginiClase: GlobalConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePaginiClase],
   },
   fields: [
     {
@@ -71,15 +76,14 @@ export const PaginiClase: GlobalConfig = {
               ],
             },
             {
-              name: 'cardStyle',
+              name: 'cardType',
               type: 'select',
-              label: 'Stil carduri',
-              defaultValue: 'overlay',
-              options: [
-                { label: 'Cu overlay', value: 'overlay' },
-                { label: 'Simplu', value: 'simple' },
-                { label: 'Cu border', value: 'bordered' },
-              ],
+              label: 'Tip Card (UniversalCard)',
+              defaultValue: 'class',
+              options: cardTypeOptions,
+              admin: {
+                description: 'Alege stilul cardurilor pentru listarea claselor',
+              },
             },
           ],
         },

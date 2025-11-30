@@ -245,9 +245,10 @@ export interface Page {
           marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
         };
         /**
-         * Team = pentru membri echipă | Class = pentru clase fitness
+         * Alege stilul vizual al cardurilor
          */
-        style?: ('team' | 'class') | null;
+        cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
+        columns?: ('2' | '3' | '4') | null;
         cards?:
           | {
               image: string | Media;
@@ -261,9 +262,16 @@ export interface Page {
                */
               description?: string | null;
               /**
-               * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
+               * Ex: "Popular", "Reducere 20%", "Nou"
                */
               badge?: string | null;
+              badgeColor?: ('primary' | 'success' | 'warning' | 'dark') | null;
+              price?: {
+                amount?: number | null;
+                period?: string | null;
+                oldPrice?: number | null;
+              };
+              highlighted?: boolean | null;
               link?: {
                 type?: ('reference' | 'custom') | null;
                 reference?:
@@ -301,14 +309,17 @@ export interface Page {
         /**
          * Alege stilul vizual al cardului
          */
-        variant?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'simple') | null;
+        cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
         title: string;
         subtitle?: string | null;
         description?: string | null;
         image?: (string | null) | Media;
         imagePosition?: ('top' | 'background') | null;
+        /**
+         * Opțional - disponibil pe toate tipurile de carduri
+         */
         price?: {
-          amount: number;
+          amount?: number | null;
           period?: string | null;
           oldPrice?: number | null;
         };
@@ -319,8 +330,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Opțional - disponibil pe toate tipurile de carduri
+         */
         badge?: string | null;
+        badgeColor?: ('primary' | 'success' | 'warning' | 'dark') | null;
         highlighted?: boolean | null;
+        /**
+         * Informații suplimentare pentru carduri de tip clasă/serviciu
+         */
+        meta?: {
+          duration?: number | null;
+          capacity?: number | null;
+          schedule?: string | null;
+        };
         cta?: {
           label?: string | null;
           linkType?: ('page' | 'custom') | null;
@@ -330,7 +353,7 @@ export interface Page {
         };
         id?: string | null;
         blockName?: string | null;
-        blockType: 'variantCard';
+        blockType: 'universalCard';
       }
   )[];
   meta?: {
@@ -890,9 +913,12 @@ export interface ContentBlock {
                     marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
                   };
                   /**
-                   * Team = pentru membri echipă | Class = pentru clase fitness
+                   * Alege stilul vizual al cardurilor
                    */
-                  style?: ('team' | 'class') | null;
+                  cardType?:
+                    | ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple')
+                    | null;
+                  columns?: ('2' | '3' | '4') | null;
                   cards?:
                     | {
                         image: string | Media;
@@ -906,9 +932,16 @@ export interface ContentBlock {
                          */
                         description?: string | null;
                         /**
-                         * Ex: "RON 50" - apare în colțul imaginii (doar la stilul large)
+                         * Ex: "Popular", "Reducere 20%", "Nou"
                          */
                         badge?: string | null;
+                        badgeColor?: ('primary' | 'success' | 'warning' | 'dark') | null;
+                        price?: {
+                          amount?: number | null;
+                          period?: string | null;
+                          oldPrice?: number | null;
+                        };
+                        highlighted?: boolean | null;
                         link?: {
                           type?: ('reference' | 'custom') | null;
                           reference?:
@@ -933,6 +966,65 @@ export interface ContentBlock {
                   id?: string | null;
                   blockName?: string | null;
                   blockType: 'previewCards';
+                }
+              | {
+                  /**
+                   * Spațiu vertical între blocuri
+                   */
+                  spacing?: {
+                    marginTop?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+                    marginBottom?: ('none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl') | null;
+                  };
+                  /**
+                   * Alege stilul vizual al cardului
+                   */
+                  cardType?:
+                    | ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple')
+                    | null;
+                  title: string;
+                  subtitle?: string | null;
+                  description?: string | null;
+                  image?: (string | null) | Media;
+                  imagePosition?: ('top' | 'background') | null;
+                  /**
+                   * Opțional - disponibil pe toate tipurile de carduri
+                   */
+                  price?: {
+                    amount?: number | null;
+                    period?: string | null;
+                    oldPrice?: number | null;
+                  };
+                  features?:
+                    | {
+                        text: string;
+                        included?: boolean | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  /**
+                   * Opțional - disponibil pe toate tipurile de carduri
+                   */
+                  badge?: string | null;
+                  badgeColor?: ('primary' | 'success' | 'warning' | 'dark') | null;
+                  highlighted?: boolean | null;
+                  /**
+                   * Informații suplimentare pentru carduri de tip clasă/serviciu
+                   */
+                  meta?: {
+                    duration?: number | null;
+                    capacity?: number | null;
+                    schedule?: string | null;
+                  };
+                  cta?: {
+                    label?: string | null;
+                    linkType?: ('page' | 'custom') | null;
+                    page?: (string | null) | Page;
+                    url?: string | null;
+                    newTab?: boolean | null;
+                  };
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'universalCard';
                 }
             )[]
           | null;
@@ -1256,20 +1348,19 @@ export interface ArchiveBlock {
     [k: string]: unknown;
   } | null;
   populateBy?: ('collection' | 'selection') | null;
-  relationTo?: ('posts' | 'team-members') | null;
+  relationTo?: 'posts' | null;
   categories?: (string | Category)[] | null;
   limit?: number | null;
+  /**
+   * Alege stilul cardurilor. Dacă nu este selectat, se va folosi stilul implicit pentru tipul de colecție.
+   */
+  cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
+  columns?: ('2' | '3' | '4') | null;
   selectedDocs?:
-    | (
-        | {
-            relationTo: 'posts';
-            value: string | Post;
-          }
-        | {
-            relationTo: 'team-members';
-            value: string | TeamMember;
-          }
-      )[]
+    | {
+        relationTo: 'posts';
+        value: string | Post;
+      }[]
     | null;
   id?: string | null;
   blockName?: string | null;
@@ -1692,7 +1783,8 @@ export interface PagesSelect<T extends boolean = true> {
                     marginTop?: T;
                     marginBottom?: T;
                   };
-              style?: T;
+              cardType?: T;
+              columns?: T;
               cards?:
                 | T
                 | {
@@ -1701,6 +1793,15 @@ export interface PagesSelect<T extends boolean = true> {
                     subtitle?: T;
                     description?: T;
                     badge?: T;
+                    badgeColor?: T;
+                    price?:
+                      | T
+                      | {
+                          amount?: T;
+                          period?: T;
+                          oldPrice?: T;
+                        };
+                    highlighted?: T;
                     link?:
                       | T
                       | {
@@ -1715,7 +1816,7 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
         schedule?: T | ScheduleBlockSelect<T>;
-        variantCard?:
+        universalCard?:
           | T
           | {
               spacing?:
@@ -1724,7 +1825,7 @@ export interface PagesSelect<T extends boolean = true> {
                     marginTop?: T;
                     marginBottom?: T;
                   };
-              variant?: T;
+              cardType?: T;
               title?: T;
               subtitle?: T;
               description?: T;
@@ -1745,7 +1846,15 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               badge?: T;
+              badgeColor?: T;
               highlighted?: T;
+              meta?:
+                | T
+                | {
+                    duration?: T;
+                    capacity?: T;
+                    schedule?: T;
+                  };
               cta?:
                 | T
                 | {
@@ -1875,7 +1984,8 @@ export interface ContentBlockSelect<T extends boolean = true> {
                           marginTop?: T;
                           marginBottom?: T;
                         };
-                    style?: T;
+                    cardType?: T;
+                    columns?: T;
                     cards?:
                       | T
                       | {
@@ -1884,6 +1994,15 @@ export interface ContentBlockSelect<T extends boolean = true> {
                           subtitle?: T;
                           description?: T;
                           badge?: T;
+                          badgeColor?: T;
+                          price?:
+                            | T
+                            | {
+                                amount?: T;
+                                period?: T;
+                                oldPrice?: T;
+                              };
+                          highlighted?: T;
                           link?:
                             | T
                             | {
@@ -1893,6 +2012,57 @@ export interface ContentBlockSelect<T extends boolean = true> {
                                 newTab?: T;
                               };
                           id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+              universalCard?:
+                | T
+                | {
+                    spacing?:
+                      | T
+                      | {
+                          marginTop?: T;
+                          marginBottom?: T;
+                        };
+                    cardType?: T;
+                    title?: T;
+                    subtitle?: T;
+                    description?: T;
+                    image?: T;
+                    imagePosition?: T;
+                    price?:
+                      | T
+                      | {
+                          amount?: T;
+                          period?: T;
+                          oldPrice?: T;
+                        };
+                    features?:
+                      | T
+                      | {
+                          text?: T;
+                          included?: T;
+                          id?: T;
+                        };
+                    badge?: T;
+                    badgeColor?: T;
+                    highlighted?: T;
+                    meta?:
+                      | T
+                      | {
+                          duration?: T;
+                          capacity?: T;
+                          schedule?: T;
+                        };
+                    cta?:
+                      | T
+                      | {
+                          label?: T;
+                          linkType?: T;
+                          page?: T;
+                          url?: T;
+                          newTab?: T;
                         };
                     id?: T;
                     blockName?: T;
@@ -1986,6 +2156,8 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   relationTo?: T;
   categories?: T;
   limit?: T;
+  cardType?: T;
+  columns?: T;
   selectedDocs?: T;
   id?: T;
   blockName?: T;
@@ -2979,6 +3151,10 @@ export interface PaginiAbonamente {
   showFilters?: boolean | null;
   columns?: ('2' | '3' | '4') | null;
   defaultFilter?: ('all' | 'gym' | 'spa' | 'solar' | 'fitness-spa' | 'aerobic-spa') | null;
+  /**
+   * Opțional - dacă nu este setat, cardType se determină automat (gym=pricing, spa/solar=product)
+   */
+  cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
   meta?: {
     title?: string | null;
     /**
@@ -3003,7 +3179,10 @@ export interface PaginiClase {
   heroBackground?: (string | null) | Media;
   showScheduleLink?: boolean | null;
   columns?: ('2' | '3' | '4') | null;
-  cardStyle?: ('overlay' | 'simple' | 'bordered') | null;
+  /**
+   * Alege stilul cardurilor pentru listarea claselor
+   */
+  cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
   meta?: {
     title?: string | null;
     /**
@@ -3037,7 +3216,10 @@ export interface PaginiEchipa {
   heroSubtitle?: string | null;
   heroBackground?: (string | null) | Media;
   columns?: ('2' | '3' | '4') | null;
-  cardStyle?: ('photo' | 'compact' | 'social') | null;
+  /**
+   * Alege stilul cardurilor pentru listarea echipei
+   */
+  cardType?: ('pricing' | 'product' | 'team' | 'class' | 'offer' | 'blog' | 'service' | 'simple') | null;
   showSpecialization?: boolean | null;
   meta?: {
     title?: string | null;
@@ -3275,6 +3457,7 @@ export interface PaginiAbonamenteSelect<T extends boolean = true> {
   showFilters?: T;
   columns?: T;
   defaultFilter?: T;
+  cardType?: T;
   meta?:
     | T
     | {
@@ -3296,7 +3479,7 @@ export interface PaginiClaseSelect<T extends boolean = true> {
   heroBackground?: T;
   showScheduleLink?: T;
   columns?: T;
-  cardStyle?: T;
+  cardType?: T;
   meta?:
     | T
     | {
@@ -3327,7 +3510,7 @@ export interface PaginiEchipaSelect<T extends boolean = true> {
   heroSubtitle?: T;
   heroBackground?: T;
   columns?: T;
-  cardStyle?: T;
+  cardType?: T;
   showSpecialization?: T;
   meta?:
     | T

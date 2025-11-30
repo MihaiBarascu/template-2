@@ -2,27 +2,31 @@ import type { Block } from 'payload'
 
 import { spacingField } from '@/fields/spacing'
 
-export const VariantCardBlock: Block = {
-  slug: 'variantCard',
+export const cardTypeOptions = [
+  { label: 'Pricing (abonamente sală)', value: 'pricing' },
+  { label: 'Product (SPA/Solar)', value: 'product' },
+  { label: 'Team (membri echipă)', value: 'team' },
+  { label: 'Class (clase fitness)', value: 'class' },
+  { label: 'Offer (oferte/promo)', value: 'offer' },
+  { label: 'Blog (articole)', value: 'blog' },
+  { label: 'Service (servicii)', value: 'service' },
+  { label: 'Simple (minimal)', value: 'simple' },
+]
+
+export const UniversalCardBlock: Block = {
+  slug: 'universalCard',
   labels: {
-    singular: 'Card Variabil',
-    plural: 'Carduri Variabile',
+    singular: 'Card Universal',
+    plural: 'Carduri Universale',
   },
   fields: [
     spacingField,
     {
-      name: 'variant',
+      name: 'cardType',
       type: 'select',
-      label: 'Stil Card',
+      label: 'Tip Card',
       defaultValue: 'simple',
-      options: [
-        { label: 'Pricing (abonamente sală)', value: 'pricing' },
-        { label: 'Product (SPA/Solar)', value: 'product' },
-        { label: 'Team (membri echipă)', value: 'team' },
-        { label: 'Class (clase fitness)', value: 'class' },
-        { label: 'Offer (oferte/promo)', value: 'offer' },
-        { label: 'Simple (minimal)', value: 'simple' },
-      ],
+      options: cardTypeOptions,
       admin: {
         description: 'Alege stilul vizual al cardului',
       },
@@ -40,7 +44,7 @@ export const VariantCardBlock: Block = {
       type: 'text',
       label: 'Subtitlu',
       admin: {
-        placeholder: 'Ex: "8 ședințe", "Full morning"',
+        placeholder: 'Ex: "8 ședințe", "Full morning", "Antrenor Principal"',
       },
     },
     {
@@ -56,8 +60,8 @@ export const VariantCardBlock: Block = {
       relationTo: 'media',
       label: 'Imagine',
       admin: {
-        condition: (_, { variant }) =>
-          ['pricing', 'product', 'team', 'class', 'offer'].includes(variant),
+        condition: (_, { cardType }) =>
+          ['pricing', 'product', 'team', 'class', 'offer', 'blog', 'service'].includes(cardType),
       },
     },
     {
@@ -71,24 +75,23 @@ export const VariantCardBlock: Block = {
       ],
       admin: {
         layout: 'horizontal',
-        condition: (_, { variant }) => ['pricing'].includes(variant),
+        condition: (_, { cardType }) => ['pricing'].includes(cardType),
       },
     },
 
-    // === PREȚ (condiționat) ===
+    // === PREȚ (disponibil pe TOATE tipurile) ===
     {
       name: 'price',
       type: 'group',
       label: 'Preț',
       admin: {
-        condition: (_, { variant }) => ['pricing', 'product', 'class'].includes(variant),
+        description: 'Opțional - disponibil pe toate tipurile de carduri',
       },
       fields: [
         {
           name: 'amount',
           type: 'number',
           label: 'Sumă (RON)',
-          required: true,
         },
         {
           name: 'period',
@@ -112,7 +115,7 @@ export const VariantCardBlock: Block = {
       type: 'array',
       label: 'Beneficii / Features',
       admin: {
-        condition: (_, { variant }) => ['pricing'].includes(variant),
+        condition: (_, { cardType }) => ['pricing'].includes(cardType),
       },
       fields: [
         {
@@ -130,15 +133,29 @@ export const VariantCardBlock: Block = {
       ],
     },
 
-    // === BADGE ===
+    // === BADGE (disponibil pe TOATE tipurile) ===
     {
       name: 'badge',
       type: 'text',
       label: 'Badge Text',
       admin: {
-        placeholder: 'Ex: "Popular", "Reducere 20%"',
-        condition: (_, { variant }) =>
-          ['pricing', 'product', 'offer'].includes(variant),
+        placeholder: 'Ex: "Popular", "Reducere 20%", "Nou", "Avansat"',
+        description: 'Opțional - disponibil pe toate tipurile de carduri',
+      },
+    },
+    {
+      name: 'badgeColor',
+      type: 'select',
+      label: 'Culoare Badge',
+      defaultValue: 'primary',
+      options: [
+        { label: 'Primary (Roșu)', value: 'primary' },
+        { label: 'Success (Verde)', value: 'success' },
+        { label: 'Warning (Galben)', value: 'warning' },
+        { label: 'Dark (Negru)', value: 'dark' },
+      ],
+      admin: {
+        condition: (_, { badge }) => !!badge,
       },
     },
     {
@@ -146,10 +163,37 @@ export const VariantCardBlock: Block = {
       type: 'checkbox',
       label: 'Evidențiat (stil special)',
       defaultValue: false,
+    },
+
+    // === META (pentru class/service) ===
+    {
+      name: 'meta',
+      type: 'group',
+      label: 'Metadata',
       admin: {
-        condition: (_, { variant }) =>
-          ['pricing', 'product', 'offer'].includes(variant),
+        condition: (_, { cardType }) => ['class', 'service', 'blog'].includes(cardType),
+        description: 'Informații suplimentare pentru carduri de tip clasă/serviciu',
       },
+      fields: [
+        {
+          name: 'duration',
+          type: 'number',
+          label: 'Durată (minute)',
+        },
+        {
+          name: 'capacity',
+          type: 'number',
+          label: 'Capacitate maximă',
+        },
+        {
+          name: 'schedule',
+          type: 'text',
+          label: 'Program',
+          admin: {
+            placeholder: 'Ex: "3 zile/săptămână"',
+          },
+        },
+      ],
     },
 
     // === CTA ===

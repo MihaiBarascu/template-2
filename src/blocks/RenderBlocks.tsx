@@ -11,7 +11,7 @@ import { MapBlock } from '@/blocks/MapBlock/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { PreviewCards } from '@/blocks/PreviewCards/Component'
 import { ScheduleBlock } from '@/blocks/ScheduleBlock/Component'
-import { VariantCardBlock } from '@/blocks/VariantCard/Component'
+import { UniversalCardBlock } from '@/blocks/UniversalCard/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -23,7 +23,7 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   previewCards: PreviewCards,
   schedule: ScheduleBlock,
-  variantCard: VariantCardBlock,
+  universalCard: UniversalCardBlock,
 }
 
 export const RenderBlocks: React.FC<{

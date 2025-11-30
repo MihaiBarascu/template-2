@@ -1,19 +1,19 @@
 'use client'
 
 import React from 'react'
-import { VariantCard, type CardVariant } from '@/components/VariantCard'
+import { UniversalCard, type CardType } from '@/components/UniversalCard'
 import { getSpacingClasses, type SpacingConfig } from '@/fields/spacing'
 import type { Media as MediaType, Page } from '@/payload-types'
 
-interface VariantCardBlockProps {
-  variant?: CardVariant
+interface UniversalCardBlockProps {
+  cardType?: CardType
   title: string
   subtitle?: string | null
   description?: string | null
   image?: MediaType | string | null
   imagePosition?: 'top' | 'background'
   price?: {
-    amount: number
+    amount?: number | null
     period?: string | null
     oldPrice?: number | null
   } | null
@@ -22,7 +22,13 @@ interface VariantCardBlockProps {
     included?: boolean | null
   }> | null
   badge?: string | null
+  badgeColor?: 'primary' | 'success' | 'warning' | 'dark' | null
   highlighted?: boolean | null
+  meta?: {
+    duration?: number | null
+    capacity?: number | null
+    schedule?: string | null
+  } | null
   cta?: {
     label?: string | null
     linkType?: 'page' | 'custom' | null
@@ -35,7 +41,7 @@ interface VariantCardBlockProps {
 }
 
 // Helper to get CTA href
-function getCtaHref(cta: VariantCardBlockProps['cta']): string {
+function getCtaHref(cta: UniversalCardBlockProps['cta']): string {
   if (!cta) return '#'
 
   if (cta.linkType === 'custom' && cta.url) {
@@ -51,8 +57,8 @@ function getCtaHref(cta: VariantCardBlockProps['cta']): string {
   return '#'
 }
 
-export const VariantCardBlock: React.FC<VariantCardBlockProps> = ({
-  variant = 'simple',
+export const UniversalCardBlock: React.FC<UniversalCardBlockProps> = ({
+  cardType = 'simple',
   title,
   subtitle,
   description,
@@ -61,13 +67,15 @@ export const VariantCardBlock: React.FC<VariantCardBlockProps> = ({
   price,
   features,
   badge,
+  badgeColor,
   highlighted,
+  meta,
   cta,
   spacing,
-  _nested,
 }) => {
   const spacingClass = getSpacingClasses(spacing)
 
+  // Build CTA data if label exists
   const ctaData = cta?.label
     ? {
         label: cta.label,
@@ -76,19 +84,40 @@ export const VariantCardBlock: React.FC<VariantCardBlockProps> = ({
       }
     : undefined
 
+  // Build price data if amount exists
+  const priceData = price?.amount
+    ? {
+        amount: price.amount,
+        period: price.period,
+        oldPrice: price.oldPrice,
+      }
+    : undefined
+
+  // Build meta data if any field exists
+  const metaData =
+    meta?.duration || meta?.capacity || meta?.schedule
+      ? {
+          duration: meta.duration,
+          capacity: meta.capacity,
+          schedule: meta.schedule,
+        }
+      : undefined
+
   return (
     <div className={spacingClass}>
-      <VariantCard
-        variant={variant}
+      <UniversalCard
+        cardType={cardType}
         title={title}
         subtitle={subtitle}
         description={description}
         image={image as MediaType | null}
         imagePosition={imagePosition}
-        price={price}
+        price={priceData}
         features={features}
         badge={badge}
+        badgeColor={badgeColor}
         highlighted={highlighted}
+        meta={metaData}
         cta={ctaData}
         index={0}
       />

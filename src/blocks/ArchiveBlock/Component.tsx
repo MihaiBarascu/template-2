@@ -7,6 +7,7 @@ import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { getSpacingClasses } from '@/fields/spacing'
+import type { CardType } from '@/components/UniversalCard'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -22,6 +23,8 @@ export const ArchiveBlock: React.FC<
     selectedDocs,
     relationTo = 'posts',
     spacing,
+    cardType,
+    columns,
   } = props
   const spacingClass = getSpacingClasses(spacing)
 
@@ -84,7 +87,12 @@ export const ArchiveBlock: React.FC<
           <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
         </div>
       )}
-      <CollectionArchive items={items} collectionType={relationTo || 'posts'} />
+      <CollectionArchive
+        items={items}
+        collectionType={(relationTo || 'posts') as 'posts' | 'team-members' | 'clase'}
+        cardType={cardType as CardType | undefined}
+        columns={(columns as '2' | '3' | '4') || '3'}
+      />
     </div>
   )
 }

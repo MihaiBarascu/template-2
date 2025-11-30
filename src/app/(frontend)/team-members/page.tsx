@@ -5,10 +5,10 @@ import { StaticPageHero } from '@/components/StaticPageHero'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import type { TeamMember, PaginiEchipa } from '@/payload-types'
+import type { PaginiEchipa } from '@/payload-types'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { UniversalCard, type CardType } from '@/components/UniversalCard'
+import { teamMemberToCardProps } from '@/utilities/cardAdapters'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -57,10 +57,25 @@ export default async function TeamMembersPage({
       <div className="container mt-16">
         {teamMembers.docs.length > 0 ? (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-              {teamMembers.docs.map((member) => (
-                <TeamMemberCard key={member.id} member={member} />
-              ))}
+            <div className={`grid gap-6 mb-12 ${
+              settings?.columns === '2' ? 'md:grid-cols-2' :
+              settings?.columns === '4' ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' :
+              'md:grid-cols-2 lg:grid-cols-3'
+            }`}>
+              {teamMembers.docs.map((member, index) => {
+                const cardType = (settings?.cardType as CardType) || 'team'
+                const cardProps = teamMemberToCardProps(member, {
+                  cardType,
+                  showExperience: settings?.showExperience ?? true,
+                })
+                return (
+                  <UniversalCard
+                    key={member.id}
+                    {...cardProps}
+                    index={index}
+                  />
+                )
+              })}
             </div>
 
             {/* Pagination */}
@@ -93,49 +108,5 @@ export default async function TeamMembersPage({
         )}
       </div>
     </div>
-  )
-}
-
-// Team Member Card Component
-function TeamMemberCard({ member }: { member: TeamMember }) {
-  return (
-    <article className="bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 group">
-      <Link href={`/team-members/${member.slug}`} className="block">
-        <div className="relative aspect-[3/4] bg-gray-100">
-          {member.featuredImage && typeof member.featuredImage === 'object' ? (
-            <Image
-              src={member.featuredImage.url || ''}
-              alt={member.featuredImage.alt || member.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-theme-muted to-theme-dark
-                          flex items-center justify-center">
-              <span className="text-6xl text-white opacity-50">
-                {member.title.charAt(0).toUpperCase()}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="p-6 text-center">
-          <h3 className="text-xl font-bold text-theme-dark mb-1
-                       group-hover:text-theme-primary transition-colors">
-            {member.title}
-          </h3>
-
-          {member.role && (
-            <p className="text-theme-primary font-medium mb-3">{member.role}</p>
-          )}
-
-          {member.excerpt && (
-            <p className="text-sm text-theme-text line-clamp-2">
-              {member.excerpt}
-            </p>
-          )}
-        </div>
-      </Link>
-    </article>
   )
 }

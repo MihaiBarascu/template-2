@@ -5,6 +5,8 @@ import {
   MetaImageField,
   MetaTitleField,
 } from '@payloadcms/plugin-seo/fields'
+import { cardTypeOptions } from '@/blocks/UniversalCard/config'
+import { revalidatePaginiEchipa } from './hooks/revalidatePaginiEchipa'
 
 export const PaginiEchipa: GlobalConfig = {
   slug: 'pagini-echipa',
@@ -15,6 +17,9 @@ export const PaginiEchipa: GlobalConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePaginiEchipa],
   },
   fields: [
     {
@@ -65,15 +70,14 @@ export const PaginiEchipa: GlobalConfig = {
               ],
             },
             {
-              name: 'cardStyle',
+              name: 'cardType',
               type: 'select',
-              label: 'Stil carduri',
-              defaultValue: 'photo',
-              options: [
-                { label: 'Cu poza mare', value: 'photo' },
-                { label: 'Compact', value: 'compact' },
-                { label: 'Cu social links', value: 'social' },
-              ],
+              label: 'Tip Card (UniversalCard)',
+              defaultValue: 'team',
+              options: cardTypeOptions,
+              admin: {
+                description: 'Alege stilul cardurilor pentru listarea echipei',
+              },
             },
             {
               name: 'showSpecialization',

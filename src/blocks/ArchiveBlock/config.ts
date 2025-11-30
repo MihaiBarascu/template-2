@@ -8,6 +8,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { spacingField } from '@/fields/spacing'
+import { cardTypeOptions } from '@/blocks/UniversalCard/config'
 
 export const Archive: Block = {
   slug: 'archive',
@@ -57,10 +58,6 @@ export const Archive: Block = {
           label: 'Posts',
           value: 'posts',
         },
-        {
-          label: 'Membri Echipă',
-          value: 'team-members',
-        },
       ],
     },
     {
@@ -84,6 +81,26 @@ export const Archive: Block = {
       label: 'Limit',
     },
     {
+      name: 'cardType',
+      type: 'select',
+      label: 'Tip Card (UniversalCard)',
+      options: cardTypeOptions,
+      admin: {
+        description: 'Alege stilul cardurilor. Dacă nu este selectat, se va folosi stilul implicit pentru tipul de colecție.',
+      },
+    },
+    {
+      name: 'columns',
+      type: 'select',
+      label: 'Numar coloane',
+      defaultValue: '3',
+      options: [
+        { label: '2 coloane', value: '2' },
+        { label: '3 coloane', value: '3' },
+        { label: '4 coloane', value: '4' },
+      ],
+    },
+    {
       name: 'selectedDocs',
       type: 'relationship',
       admin: {
@@ -91,7 +108,7 @@ export const Archive: Block = {
       },
       hasMany: true,
       label: 'Selection',
-      relationTo: ['posts', 'team-members'],
+      relationTo: ['posts'],
     },
   ],
   labels: {

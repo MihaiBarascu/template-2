@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
-import { fadeInUp, fadeInDown, viewportSettings } from '@/utilities/animations'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/utilities/ui'
 
 interface AnimatedScheduleProps {
   children: React.ReactNode
@@ -10,31 +10,35 @@ interface AnimatedScheduleProps {
 }
 
 export const AnimatedSchedule: React.FC<AnimatedScheduleProps> = ({ children, title }) => {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+  const { ref: tableRef, isVisible: tableVisible } = useScrollAnimation({ rootMargin: '0px 0px -100px 0px' })
+
   return (
     <>
       {/* Animated Title */}
-      <motion.div
-        className="text-center mb-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInDown}
-        custom={0}
+      <div
+        ref={titleRef}
+        className={cn(
+          'text-center mb-10',
+          'transition-all duration-700 ease-out',
+          titleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6',
+        )}
       >
         <h2 className="text-white text-3xl md:text-4xl font-bold">{title}</h2>
-      </motion.div>
+      </div>
 
       {/* Animated Table Container */}
-      <motion.div
-        className="overflow-x-auto"
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportSettings}
-        variants={fadeInUp}
-        custom={200}
+      <div
+        ref={tableRef}
+        className={cn(
+          'overflow-x-auto',
+          'transition-all duration-700 ease-out',
+          tableVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+        )}
+        style={{ transitionDelay: '200ms' }}
       >
         {children}
-      </motion.div>
+      </div>
     </>
   )
 }
